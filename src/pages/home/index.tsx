@@ -6,18 +6,18 @@ import ListNFT from "./ListNFT";
 const Home = () => {
 
   return (<>
- 
+
     <React.Fragment>
       <CssBaseline />
       <div>
-     <Banner/>
-     <ListNFT/>
-     </div>
-     
-      
+        <Banner />
+        <ListNFT />
+      </div>
+
+
     </React.Fragment>
-  
-    </>
+
+  </>
   );
 };
 

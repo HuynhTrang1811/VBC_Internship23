@@ -1,5 +1,4 @@
 import * as React from 'react';
-import Button from '@mui/material/Button';
 import Stack from '@mui/material/Stack';
 import Avatar from '@mui/material/Avatar';
 import ButtonConnect from './Button';
@@ -17,7 +16,7 @@ const Header = () => {
           <Stack direction="row" spacing={3}>
             {/* <div className='app-header-2'> */}
             {/* <Button variant="contained" sx={{ minWidth: 200, maxWidth: 250, height: 2 / 3, color: 130841 }} >Connect Wallet</Button> */}
-            <ButtonConnect/>
+            <ButtonConnect />
             <a href="/user"><Avatar src="/broken-image.jpg" /></a>
           </Stack>
         </div>

@@ -1,11 +1,6 @@
 import { useEffect, useState } from "react";
-import ButtonGroup from '@mui/material/ButtonGroup';
-import Button from '@mui/material/Button';
 import './Header.css'
 const ButtonConnect = () => {
-
-    const [isMetamaskInstalled, setIsMetamaskInstalled] = useState<boolean>(false);
-    const [ethereumAccount, setEthereumAccount] = useState<string | null>(null);
     const [walletAdress, setAdress] = useState("Connect Wallet");
 
     useEffect(() => {
