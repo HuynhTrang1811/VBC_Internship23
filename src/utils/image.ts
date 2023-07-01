@@ -10,7 +10,7 @@ async function getBase64(link_array: string | any[] | undefined) {
         });
         await Promise.resolve(response).then(async function (result) {
           file_result.push(
-            // Buffer.from(result.data, "binary").toString("base64")
+            Buffer.from(result.data, "binary").toString("base64")
           );
         });
       }

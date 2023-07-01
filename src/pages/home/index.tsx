@@ -1,21 +1,25 @@
-import React from "react"
+import React, { useState } from "react"
 import "./Home.css"
 import CssBaseline from '@mui/material/CssBaseline';
 import Banner from "./Banner";
-import ListNFT from "./ListNFT";
-const Home = () => {
-
+import Market from "./Market";
+import product from "../../api/product.js";
+import { CartProvider } from "react-use-cart";
+const Home = ( handleAddProduct:any) => {
+ 
   return (<>
  
-    <React.Fragment>
-      <CssBaseline />
-      <div>
+   <CartProvider>
+     
      <Banner/>
-     <ListNFT/>
-     </div>
+  
+     
+     <Market />
+
+     </CartProvider>
      
       
-    </React.Fragment>
+    
   
     </>
   );
