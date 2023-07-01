@@ -5,25 +5,130 @@
    
 
 }
+
 .app-home-banner{
    width: 100%;
-   background-color: antiquewhite;
-   height: 500px;
+   /* background-image: url("https://e1.pxfuel.com/desktop-wallpaper/402/881/desktop-wallpaper-black-space-group-rylo.jpg"); */
+   background-image: url("https://i.seadn.io/gae/kjGPnsody4K1ZS9CwCj9IjiGs3Z9JG9B0GykEq6WV3XPh7OElAfneqObo1CnS2jmQ_y9OnRnA-WeGuXd9PrkPr4rEEH_GG2Y8rxnqHU?auto=format&dpr=1&w=1920");
+   /* background-color: antiquewhite; */
+   height: 400px;
+   background-color:#eee;
+   color:white!important;
+   display: flex;
+   
+   padding-left: 10%;
+
+}
+.app-home-banner-left{
+   width: 60%;
+   padding-top: 5%;
 }
 .app-home-note{
-   padding-top: 100px;
-   color:black;
+  
+  
    align-items: center;
    text-align: center;
 
    }
-.app-home-title{
-   padding-left: 10%;
-   padding-top: 100px;
-}
-.app-home-listitem{
-   height: 500px;
-   width: 90%;
+
+.app-home-banner-button {
+  
+  
+   background-color:#6F4FF2!important;
    margin: auto;
-   background-color: white;
+
 }
+.app-home-banner-divbutton{
+   text-align: center;
+   padding-top: 5%;
+}
+h1 {
+  
+   
+   color : white !important;
+}
+
+.banner-title {
+   color : white !important;
+   padding: auto;
+   padding-top: 30px;
+   /* padding-bottom: 50px; */
+   align-items: center;
+   text-align: center;
+ 
+}
+.app-home-banner-right{
+   display: flex;
+   justify-content: space-between;
+   padding-top: 8%;
+   padding-left: 20px;
+   padding-right: 10%;
+
+}
+.app-home-market{
+  
+   height: 100%;
+}
+.app-home-market-container{
+   background-color: #f7f5f5f0;
+   padding-top: 50px;
+   width: 80%;
+   margin: auto;
+   padding-bottom: 50px;
+   
+}
+.app-home-market-item{
+   padding: 30px 20px 30px 20px;
+}
+h4{
+   padding-left: 20px;
+}
+.price{
+   display: flex;
+   justify-content:space-between;
+}
+
+.app-home-item-button{
+ 
+  display: flex;
+
+  justify-content: space-between !important;
+
+}
+.app-home-martket-pagi{
+   align-items: center;
+   text-align: center;
+   margin:auto;
+   width: 30%;
+}
+.app-home-item-button-buy{
+   background-color:#6F4FF2!important;
+  
+}
+.app-home-item-button-add{
+   background-color:#6F4FF2!important;
+   margin: auto;
+  
+}
+
+Button:focus{
+   outline: none !important;
+}
+.app-banner-form-input{
+border-radius: 10px;
+border: none!important;
+border: 1px solid #8d8a8adc !important;
+width: 30%;
+margin-left:10px
+}
+.app-banner-form-input:focus{
+  
+   border: 1px solid #8d8a8adc !important;
+  
+   }
+   .app-banner-form-input:active{
+  
+      border: 1px solid #8d8a8adc !important;
+     
+      }
+      
