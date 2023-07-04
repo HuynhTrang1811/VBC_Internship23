@@ -7,7 +7,7 @@ export const mintAccount = async (login: any, rentalTime:any) => {// ABI of the 
     
     ethers.providers.getNetwork(8888)
     // Address of the smart contract
-    const contractAddress = '0x48220D442132b9FFFd281E2f717468B7B390e8b4'; // Replace with your contract address
+    const contractAddress = '0x403E25c504eBafFBf0F9256e5Fca10d3F5497425'; // Replace with your contract address
     
     // Ethereum node URL
     const nodeUrl = 'https://agridential.vbchain.vn/VBCinternship2023'; // Replace with your Ethereum node URL
