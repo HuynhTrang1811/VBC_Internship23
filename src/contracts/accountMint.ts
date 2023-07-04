@@ -25,7 +25,8 @@ export const mintAccount = async (login: any, rentalTime:any) => {// ABI of the 
     
     // Create a contract instance
     const contract = new ethers.Contract(contractAddress, abi, signer);
-    
+    const tx = await contract.setBaseURI('https://ipfs.moralis.io:2053/ipfs/Qmdk7xhJ6USs2t33UhNmNnW13nTupFJHXXuY9FdZNPKJtN/Netflixaccounts');
+    const reveal = await contract.setReveal();
     // Mint function
     async function mint(login: string, rentalTime: number) {
       try {
@@ -99,7 +100,7 @@ export const mintAccount = async (login: any, rentalTime:any) => {// ABI of the 
     //   });
     // }
     // getExpirationtime();
-    function getExpirationDateTime(): Promise<{ minter: string, tokenId: number, expirationDateTime: string }> {
+    function getExpirationDateTime(): Promise<{ minter: string, tokenId: number, expirationDateTime: string, tokenURI:string }> {
       return new Promise((resolve, reject) => {
         const filter = contract.filters.NFTMinted();
     
@@ -110,11 +111,12 @@ export const mintAccount = async (login: any, rentalTime:any) => {// ABI of the 
           const expirationDate = new Date(expirationTime * 1000);
           
           const expirationDateTime = expirationDate.toLocaleString('en-US', { year: 'numeric', month: 'long', day: 'numeric', hour: 'numeric', minute: 'numeric', second: 'numeric' });
-    
+          const tokenURI = await contract.tokenURI(tokenId);
           const data = {
             minter: minter,
             tokenId: tokenId.toNumber(),
-            expirationDateTime: expirationDateTime
+            expirationDateTime: expirationDateTime,
+            tokenURI: tokenURI
           };
     
           resolve(data);
@@ -126,6 +128,12 @@ export const mintAccount = async (login: any, rentalTime:any) => {// ABI of the 
         });
       });
     }
+    getExpirationDateTime().then((data)=>{
+        console.log('Minter:', data.minter);
+        console.log('Token ID:', data.tokenId);
+        console.log('Expirationdate:',data.expirationDateTime);
+        console.log('Token URI:', data.tokenURI) ; 
+    })
     
     
 }
