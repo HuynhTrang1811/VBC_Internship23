@@ -11,15 +11,20 @@ import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
 import { useState } from 'react';
 import axios from 'axios';
+import { mintAccount } from '../../contracts/accountMint';
 const Banner = () => {
     const [open, setOpen] = useState(false);
-
+    const [months, setMonths] = useState(0);
     const handleClickOpen = () => {
         setOpen(true);
     };
 
     const handleClose = () => {
         setOpen(false);
+    };
+    const handleMint = () => {
+        console.log(months);
+        mintAccount('hiep', months )
     };
 
     return (
@@ -44,12 +49,14 @@ const Banner = () => {
                             </DialogTitle>
                             <DialogContent>
                                 <DialogContentText id="alert-dialog-description">
-                                 Enter number of month: <input type="text" className='app-banner-form-input'></input>
+                                 Enter number of month: <input type="text" onChange={(e) => {
+                                    setMonths( +e.target.value);
+                                 }} className='app-banner-form-input'></input>
                                   {/* <input></input> */}
                                 </DialogContentText>
                             </DialogContent>
                             <DialogActions>
-                                <Button onClick={handleClose}>Payment</Button>
+                                <Button onClick={handleMint}>Payment</Button>
                                 <Button onClick={handleClose} autoFocus>
                                   Close
                                 </Button>
