@@ -7,7 +7,7 @@ export const mintAccount = async (login: any, rentalTime:any) => {// ABI of the 
     
     ethers.providers.getNetwork(8888)
     // Address of the smart contract
-    const contractAddress = '0xB9AB4A32c4ccdefB92De3cBca4B2EBBde61ED334'; // Replace with your contract address
+    const contractAddress = '0x48220D442132b9FFFd281E2f717468B7B390e8b4'; // Replace with your contract address
     
     // Ethereum node URL
     const nodeUrl = 'https://agridential.vbchain.vn/VBCinternship2023'; // Replace with your Ethereum node URL
@@ -48,6 +48,7 @@ export const mintAccount = async (login: any, rentalTime:any) => {// ABI of the 
     // Usage example
     
     mint(login, rentalTime);
+    
     function printMintTransactionInfo() {
         contract.on('Transfer', (from, to, tokenId, event) => {
           console.log('Mint Transaction Information:');
@@ -59,5 +60,72 @@ export const mintAccount = async (login: any, rentalTime:any) => {// ABI of the 
           console.log('--------------------------------------');
         });
       }  
-    printMintTransactionInfo();
+    
+    function getMintTransactionInfo() {
+        return new Promise((resolve, reject) => {
+        contract.on('Transfer', (from, to, tokenId, event) => {
+        const mintTransactionInfo = {
+        from: from,
+        to: to,
+        tokenId: tokenId.toString(),
+        transactionHash: event.transactionHash,
+        blockNumber: event.blockNumber,
+        };
+        resolve(mintTransactionInfo);
+        });
+        });
+        }
+    // printMintTransactionInfo();
+        
+    // function getExpirationtime() {
+    //   const filter = contract.filters.NFTMinted();
+
+    //   // Event listener to capture the minter's address
+    //   contract.on(filter, async (minter, tokenId) => {
+    //   console.log('Minter:', minter);
+    //   console.log('Token ID:', tokenId.toNumber());
+
+    //  // Get the minted NFT from the mapping
+    //   const mintedNFT = await contract.nfts(tokenId);
+    //   const expirationTime = mintedNFT.expirationTime.toNumber();
+    //   console.log('Expiration Time:', expirationTime);
+    //   const expirationDate = new Date(expirationTime * 1000);
+
+    // // Extract month and year from the Date object
+    //   const month = expirationDate.toLocaleString('default', { month: 'long' });
+    //   const year = expirationDate.getFullYear();
+
+    //   console.log('Expiration Date:', month, year);
+    //   });
+    // }
+    // getExpirationtime();
+    function getExpirationDateTime(): Promise<{ minter: string, tokenId: number, expirationDateTime: string }> {
+      return new Promise((resolve, reject) => {
+        const filter = contract.filters.NFTMinted();
+    
+        // Event listener to capture the minter's address
+        contract.on(filter, async (minter, tokenId) => {
+          const mintedNFT = await contract.nfts(tokenId);
+          const expirationTime = mintedNFT.expirationTime.toNumber();
+          const expirationDate = new Date(expirationTime * 1000);
+          
+          const expirationDateTime = expirationDate.toLocaleString('en-US', { year: 'numeric', month: 'long', day: 'numeric', hour: 'numeric', minute: 'numeric', second: 'numeric' });
+    
+          const data = {
+            minter: minter,
+            tokenId: tokenId.toNumber(),
+            expirationDateTime: expirationDateTime
+          };
+    
+          resolve(data);
+        });
+    
+        // Reject the promise if an error occurs
+        contract.on('error', error => {
+          reject(error);
+        });
+      });
+    }
+    
+    
 }
