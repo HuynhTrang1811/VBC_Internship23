@@ -26,7 +26,7 @@ export const mintAccount = async (login: any, rentalTime:any) => {// ABI of the 
     // Create a contract instance
     const contract = new ethers.Contract(contractAddress, abi, signer);
     const tx = await contract.setBaseURI('https://ipfs.moralis.io:2053/ipfs/Qmdk7xhJ6USs2t33UhNmNnW13nTupFJHXXuY9FdZNPKJtN/Netflixaccounts');
-    const reveal = await contract.setReveal();
+    
     // Mint function
     async function mint(login: string, rentalTime: number) {
       try {
