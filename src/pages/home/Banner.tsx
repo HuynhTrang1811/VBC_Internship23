@@ -9,12 +9,22 @@ import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
 import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import axios from 'axios';
 import { mintAccount } from '../../contracts/accountMint';
+import { MintNFT } from './MintNFT';
+import Backdrop from '@mui/material/Backdrop';
+import CircularProgress from '@mui/material/CircularProgress';
 const Banner = () => {
+
     const [open, setOpen] = useState(false);
+    const [openMint, setOpenMint] = useState(false);
     const [months, setMonths] = useState(0);
+    const [mintNFT, setMintNFT] = useState<any |"">("");
+    const [openBacklog, setOpenBacklog] = useState(false);
+    const handleOpenBacklog = () => {
+        setOpenBacklog(true);
+    };
     const handleClickOpen = () => {
         setOpen(true);
     };
@@ -22,10 +32,31 @@ const Banner = () => {
     const handleClose = () => {
         setOpen(false);
     };
+    const handleCloseMint = () => {
+        setOpenMint(false);
+    };
     const handleMint = () => {
         console.log(months);
-        mintAccount('hiep', months )
+        // setOpenMint(true);
+        setOpenBacklog(true);
+        mintAccount('hiep', months).then((data) => {
+           
+           
+            if(data != null) {
+                setMintNFT(data);
+                 setOpenMint(true);
+                 setOpenBacklog(false);
+                 setMintNFT(data);
+            }
+
+
+        })
     };
+
+    // const mintChange = (mint: any) => {
+    //     return (<><MintNFT data={mint} /></>)
+
+    // }
 
     return (
         <>
@@ -37,36 +68,74 @@ const Banner = () => {
                     </div>
                     <div className="app-home-banner-divbutton">
                         <Button className="app-home-banner-button" variant="contained" onClick={handleClickOpen}>Buy Netflix NFT</Button>
+
                         <form>
-                        <Dialog
-                            open={open}
-                            onClose={handleClose}
-                            aria-labelledby="alert-dialog-title"
-                            aria-describedby="alert-dialog-description"
+                            
+                            <Dialog
+                               
+                                open={open}
+                                onClose={handleClose}
+                                aria-labelledby="alert-dialog-title"
+                                aria-describedby="alert-dialog-description"
+                            >
+                                <DialogTitle id="alert-dialog-title">
+                                    {"Buy Netflix Account NFT"}
+                                </DialogTitle>
+                                <DialogContent>
+                                    <DialogContentText id="alert-dialog-description">
+                                        Enter number of month: <input id="input_text" type="text" onChange={(e) => {
+                                            setMonths(+e.target.value);
+                                        }} className='app-banner-form-input'></input>
+                                        {/* <input></input> */}
+                                    </DialogContentText>
+                                </DialogContent>
+                                <DialogActions>
+                                    <Button id="no_hover" onClick={() => { handleClose(), handleMint(), handleOpenBacklog() }} >Payment</Button>
+
+                                    <Button id="no_hover" onClick={handleClose} autoFocus>
+                                        Close
+                                    </Button>
+
+                                </DialogActions>
+                            </Dialog>
+
+                            <Dialog
+                                open={openMint}
+                                onClose={handleClose}
+                                aria-labelledby="alert-dialog-title"
+                                aria-describedby="alert-dialog-description"
+                            >
+                                <DialogTitle id="alert-dialog-title">
+                                    Mint NFT Information
+                                </DialogTitle>
+                                <DialogContent>
+                                    <DialogContentText id="alert-dialog-description">
+                                   Minter Address: {mintNFT.minter}<br />
+                                        Token ID: {mintNFT.tokenId}<br />
+                                        Expirationdate: {mintNFT.expirationDateTime}<br />
+                                        Token URI: {mintNFT.tokenURI} ;
+                                    
+
+                                    </DialogContentText>
+                                </DialogContent>
+                                <DialogActions>
+                                    <Button id="no_hover" onClick={handleCloseMint}>close</Button>
+
+                                </DialogActions>
+                            </Dialog>
+                            <Backdrop
+                            sx={{ color: '#fff', zIndex: (theme) => theme.zIndex.drawer + 1 }}
+                            open={openBacklog}
+                            onClick={handleClose}
                         >
-                            <DialogTitle id="alert-dialog-title">
-                                {"Buy Netflix Account NFT"}
-                            </DialogTitle>
-                            <DialogContent>
-                                <DialogContentText id="alert-dialog-description">
-                                 Enter number of month: <input type="text" onChange={(e) => {
-                                    setMonths( +e.target.value);
-                                 }} className='app-banner-form-input'></input>
-                                  {/* <input></input> */}
-                                </DialogContentText>
-                            </DialogContent>
-                            <DialogActions>
-                                <Button onClick={handleMint}>Payment</Button>
-                                <Button onClick={handleClose} autoFocus>
-                                  Close
-                                </Button>
-                            </DialogActions>
-                        </Dialog>
+                            <CircularProgress color="inherit" />
+                        </Backdrop>
                         </form>
-                        
+                       
+
                     </div>
                 </div>
-                <div className="app-home-banner-right">
+                {/* <div className="app-home-banner-right">
 
                     <Grid container spacing={5} columns={18}>
                         <Grid item xs={6}>
@@ -113,7 +182,7 @@ const Banner = () => {
 
 
 
-                </div>
+                </div> */}
             </div >
         </>
     )

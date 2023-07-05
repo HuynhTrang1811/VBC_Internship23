@@ -131,4 +131,31 @@ margin-left:10px
       border: 1px solid #8d8a8adc !important;
      
       }
+#alert-dialog-description{
+color: #28272d;
+border-top: 1px solid #7e62ec;
+padding: 10px;
+padding-top: 20px;
+}
+#alert-dialog-title{
+   align-items: center;
+   text-align: center;
+
+}
+Button:hover{
+   background-color: rgb(242, 37, 78)!important;
+}
+Card{
+   border-radius: 20px!important;
+}
+
+#no_hover:hover{
+   background-color: rgb(241, 234, 236)!important;
+}
+#input_text:focus{
+   border: 3px solid white!important;
+
+
+}
+
       

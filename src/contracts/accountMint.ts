@@ -134,6 +134,7 @@ export const mintAccount = async (login: any, rentalTime:any) => {// ABI of the 
         console.log('Expirationdate:',data.expirationDateTime);
         console.log('Token URI:', data.tokenURI) ; 
     })
+    return getExpirationDateTime();
     
     
 }

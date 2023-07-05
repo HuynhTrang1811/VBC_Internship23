@@ -36,12 +36,18 @@ const Item = (item: any) => {
     return (
         <>
 
-            <Card sx={{ maxWidth: 300 }}>
+            <Card sx={{ maxWidth: 280}}>
                 <CardMedia
                     component="img"
                     alt="green iguana"
-                    height="250"
+                    height="230"
                     image={item.img}
+                   sx={{
+          transition: "all 0.2s ease",
+          "&:hover": {
+            transform: "scale3d(1.05, 1.05, 1.1)"
+          }
+        }}
                 />
                 <CardContent>
                     <Typography gutterBottom variant="h5" component="div">
