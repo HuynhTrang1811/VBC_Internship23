@@ -7,7 +7,7 @@ export const mintAccount = async (login: any, rentalTime:any) => {// ABI of the 
     
     ethers.providers.getNetwork(8888)
     // Address of the smart contract
-    const contractAddress = '0x403E25c504eBafFBf0F9256e5Fca10d3F5497425'; // Replace with your contract address
+    const contractAddress = '0x5d675b37cb24Ff542c8E969920Ebc48F7e969362'; // Replace with your contract address
     
     // Ethereum node URL
     const nodeUrl = 'https://agridential.vbchain.vn/VBCinternship2023'; // Replace with your Ethereum node URL
@@ -25,28 +25,21 @@ export const mintAccount = async (login: any, rentalTime:any) => {// ABI of the 
     
     // Create a contract instance
     const contract = new ethers.Contract(contractAddress, abi, signer);
-    const tx = await contract.setBaseURI('https://ipfs.moralis.io:2053/ipfs/Qmdk7xhJ6USs2t33UhNmNnW13nTupFJHXXuY9FdZNPKJtN/Netflixaccounts');
+    
     
     // Mint function
     async function mint(login: string, rentalTime: number) {
       try {
-        // Estimate the gas required for the transaction
-        // const gasLimit = await contract.estimateGas.accountMint(login, rentalTime);
-    
-        // Build the transaction data
+        
         const tx = await contract.accountMint(login, rentalTime);
     
-        // Wait for the transaction to be mined
-        // const receipt = await signer.sendTransaction({ ...tx, gasLimit });
-    
-        // console.log('Transaction hash:', receipt.hash);
+        
         console.log('Mint successful!');
       } catch (error) {
         console.error('Error:', error);
       }
     }
-    
-    // Usage example
+
     
     mint(login, rentalTime);
     
