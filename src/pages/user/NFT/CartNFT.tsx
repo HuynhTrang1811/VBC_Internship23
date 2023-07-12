@@ -1,73 +1,56 @@
-
+import React from 'react'
+import { useState } from 'react';
+import CardMedia from '@mui/material/CardMedia';
+import Button from '@mui/material/Button';
+import './CardNFT.css'
+import { useCart } from "react-use-cart"
 import Stack from '@mui/material/Stack';
-import React from 'react';
-import { useCart } from 'react-use-cart';
-import Snackbar from '@mui/material/Snackbar';
 import MuiAlert, { AlertProps } from '@mui/material/Alert';
-import { Button, Card, CardContent, CardMedia, Typography } from '@mui/material';
-const CartNFT = (item:any) => {
-    const {removeItem} =useCart();
-    const [open, setOpen] = React.useState(false);
-    const Alert = React.forwardRef<HTMLDivElement, AlertProps>(function Alert(
-        props,
-        ref,
-    ) {
-        return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;
-    });
 
+const CartNFT = (item: any) => {
+    const { removeItem, items } = useCart();
+    return (
 
-
-    const handleClick = () => {
-        setOpen(true);
-    };
-
-    const handleClose = (event?: React.SyntheticEvent | Event, reason?: string) => {
-        if (reason === 'clickaway') {
-            return;
-        }
-
-        setOpen(false);
-    };
-
-  return (
-   <>
-     <Card sx={{ maxWidth: 250 }}>
+        <div className='card-product'>
+             <div id="stars"></div>
+      <div id="stars2"></div>
+      <div id="stars3"></div>
+            <div className="card-header">
                 <CardMedia
+                    id="card-img"
                     component="img"
                     alt="green iguana"
-                    height="150"
+                    height="230"
                     image={item.img}
+                    sx={{
+                        transition: "all 0.2s ease",
+                        "&:hover": {
+                            transform: "scale3d(1.05, 1.05, 1.1)"
+                        }
+                    }}
                 />
-                <CardContent>
-                    <Typography gutterBottom variant="h5" component="div">
-                        {item.name}
-                    </Typography>
-                    <div className='price'>
-                        <p>Price:</p>
-                        <p>{item.price}</p>
-                    </div>
-                    <div className='price'>
-                        <p>Time left:</p>
-                        <p>{item.time}</p>
-                    </div>
-                </CardContent>
-                <CardContent>
-                    <div className='app-home-item-button'>
-                        <Button className="app-home-item-button-add" variant="contained" >pay </Button>
-                           <Stack>
-                        <Button className="app-home-item-button-add" variant="contained" onClick={()=>{removeItem(item.id),handleClick()} }   >Remove</Button>
-                        <Snackbar open={open} autoHideDuration={6000} onClose={handleClose}>
-                            <Alert onClose={handleClose} severity="success" sx={{ width: '100%' }}>
-                              Remove from cart successfully !
-                            </Alert>
-                        </Snackbar>  
-                        </Stack>        
-                      
-                    </div>
-                </CardContent>
-            </Card>
-   </>
-  )
+                <div className='time-left'>
+                    {item.time}
+                </div>
+            </div>
+            <div className="card-body">
+                <div className="card-name">{item.name}</div>
+                <div className="card-price">
+                    {item.price}
+                    {/* <img src="" style={{width:20,height:20}}/> */}
+                </div>
+            </div>
+            <div className="card-buy" >
+                <Stack>
+                    <Button className="app-home-item-button-add" variant="contained" size="medium" onClick={() => { removeItem(item.id) }} >remove item</Button>
+                </Stack>
+
+                <Button className="app-home-item-button-buy" size="medium" variant="contained" >buy</Button>
+            </div>
+        </div>
+
+
+    )
 }
 
 export default CartNFT
