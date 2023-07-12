@@ -1,12 +1,7 @@
 import React from "react";
 import ReactDOM from "react-dom/client";
 import App from "./App";
-import "./assets/base.scss";
-import "./assets/css/main.css";
-import "./assets/css/reactTable.css";
-import "./assets/css/responsive.css";
-import "./assets/css/select.css";
-import "./index.css";
+
 import reportWebVitals from "./reportWebVitals";
 
 const root = ReactDOM.createRoot(document.getElementById("app") as HTMLElement);
