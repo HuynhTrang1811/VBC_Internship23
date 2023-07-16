@@ -33,7 +33,7 @@ const Market = () => {
   const ShowProduct = () => {
     return (<>
 
-      <Grid container spacing={{ xs: 1, md: 3 }} columns={24}>
+      <Grid container spacing={{ xs: 1, md: 2 }} columns={24}>
         {
           loading ? (<>
 

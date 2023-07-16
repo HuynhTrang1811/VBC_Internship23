@@ -188,5 +188,51 @@
     color: white !important;
 }
 .address-button{font-size: 16px; color: white !important;}
+.cart-header{
+padding-top: 20px;
+padding-left: 20px;
+ 
+}
+#alert-open-cart{
+ 
+  background-color: white!important;
+  margin-left: 50%!important; 
+
+}
+.open-cart{
+  width: 500px;
+  padding: 20px;
+}
+.cart-header{
+  display: flex;
+  justify-content: space-between;
   
+}
+.header-icon{
+  padding-top: 20px;
+}
+.cart-body{
+  padding: 10px;
+}
+.cart-items{
+  padding-bottom: 20px;
+  color: rgb(9, 9, 86);
+}
+h2{
+  color: rgb(9, 9, 86);
+}
+.cart-header{
+  border-bottom: #908d8d;
+}
+.cart-total{
+  color:rgb(133, 12, 12);
+  font-size: 16px;
+
   
+ 
+
+  
+ 
+ 
+ 
+}

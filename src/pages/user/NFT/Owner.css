@@ -1,0 +1,66 @@
+*{
+    font-family: "Martian Mono", "Roboto Mono", monospace!important;
+}
+
+.owned-img{
+    height: 100px;
+    
+   
+}
+.owned-name{
+    padding-top: 15%;
+    font-size: 20px;
+}
+.cell-name{
+    font-size: 18px!important;
+    color:#1F1D86!important;
+}
+.cell-name-sale{
+    font-size: 18px!important;
+    color:rgb(197, 32, 32)!important;
+}
+.cell-name-owner{
+    font-size: 18px!important;
+    color:rgb(24, 147, 24)!important;
+}
+.cell-name-rent{
+    color:rgb(7, 32, 133)!important;
+    font-size: 18px !important;
+}
+.action-button{
+    display:  flex;
+    justify-content: space-evenly;
+}
+.alert-sellNFT{
+    border: 1px solid #1F1D86;
+    border-radius: 20px;
+    padding: 30px;
+   
+}
+.sellNFT-header{
+    display: flex;
+    justify-content: space-between;
+    
+}
+.sell-inf{
+    color:#1F1D86!important;
+    font-size: 18px;
+    padding-left: 30px;
+    padding-top: 20px;
+}.sellNFT-input{
+    padding-top: 30px;
+    padding-left: 35px;
+
+}
+.rentNFT-input{
+     padding-top: 30px;
+    display: flex;
+    justify-content: space-between!important;
+}
+.rentNFT-header{
+    display: flex;
+    justify-content: space-evenly;
+}
+.rent-inf{
+    padding-top: 20px;
+}

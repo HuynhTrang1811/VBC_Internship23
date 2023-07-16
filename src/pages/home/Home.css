@@ -224,12 +224,12 @@ Card{
 .card-product{
   color:white;
   border-radius: 20px;
-  width: 250px;
+  width: 240px;
 
   /* width: 250px;
   height: 200px; */
   /* background-image: url("https://i.pinimg.com/236x/79/7b/57/797b571b4f1631fd6e28428cb37dd1d9.jpg")!important; */
-  background-color:rgb(18, 8, 49);
+  background-color:rgb(28, 14, 71);
   border: 1px solid #22088e;
   padding: 10px;
 }
