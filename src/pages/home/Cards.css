@@ -125,8 +125,8 @@
     background-image: linear-gradient(315deg, #d5fefd 0%, #fffcff 74%);
   }
   .app-market-list{
-    margin-left: 10%;
-    margin-right: 10%;
+    margin-left: 5%;
+    margin-right: 5%
   }
   .market-buttons{
     margin: 10px;

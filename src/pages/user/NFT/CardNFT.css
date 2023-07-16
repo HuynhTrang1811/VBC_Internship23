@@ -1,5 +1,39 @@
-.card-product{
-   
-    background-color:rgb(18, 8, 49);
-  border: 1px solid #22088e;
+.item-cart{
+ border:2px solid #070f66;
+  display: flex;
+  justify-content: space-between;
+  height: 20%;
+  border-radius: 20px;
+  padding: 20px;
+  font-size: 18px;
+  
+}
+.item-cart-img{
+  height: 100px!important;
+  width: 100px;
+}
+.cart-img{
+  height: 100%;
+  width: 100%;
+  border-radius: 20%;
+
+}
+.item-info{
+  padding-top:3vh ;
+ 
+}
+.item-info-name{
+  padding-bottom: 15px;
+  border-bottom: 1px solid #070f66;
+}
+.item-info-price{
+  padding-top:15px;
+}
+.item-footer{
+  padding-top:4vh ;
+  display: flex;
+  justify-content: space-between;
+}
+.item-buy{
+  padding-right: 10px;
 }

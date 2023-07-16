@@ -19,7 +19,8 @@ const ConnectWallet = () => {
                 alert(`Something went wrong: ${err}`);
             }
         } else {
-            console.log("Metamask is not install!")
+            console.log("Metamask is not install!");
+            alert(`Metamask is not install!`);
         }
     }
     const getcurentWalletconnect = async () => {

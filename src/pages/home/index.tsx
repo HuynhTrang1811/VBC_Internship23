@@ -14,18 +14,8 @@ const Home = () => {
   }, [])
   return (
     <>
-      {/* {
-        loading ? 
-        <Box sx={{ display: 'flex' }}>
-        <CircularProgress />
-      </Box>:
-      <>
-        <Banner/>
-         <Market/>
-        </>
-      } */}
-       <Banner/>
-         <Market/>
+      <Banner />
+      <Market />
 
     </>
   )

@@ -9,6 +9,8 @@ import Snackbar from '@mui/material/Snackbar';
 import MuiAlert, { AlertProps } from '@mui/material/Alert';
 const CardItem = (item: any) => {
   const [open, setOpen] = useState(false);
+  const { addItem ,items} = useCart();
+
   const Alert = React.forwardRef<HTMLDivElement, AlertProps>(function Alert(
     props,
     ref,
@@ -21,6 +23,8 @@ const CardItem = (item: any) => {
   const handleClick = (item: any) => {
      
     setOpen(true);
+    addItem(item.item);
+   
    
 
    
@@ -30,11 +34,10 @@ const CardItem = (item: any) => {
     if (reason === 'clickaway') {
       return;
     }
-    addItem(item.item);
+   
     setOpen(false);
   };
 
-  const { addItem ,items} = useCart();
 
   return (
 
@@ -44,7 +47,7 @@ const CardItem = (item: any) => {
           id="card-img"
           component="img"
           alt="green iguana"
-          height="230"
+          height="180"
           image={item.img}
           sx={{
             transition: "all 0.2s ease",
