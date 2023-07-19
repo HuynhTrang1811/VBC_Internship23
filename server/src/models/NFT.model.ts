@@ -7,6 +7,7 @@ export interface INFT {
     expirationDateTime: Date
     time_out: Date
     minter:string
+    tokenID:number
 }
 
 const NFTSchema = new Schema<INFT>({
@@ -18,6 +19,7 @@ const NFTSchema = new Schema<INFT>({
     expirationDateTime: { type: Date, default: Date.now() },
     time_out: { type: Date, default: Date.now() },
     minter:{type:String},
+    tokenID:{type:Number}
 })
 
 // NFTSchema.pre('findOneAndUpdate', function (next) {
