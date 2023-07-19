@@ -38,7 +38,7 @@ const Owned = (item: any) => {
         <div className='action-button'>
           <Button variant="outlined" onClick={handleOpenSell}>Sell</Button>
           <form>
-            {/* Form BUy NFT  */}
+           
             <Dialog
               open={openSell}
               onClose={handleCloseSell}

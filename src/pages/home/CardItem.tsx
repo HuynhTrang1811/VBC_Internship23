@@ -23,7 +23,7 @@ const CardItem = (item: any) => {
   const handleClick = (item: any) => {
      
     setOpen(true);
-    addItem(item.item);
+    addItem(item);
    
    
 
