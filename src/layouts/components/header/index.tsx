@@ -80,7 +80,7 @@ const Header = () => {
                                         items.map((item: any) => {
                                             return (<>
                                                 <div className="cart-items">
-                                                    <CartNFT name={item.name} price={item.price} img={item.img} time={item.time_left} id={item.id} />
+                                                    <CartNFT name={item.name} price={item.price} img={item.img} time={item.expirationDateTime} id={item.id} />
                                                 </div>
                                             </>
                                             )

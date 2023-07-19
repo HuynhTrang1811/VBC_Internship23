@@ -37,3 +37,39 @@
 .item-buy{
   padding-right: 10px;
 }
+#alert-dialog-title{
+  width: 300px!important;
+}
+.payment-card{
+  display: flex;
+  justify-content: space-between;
+  padding-bottom: 20px;
+}
+.item-cart-payment-img{
+ width: 100px;
+ height: 100px;
+
+
+}
+.cart-payment-img{
+  text-align: center;
+  align-items: center;
+  margin: auto;
+  height: 100px;
+  width: 100px;
+}
+.payment-method{
+  padding-top: 20px;
+  border-top: 1px solid #070f66;
+}
+.payment-option{
+  display: flex;
+  justify-content:flex-start;
+}
+#eth-img{
+  width: 20px;
+  height: 20px;
+  padding-top: 15px;
+  padding-right: 10px;
+  padding-left: 10px;
+}

@@ -14,6 +14,7 @@ import Button from '@mui/material/Button';
 import ContentCopyIcon from '@mui/icons-material/ContentCopy';
 import { IconButton } from '@mui/material';
 import CheckIcon from '@mui/icons-material/Check';
+import axios from "../../api"
 const Banner = () => {
     const data_category = [
 
@@ -69,7 +70,10 @@ const Banner = () => {
                 setOpenMint(true);
                 setOpenBacklog(false);
                 setMintNFT(data);
+                axios.post('/route/createNFT',data)
+                
             }
+
             // else if(data==""){
 
             // }
