@@ -1,3 +1,4 @@
+import {listNft} from '../../../contracts/nftList';
 import React, { useState } from 'react'
 import "./Owner.css"
 import { Box, Dialog, DialogActions, DialogContent, DialogTitle, TableCell } from '@mui/material'
@@ -6,6 +7,8 @@ import TextField from '@mui/material/TextField';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { DatePicker } from '@mui/x-date-pickers';
+
+
 const Owned = (item: any) => {
   const [openSell, setOpenSell] = useState(false);
   const [openRent, setOpenRent] = useState(false);
@@ -20,6 +23,13 @@ const Owned = (item: any) => {
   }
   const handleCloseSell = () => {
     setOpenSell(false);
+  }
+  const [months, setMonths] = useState(0);
+  const [price, setPrice] = useState(0);
+
+  const handleList = () => {
+      listNft(1, price);
+    
   }
   const Actions = (status: any) => {
 
