@@ -67,6 +67,13 @@ const CardItem = (item: any) => {
           {/* <img src="" style={{width:20,height:20}}/> */}
         </div>
       </div>
+      <div className="card-body">
+        <div className="card-name">Status:</div>
+        <div className="card-price">
+          {item.status}
+          {/* <img src="" style={{width:20,height:20}}/> */}
+        </div>
+      </div>
       <div className="card-buy" >
         <Stack>
           <Button className="app-home-item-button-add" variant="contained" size="medium" onClick={() => { handleClick(item) }} >add cart</Button>

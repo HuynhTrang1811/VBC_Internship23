@@ -1,4 +1,4 @@
-import {listNft} from '../../../contracts/nftList';
+import { listNft } from '../../../contracts/nftList';
 import React, { useState } from 'react'
 import "./Owner.css"
 import { Box, Dialog, DialogActions, DialogContent, DialogTitle, TableCell } from '@mui/material'
@@ -7,11 +7,17 @@ import TextField from '@mui/material/TextField';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { DatePicker } from '@mui/x-date-pickers';
-
+import axios from '../../../api';
 
 const Owned = (item: any) => {
   const [openSell, setOpenSell] = useState(false);
   const [openRent, setOpenRent] = useState(false);
+  const [nftPrice, setNFTPrice] = useState('');
+  let nftInput="";
+  const handleChange = (event:React.ChangeEvent<HTMLInputElement>) => {
+    nftInput=event.target.value;
+    
+  };
   const handleOpenRent = () => {
     setOpenRent(true);
   }
@@ -22,15 +28,20 @@ const Owned = (item: any) => {
     setOpenSell(true);
   }
   const handleCloseSell = () => {
+    setNFTPrice(nftInput);
     setOpenSell(false);
+    listNft(1, price);
+    axios.post('/route/sellNFT',item)
+
   }
   const [months, setMonths] = useState(0);
   const [price, setPrice] = useState(0);
 
   const handleList = () => {
-      listNft(1, price);
-    
+    listNft(1, price);
+
   }
+ 
   const Actions = (status: any) => {
 
     if (status.status == "Owner") {
@@ -38,7 +49,7 @@ const Owned = (item: any) => {
         <div className='action-button'>
           <Button variant="outlined" onClick={handleOpenSell}>Sell</Button>
           <form>
-           
+
             <Dialog
               open={openSell}
               onClose={handleCloseSell}
@@ -64,7 +75,9 @@ const Owned = (item: any) => {
                     </div>
                   </div>
                   <div className="sellNFT-input">
-                    <TextField  id="outlined-basic" label="NFT Price" variant="outlined"  helperText="Please enter NFT Price" />
+                    <TextField id="outlined-basic" label="NFT Price" variant="outlined" helperText="Please enter NFT Price" 
+                    onChange={handleChange}
+                       />
                   </div>
 
 
@@ -117,12 +130,12 @@ const Owned = (item: any) => {
                       }}
                     >
                       <LocalizationProvider dateAdapter={AdapterDayjs}>
-                       
-                          <DatePicker
-                            label="Renting Date"
-                            slotProps={{ textField: { helperText: 'Please enter Renting Date' } }}
-                          />
-                        
+
+                        <DatePicker
+                          label="Renting Date"
+                          slotProps={{ textField: { helperText: 'Please enter Renting Date' } }}
+                        />
+
                         <TextField
                           helperText="Please enter NFT price"
                           id="demo-helper-text-aligned-no-helper"

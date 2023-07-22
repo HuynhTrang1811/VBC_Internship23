@@ -15,20 +15,8 @@ const Market = () => {
     time_left: string;
     price: string;
   }
-  
-  // Khởi tạo state và sử dụng kiểu dữ liệu Product
-  const [products, setProduct] = useState<Product[]>([]);
-  // const products = [
-  //   { id: "1", name: "Terraform", img: "https://i.pinimg.com/236x/7e/56/77/7e56778e565d8f6f31bb744e10acb158.jpg", type: "Netflix", owner: "", time_left: "2d 3h", price: "0.05ETH" },
-  //   { id: "2", name: "Terraform", img: "https://i.pinimg.com/236x/c0/17/fe/c017fea9b1df16e8c3f525238fd2cbab.jpg", type: "Netflix", owner: "", time_left: "2d 3h", price: "0.05ETH" },
-  //   { id: "3", name: "Terraform", img: "https://i.pinimg.com/236x/ee/99/d6/ee99d6fedc69a859852620123c6291b5.jpg", type: "Netflix", owner: "", time_left: "2d 3h", price: "0.05ETH" },
-  //   { id: "4", name: "Terraform", img: "https://i.pinimg.com/236x/fc/aa/f8/fcaaf823f6c25055122b63c4621fc0eb.jpg", type: "Netflix", owner: "", time_left: "2d 3h", price: "0.05ETH" },
-  //   // { tokenID: "5", name: "Terraform", img: "https://openseauserdata.com/files/85230f10cbf4f9616c2eadb7121b6543.svg", type: "Netflix", owner: "", time_left: "2d 3h", price: "0.05ETH" },
-  //   // { tokenID: "6", name: "Terraform", img: "https://openseauserdata.com/files/85230f10cbf4f9616c2eadb7121b6543.svg", type: "Netflix", owner: "", time_left: "2d 3h", price: "0.05ETH" },
-  //   // { tokenID: "7", name: "Terraform", img: "https://openseauserdata.com/files/85230f10cbf4f9616c2eadb7121b6543.svg", type: "Netflix", owner: "", time_left: "2d 3h", price: "0.05ETH" },
-  //   // { tokenID: "8", name: "Terraform", img: "https://openseauserdata.com/files/85230f10cbf4f9616c2eadb7121b6543.svg", type: "Netflix", owner: "", time_left: "2d 3h", price: "0.05ETH" },
-  //   // { tokenID: "9", name: "Terraform", img: "https://openseauserdata.com/files/85230f10cbf4f9616c2eadb7121b6543.svg", type: "Netflix", owner: "", time_left: "2d 3h", price: "0.05ETH" },
-  // ];
+  const [sellNFT, setSellNFT] = useState<Product[]>([]);
+  const [rentNFT, setRentNFT] = useState<Product[]>([]);
   const [loading, setLoading] = useState(true);
 
 
@@ -36,15 +24,24 @@ const Market = () => {
     setTimeout(() => {
       setLoading(false)
     }, 1000)
-    axios.get('/route/getNFT')
-    .then((res)=>{
-      setProduct(res.data)
-      console.log(res.data)
-    })
-    .catch(error => console.log(error))
+
+      axios.get('/route/getRentNFT')
+      .then((res) => {
+        setRentNFT(res.data)
+        console.log(res.data)
+
+      })
+      .catch(error => console.log(error))
+      axios.get('/route/getSellNFT')
+      .then((res) => {
+        setSellNFT(res.data)
+        console.log(res.data)
+
+      })
+      .catch(error => console.log(error))
 
   }, [])
-
+  const NFT = sellNFT.concat(rentNFT);
   const ShowProduct = () => {
     return (<>
 
@@ -54,20 +51,24 @@ const Market = () => {
 
             <div className='loading-market'><CircularProgress disableShrink /></div>
           </>
-          ) : products.map((product: any) => {
+          ) : (NFT.map((product: any) => {
             return (<>
 
               <Grid item xs={6} key={product.id} >
-                <CardItem id={product._id} item={product} name={product.name} price={product.price} img={product.img} time={product.time_left} />
+                <CardItem id={product._id} item={product} name={product.name} price={product.price} img={product.img} time={product.time_left} status={product.status} />
 
               </Grid>
 
             </>
             )
 
-          })}
+          })
+          
+          )
+          
+          }
       </Grid>
-
+     
 
     </>)
   }

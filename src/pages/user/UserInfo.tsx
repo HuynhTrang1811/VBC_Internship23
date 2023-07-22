@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import Grid from '@mui/material/Grid';
 import Owned from './NFT/Owned';
 import "../home/Cards.css"
@@ -11,22 +11,60 @@ import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
 import "./User.css"
 import RentedNFT from './NFT/RentedNFT';
+import axios from '../../api';
 const UserInfo = () => {
-  const NFTs = [
-    { id: "1", name: "Zuki", img: "https://i.pinimg.com/236x/f1/35/e0/f135e01ae46897b325b93e4c9e112a0f.jpg", price: "0.1ETH", time_left: "3m 2d", status: "OnSale" },
-    { id: "2", name: "Zuki1", img: "https://i.pinimg.com/236x/f1/35/e0/f135e01ae46897b325b93e4c9e112a0f.jpg", price: "0.1ETH", time_left: "3m 2d", status: "Owner" },
-    { id: "3", name: "Zuki2", img: "https://i.pinimg.com/236x/f1/35/e0/f135e01ae46897b325b93e4c9e112a0f.jpg", price: "0.1ETH", time_left: "3m 2d", status: "Renting" },
-    { id: "4", name: "Zuki3", img: "https://i.pinimg.com/236x/f1/35/e0/f135e01ae46897b325b93e4c9e112a0f.jpg", price: "0.1ETH", time_left: "3m 2d", status: "Owner" },
-    { id: "5", name: "Zuki4", img: "https://i.pinimg.com/236x/f1/35/e0/f135e01ae46897b325b93e4c9e112a0f.jpg", price: "0.1ETH", time_left: "3m 2d", status: "OnSale" },
-    { id: "6", name: "Zuki5", img: "https://i.pinimg.com/236x/f1/35/e0/f135e01ae46897b325b93e4c9e112a0f.jpg", price: "0.1ETH", time_left: "3m 2d", status: "Owner" },
-  ]
+  interface Product {
+    id: string;
+    name: string;
+    img: string;
+    type: string;
+    owner: string;
+    time_left: string;
+    price: string;
+    status: string
+
+  }
+  //products : have owner, sell, rent NFT of user
+  const [ownerNFT, setOwner] = useState<Product[]>([]);
+  const [sellNFT, setSell] = useState<Product[]>([]);
+  const [rentNFT, setRent] = useState<Product[]>([]);
+
   const [toggle, setToggle] = useState(1);
 
 
   const toggleTab = (index: any) => {
     setToggle(index)
   };
+  useEffect(() => {
 
+    const address = localStorage.getItem('userAddress') ?? '';
+    const get = encodeURIComponent(address);
+    console.log(typeof address)
+
+
+
+    axios.get('/route/getOwnerNFTUser/' + encodeURIComponent(address))
+      .then((res) => {
+        setOwner(res.data)
+        console.log(res.data)
+
+      })
+      .catch(error => console.log(error))
+    axios.get('/route/getSellNFTUser/' + encodeURIComponent(address))
+      .then((res) => {
+        setSell(res.data)
+        console.log(res.data)
+
+      })
+      .catch(error => console.log(error))
+    axios.get('/route/getRentNFTUser/' + encodeURIComponent(address))
+      .then((res) => {
+        setRent(res.data)
+        console.log(res.data)
+
+      })
+      .catch(error => console.log(error))
+  }, [])
 
   return (<>
 
@@ -61,14 +99,15 @@ const UserInfo = () => {
                   </TableRow>
                 </TableHead>
                 <TableBody>
-                  {NFTs.map((row) => (
-                    <TableRow
-                      key={row.id}
-                      sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
-                    >
-                      <Owned name={row.name} img={row.img} price={row.price} time_left={row.time_left} status={row.status} />
+                  {ownerNFT.length? <><div>empty</div>
+                  </>:ownerNFT.map((row) => (
+                  <TableRow
+                    key={row.id}
+                    sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
+                  >
+                    <Owned name={row.name} img={row.img} price={row.price} time_left={row.time_left} status="owner" />
 
-                    </TableRow>
+                  </TableRow>
                   ))}
                 </TableBody>
               </Table>
@@ -88,12 +127,21 @@ const UserInfo = () => {
                     <TableCell className='row-name' align="center">
                       TIME START</TableCell>
                     <TableCell className='row-name' align="center">TIME OUT</TableCell>
-                  
-                  
+
+
                   </TableRow>
                 </TableHead>
                 <TableBody>
-                 
+                  {sellNFT.length? <><div>empty</div>
+                  </>:sellNFT.map((row) => (
+                    <TableRow
+                      key={row.id}
+                      sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
+                    >
+                      <Owned name={row.name} img={row.img} price={row.price} time_left={row.time_left} status={row.status} />
+
+                    </TableRow>
+                  ))}
                 </TableBody>
               </Table>
             </TableContainer>
@@ -114,7 +162,8 @@ const UserInfo = () => {
                   </TableRow>
                 </TableHead>
                 <TableBody>
-                  {/* {NFTs.map((row) => (
+                  {rentNFT.length? <><div>empty</div>
+                  </>:rentNFT.map((row) => (
                     <TableRow
                       key={row.id}
                       sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
@@ -122,7 +171,7 @@ const UserInfo = () => {
                       <Owned name={row.name} img={row.img} price={row.price} time_left={row.time_left} status={row.status} />
 
                     </TableRow>
-                  ))} */}
+                  ))}
                 </TableBody>
               </Table>
             </TableContainer>

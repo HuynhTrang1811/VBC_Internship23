@@ -1,18 +1,16 @@
 import { Router } from 'express'
 const router = Router()
 import * as nftController from '../controllers/NFT.controller'
-router.get('/getNFT', nftController.getNFT)
 
+
+router.get('/getOwnerNFTUser/:address', nftController.getOwnerNFTUser)
+router.get('/getSellNFTUser/:address', nftController.getSellNFTUser)
+router.get('/getRentNFTUser/:address', nftController.getRentNFTUser)
+
+
+
+
+router.get('/getRentNFT', nftController.getRentNFT)
+router.get('/getSellNFT', nftController.getSellNFT)
 router.post('/createNFT',nftController.createNFT)
-
-// router.put(
-//     '/updateLocation',
-//     locationMiddleware.checkUpdatingLocation,
-//     locationController.updateLocation,
-// )
-
-// router.put('/controlWaterPumping', locationController.controlWaterPumping)
-// router.put('/controlLight', locationController.controlLight)
-
-// router.delete('/deleteLocation', locationController.deleteLocation)
 export default router

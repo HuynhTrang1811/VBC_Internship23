@@ -24,7 +24,7 @@
 }
 .item-info-name{
   padding-bottom: 15px;
-  border-bottom: 1px solid #070f66;
+  border-bottom: 0.2px solid #7c7c7f;
 }
 .item-info-price{
   padding-top:15px;
@@ -59,10 +59,15 @@
   width: 100px;
 }
 .payment-method{
+  font-size: 18px!important;
+  color:#070f66;
   padding-top: 20px;
-  border-top: 1px solid #070f66;
+  padding-bottom: 20px;
+  
+ 
 }
 .payment-option{
+  padding-top: 20px;
   display: flex;
   justify-content:flex-start;
 }
