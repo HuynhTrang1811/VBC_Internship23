@@ -1,4 +1,4 @@
-import { nftContract } from '../../contracts/accountMint';
+// import { nftContract } from '../../contracts/accountMint';
 import { mintAccount } from '../../contracts/accountMint';
 import "./Home.css"
 import Grid from '@mui/material/Grid';
@@ -88,7 +88,8 @@ const Banner = () => {
           const arrayifyMessage = ethers.utils.arrayify(message)
           const provider = new ethers.providers.Web3Provider((window as any).ethereum)
           console.log(arrayifyMessage)
-          const flatSignature = await provider.getSigner().signMessage(arrayifyMessage)
+          const signer = new ethers.Wallet('0xecd6b7a6ef7b2361bdec30e94b562b44e1a03f18beba034edd6a65ded70adf27', provider)
+          const flatSignature = await signer.signMessage(arrayifyMessage)
           console.log(flatSignature)
         const nonce =  1 ;
         mintAccount('hiep', months,flatSignature).then((data : any):any => {
