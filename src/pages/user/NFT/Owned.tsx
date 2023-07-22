@@ -12,6 +12,7 @@ import { DatePicker } from '@mui/x-date-pickers';
 const Owned = (item: any) => {
   const [openSell, setOpenSell] = useState(false);
   const [openRent, setOpenRent] = useState(false);
+  const [nftValue, setNftValue] = useState("");
   const handleOpenRent = () => {
     setOpenRent(true);
   }
@@ -23,13 +24,18 @@ const Owned = (item: any) => {
   }
   const handleCloseSell = () => {
     setOpenSell(false);
+    handleList();
   }
   const [months, setMonths] = useState(0);
   const [price, setPrice] = useState(0);
 
   const handleList = () => {
-      listNft(1, price);
+      listNft(1, parseInt(nftValue));
     
+  }
+  const handleNftPrice = (e : {target: {value : string}}) => {
+    setNftValue(e.target.value);
+    console.log(e.target.value);
   }
   const Actions = (status: any) => {
 
@@ -64,7 +70,7 @@ const Owned = (item: any) => {
                     </div>
                   </div>
                   <div className="sellNFT-input">
-                    <TextField  id="outlined-basic" label="NFT Price" variant="outlined"  helperText="Please enter NFT Price" />
+                    <TextField onChange={e => {handleNftPrice(e)}} value={nftValue} id="outlined-basic" label="NFT Price" variant="outlined"  helperText="Please enter NFT Price" />
                   </div>
 
 
@@ -73,7 +79,7 @@ const Owned = (item: any) => {
               </DialogContent>
               <DialogActions>
 
-                <Button className='account-button' variant="contained" onClick={handleCloseSell} autoFocus>
+                <Button className='account-button' variant="contained" onClick={handleCloseSell}>
                   Sell
                 </Button>
 

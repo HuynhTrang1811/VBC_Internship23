@@ -1,7 +1,7 @@
 import { Request, Response, NextFunction } from 'express'
 import { StatusCodes } from 'http-status-codes'
-import NFT from '../models/NFT.model'
-import INFT from '../models/NFT.model'
+import NFT, { INFT } from '../models/NFT.model'
+// import INFT from '../models/NFT.model'
 import { AppError } from '../utils/appError'
 import { catchAsync } from '../utils/catchAsync'
 
@@ -18,13 +18,27 @@ export const getNFT = catchAsync(
       
     },
 )
-
+ interface RequestVBC extends Request {
+    body: INFT
+}
 // [POST] /api/route/createNFT
 export const createNFT= (req:Request,res:Response,next:NextFunction)=>{
-    const name=req.body.name;
-    const time_mint=req.body.expirationDateTime;
-    const minter=req.body.minter;
-    const location = NFT.create({ name,time_mint,minter })
+    const {    name,
+        img,
+        price,
+        expirationDateTime,
+        time_out,
+        minter,
+        tokenID, state, tokenURI} = req.body
+    console.log('hello')
+    console.log(req.body); 
+    const location = NFT.create({ name,
+        img,
+        price,
+        expirationDateTime,
+        time_out,
+        minter,
+        tokenID, state, tokenURI })
     res.status(StatusCodes.CREATED).json({
         status: 'success',
         data: {

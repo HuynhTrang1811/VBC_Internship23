@@ -1,10 +1,12 @@
 import { ethers } from 'ethers';
 import {getMarketAbi} from './utils/getAbis';
-
+import { nftContract } from './accountMint';
 export const listNft = async (tokenID : number, price : any) => {
+  console.log(tokenID); 
     const abi = getMarketAbi();
     const provider = new ethers.providers.Web3Provider((window as any).ethereum)
-    const contractAddress = '0x7092E934270DBEEbac1e4f91dD1f3D6E997839b9'
+    const contractAddress = '0x66F418bB2bCD7A8a5BAA80DC678F9Af5c26ace5a'
+    const nftcontract = await nftContract(); 
     // MetaMask requires requesting permission to connect users accounts
     await provider.send("eth_requestAccounts", []);
     
@@ -18,9 +20,12 @@ export const listNft = async (tokenID : number, price : any) => {
     const contract = new ethers.Contract(contractAddress, abi, signer);
     async function list(){
         try {
-        
-            const tx = await contract.listNFT(tokenID,price);
-
+          const tx = await nftcontract.approve(contractAddress, tokenID);
+          
+          // Wait for the transaction to be mined
+          await tx.wait();
+            const tx1 = await contract.listNft(tokenID,price);
+            
             
             console.log('list successful!');
           } catch (error) {
@@ -28,4 +33,5 @@ export const listNft = async (tokenID : number, price : any) => {
           }
 
     };
+    await list(); 
 }
