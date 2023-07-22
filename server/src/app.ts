@@ -6,6 +6,7 @@ import rateLimit from 'express-rate-limit'
 import mongoSanitize from 'express-mongo-sanitize'
 import compression from 'compression'
 import nftRoute from './routes/nft.route'
+import userRoute from './routes/user.route'
 
 import morgan from 'morgan'
 
@@ -28,6 +29,7 @@ app.use(compression())
 
 app.use(morgan('tiny'))
 app.use('/api/route', nftRoute)
+app.use('/api/user',userRoute)
 
 app.get('*', (req: Request, res: Response) => {
     res.send('Express + TypeScript Server')

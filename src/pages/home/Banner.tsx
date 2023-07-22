@@ -48,7 +48,7 @@ const Banner = () => {
 
 
     const handleClose = () => {
-        console.log("close")
+     
         setOpen(false);
         setOpenNetflix(false);
     };
@@ -71,6 +71,13 @@ const Banner = () => {
                 setOpenBacklog(false);
                 setMintNFT(data);
                 axios.post('/route/createNFT',data)
+                .then((request) => {
+                    console.log('Post data success:', request.data);
+                  })
+                  .catch((error) => {
+                    console.error('Error posting data:', error);
+                  });
+                
                 
             }
 

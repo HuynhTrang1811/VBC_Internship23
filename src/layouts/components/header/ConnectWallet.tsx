@@ -1,19 +1,74 @@
 import { useEffect, useState } from "react";
 import './Header.css'
 import '../button/Button.css'
+import axios from "../../../api";
 const ConnectWallet = () => {
-    const [walletAdress, setAdress] = useState("Connect Wallet");
+    interface User {
+        address: string
+    }
 
+    // Khởi tạo state và sử dụng kiểu dữ liệu Product
     useEffect(() => {
-        getcurentWalletconnect();
 
-    })
+        getcurentWalletconnect();
+        checkUser()
+       
+        axios.get('/user/getUser')
+        .then((res) => {
+            setUser(res.data)
+            console.log(res.data)
+        })
+        .catch(error => console.log(error))
+
+
+
+
+
+    }, [])
+
+    const [walletAdress, setAdress] = useState("Connect Wallet");
+    const [user, setUser] = useState<User[]>([]);
+  
+    // const [have_user, setHaveUser] = useState([])
+ 
+    const checkUser=()=>{
+        if (walletAdress != 'Connect Wallet') {
+            localStorage.setItem('userAddress', walletAdress);
+          
+            let flag = 0;
+            user.map((users: any) => {
+               
+                if (users.address === walletAdress) { flag = 1 }
+            })
+           
+            const data = { address: walletAdress };
+            if (flag === 0) {
+                console.log('post')
+                axios.post('/user/newUser', data)
+                    .then((request) => {
+                        console.log('Post data success:', request.data);
+                    })
+                    .catch((error) => {
+                        console.error('Error posting data:', error);
+                    });
+            }
+    
+    
+        }
+
+    }
     const connectWallet = async () => {
         if (typeof window != "undefined" && typeof (window as any).ethereum != "undefined") {
             try {
                 const accounts = await (window as any).ethereum.request({ method: "eth_requestAccounts" });
                 setAdress(accounts[0])
-               
+                checkUser();
+
+
+
+
+
+
             }
             catch (err) {
                 alert(`Something went wrong: ${err}`);
@@ -24,12 +79,14 @@ const ConnectWallet = () => {
         }
     }
     const getcurentWalletconnect = async () => {
-        if (typeof window != "undefined" && typeof(window as any).ethereum != "undefined") {
+        if (typeof window != "undefined" && typeof (window as any).ethereum != "undefined") {
             try {
                 const accounts = await (window as any).ethereum.request({ method: "eth_accounts" });
                 if (accounts.length > 0) {
                     setAdress(accounts[0])
-                  
+                    checkUser()
+                    
+
                 }
                 else {
                     console.log("connect metamask using connect button")
@@ -46,18 +103,18 @@ const ConnectWallet = () => {
 
 
     return (
-     
-            
-            <header className="header-button">
 
-                <div className="button-wallet" onClick={connectWallet}>
-                    <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/3/36/MetaMask_Fox.svg/1200px-MetaMask_Fox.svg.png" style={{ width: 30, height: 30 }} />
-                    <div className="address-button">{walletAdress.substring(0,8)}...{walletAdress.substring(38)}</div>
-                </div>
 
-            </header>
-      
-       
+        <header className="header-button">
+
+            <div className="button-wallet" onClick={connectWallet}>
+                <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/3/36/MetaMask_Fox.svg/1200px-MetaMask_Fox.svg.png" style={{ width: 30, height: 30 }} />
+                <div className="address-button">{walletAdress.substring(0, 8)}...{walletAdress.substring(38)}</div>
+            </div>
+
+        </header>
+
+
     );
 }
 export default ConnectWallet;
