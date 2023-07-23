@@ -25,11 +25,15 @@ var __importStar = (this && this.__importStar) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = require("express");
 const router = (0, express_1.Router)();
-const nftController = __importStar(require("../controllers/NFT.controller"));
-router.get('/getOwnerNFTUser/:address', nftController.getOwnerNFTUser);
-router.get('/getSellNFTUser/:address', nftController.getSellNFTUser);
-router.get('/getRentNFTUser/:address', nftController.getRentNFTUser);
-router.get('/getRentNFT', nftController.getRentNFT);
-router.get('/getSellNFT', nftController.getSellNFT);
-router.post('/createNFT', nftController.createNFT);
+const useController = __importStar(require("../controllers/User.controller"));
+router.get('/getUser', useController.getUser);
+router.post('/newUser', useController.newUser);
+// router.put(
+//     '/updateLocation',
+//     locationMiddleware.checkUpdatingLocation,
+//     locationController.updateLocation,
+// )
+// router.put('/controlWaterPumping', locationController.controlWaterPumping)
+// router.put('/controlLight', locationController.controlLight)
+// router.delete('/deleteLocation', locationController.deleteLocation)
 exports.default = router;

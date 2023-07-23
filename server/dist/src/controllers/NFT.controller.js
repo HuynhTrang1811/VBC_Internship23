@@ -12,25 +12,48 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.createNFT = exports.getNFT = void 0;
+exports.createNFT = exports.getSellNFT = exports.getRentNFT = exports.getRentNFTUser = exports.getSellNFTUser = exports.getOwnerNFTUser = void 0;
 const http_status_codes_1 = require("http-status-codes");
 const NFT_model_1 = __importDefault(require("../models/NFT.model"));
 const catchAsync_1 = require("../utils/catchAsync");
-// [GET] /api/route/getNFT
-exports.getNFT = (0, catchAsync_1.catchAsync)((req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
-    const nft = yield NFT_model_1.default.find({});
+//-------------------------User-------------------------
+// [GET] /api/route/getOwnerNFTUser
+//get all NFT owner for user
+exports.getOwnerNFTUser = (0, catchAsync_1.catchAsync)((req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+    const nft = yield NFT_model_1.default.find({ minter: req.params.address.toUpperCase(), status: "owner" });
     res.json(nft.map(product => product));
-    // res.status(StatusCodes.OK).json({
-    //     data: {
-    //         nft,
-    //     },
-    // })
+}));
+// [GET] /api/route/getSellNFTUser
+//get all NFT owner for user
+exports.getSellNFTUser = (0, catchAsync_1.catchAsync)((req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+    const nft = yield NFT_model_1.default.find({ minter: req.params.address.toUpperCase(), status: "onsale" });
+    res.json(nft.map(product => product));
+}));
+// [GET] /api/route/getRentNFTUser
+//get all NFT owner for user
+exports.getRentNFTUser = (0, catchAsync_1.catchAsync)((req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+    const nft = yield NFT_model_1.default.find({ minter: req.params.address.toUpperCase(), status: "rent" });
+    res.json(nft.map(product => product));
+}));
+//-------------------------Market-------------------------
+// [GET] /api/route/getNFT
+//get all NFT rent for market
+exports.getRentNFT = (0, catchAsync_1.catchAsync)((req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+    const nft = yield NFT_model_1.default.find({ status: "rent" });
+    console.log(nft);
+    res.json(nft.map(product => product));
+}));
+//get all NFT sell for market
+exports.getSellNFT = (0, catchAsync_1.catchAsync)((req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+    const nft = yield NFT_model_1.default.find({ status: "onsale" });
+    console.log(nft);
+    res.json(nft.map(product => product));
 }));
 // [POST] /api/route/createNFT
 const createNFT = (req, res, next) => {
     const name = req.body.name;
     const time_mint = req.body.expirationDateTime;
-    const minter = req.body.minter;
+    const minter = req.body.minter.toUpperCase();
     const location = NFT_model_1.default.create({ name, time_mint, minter });
     res.status(http_status_codes_1.StatusCodes.CREATED).json({
         status: 'success',
@@ -40,76 +63,17 @@ const createNFT = (req, res, next) => {
     });
 };
 exports.createNFT = createNFT;
-// // [PUT] /api/location/controlWaterPumping
-// export const controlWaterPumping = catchAsync(
-//     async (req: Request, res: Response, next: NextFunction) => {
-//         console.log(req.body)
-//         const control = await Location.findOneAndUpdate(
-//             { _id: req.body.id },
-//             { water_pumping_status: req.body.water_pumping_status },
-//             {
-//                 new: true,
-//                 runValidators: true,
-//             },
-//         )
-//         res.status(StatusCodes.OK).json({
-//             status: 'success',
-//             data: {
-//                 control,
-//             },
-//         })
-//     },
-// )
-// // [PUT] /api/location/controlLight
-// export const controlLight = catchAsync(
-//     async (req: Request, res: Response, next: NextFunction) => {
-//         console.log(req.body)
-//         const control = await Location.findOneAndUpdate(
-//             { _id: req.body.id },
-//             { light_status: req.body.light_status },
-//             {
-//                 new: true,
-//                 runValidators: true,
-//             },
-//         )
-//         res.status(StatusCodes.OK).json({
-//             status: 'success',
-//             data: {
-//                 control,
-//             },
-//         })
-//     },
-// )
-// // [PUT] /api/location/updateLocation
-// export const updateLocation = catchAsync(
-//     async (req: Request, res: Response, next: NextFunction) => {
-//         const { name, device, id } = req.body
-//         const updateLocation = await Location.findOneAndUpdate(
-//             { _id: id },
-//             { name, device },
-//             {
-//                 new: true,
-//                 runValidators: true,
-//             },
-//         )
-//         res.status(StatusCodes.OK).json({
-//             status: 'success',
-//             data: {
-//                 updateLocation,
-//             },
-//         })
-//     },
-// )
-// //[DELETE] /api/location/deleteLocation
-// export const deleteLocation = catchAsync(
-//     async (req: Request, res: Response, next: NextFunction) => {
-//         const id = req.body._id
-//         const deleteLocation = await Location.findOneAndRemove({ _id: id })
-//         res.status(StatusCodes.OK).json({
-//             status: 'success',
-//             data: {
-//                 deleteLocation,
-//             },
-//         })
-//     },
-// )
+// [POST] /api/route/sellNFT
+//post to SellNFT
+// export const sellNFT= (req:Request,res:Response,next:NextFunction)=>{
+//     const name=req.body.name;
+//     const time_mint=req.body.expirationDateTime;
+//     const minter=req.body.minter;
+//     const sellNFT=SellNFT.create({name,time_mint,minter});
+//     res.status(StatusCodes.CREATED).json({
+//         status: 'success',
+//         data: {
+//             sellNFT,
+//         },
+//     })
+// }
