@@ -7,10 +7,12 @@ const NFTSchema = new mongoose_1.Schema({
     },
     img: { type: String },
     price: { type: String },
-    expirationDateTime: { type: Date, default: Date.now() },
+    expirationDateTime: { type: String, default: Date.now() },
     time_out: { type: Date, default: Date.now() },
     minter: { type: String },
-    tokenID: { type: Number }
+    tokenID: { type: Number },
+    status: { type: String },
+    tokenURI: { type: String }
 });
 // NFTSchema.pre('findOneAndUpdate', function (next) {
 //     this.set({ updatedAt: new Date(Date.now()) })

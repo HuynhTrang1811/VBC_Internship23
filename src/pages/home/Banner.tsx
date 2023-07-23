@@ -95,13 +95,14 @@ const Banner = () => {
         mintAccount('hiep', months,flatSignature).then((data : any):any => {
             if (data != null ) {
                 console.log(data); 
-                const bodyData : INFT = {    name: 'Netflix NFT',
+                const bodyData  = {    name: 'Netflix NFT',
                 img: 'https://images.theconversation.com/files/417198/original/file-20210820-25-1j3afhs.jpeg?ixlib=rb-1.1.0&q=45&auto=format&w=926&fit=clip',
                 price: "0",
                 expirationDateTime: data.expirationDateTime,
-                minter: data.minter,
+                minter: (data.minter as string).toLowerCase(),
                 tokenID: parseInt(data.tokenId),
-                tokenURI: data.tokenURI} 
+                tokenURI: data.tokenURI,
+                status:"owner"} 
                 console.log(bodyData)
                 setOpenMint(true);
                 setOpenBacklog(false);

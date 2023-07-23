@@ -8,8 +8,8 @@ export interface INFT {
     time_out: Date
     minter:string
     tokenID:number
-    state: 'renting' | 'selling' | 'minted' 
-    tokenURI: string
+    status: 'owner' | 'onsale' | 'rent' 
+    tokenURI: string,
 }
 
 const NFTSchema = new Schema<INFT>({
@@ -22,7 +22,7 @@ const NFTSchema = new Schema<INFT>({
     time_out: { type: Date, default: Date.now() },
     minter:{type:String},
     tokenID:{type:Number},
-    state: {type: String},
+    status: {type: String},
     tokenURI: { type:String}
 })
 

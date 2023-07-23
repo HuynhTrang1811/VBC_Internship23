@@ -12,25 +12,25 @@ import Paper from '@mui/material/Paper';
 import "./User.css"
 import RentedNFT from './NFT/RentedNFT';
 import axios from '../../api';
-const UserInfo = () => {
-  interface Product {
-    id: string;
-    name: string;
-    img: string;
-    type: string;
-    owner: string;
-    time_left: string;
-    price: string;
-    status: string
+interface Product {
+  id: string;
+  name: string;
+  img: string;
+  type: string;
+  owner: string;
+  time_left: string;
+  price: string;
+  status: string
 
-  }
+}
+const UserInfo = () => {
   //products : have owner, sell, rent NFT of user
-  const [ownerNFT, setOwner] = useState<Product[]>([]);
+  const [ownerNFT, setOwner] = useState<any[]>([])
   const [sellNFT, setSell] = useState<Product[]>([]);
   const [rentNFT, setRent] = useState<Product[]>([]);
 
   const [toggle, setToggle] = useState(1);
-
+  const [update, setUpdate] = useState(false);
 
   const toggleTab = (index: any) => {
     setToggle(index)
@@ -41,45 +41,43 @@ const UserInfo = () => {
     const get = encodeURIComponent(address);
     console.log(typeof address)
 
+    console.log(address); 
 
-
-    axios.get('/route/getOwnerNFTUser/' + encodeURIComponent(address))
-      .then((res) => {
-        setOwner(res.data)
-        console.log(res.data)
-
+    axios.get('/route/getOwnerNFTUser/' + address)
+      .then((res) => { 
+        setOwner(res.data);
+        console.log(res.data); 
       })
       .catch(error => console.log(error))
-    axios.get('/route/getSellNFTUser/' + encodeURIComponent(address))
+    axios.get('/route/getSellNFTUser/' + address)
       .then((res) => {
         setSell(res.data)
         console.log(res.data)
 
       })
       .catch(error => console.log(error))
-    axios.get('/route/getRentNFTUser/' + encodeURIComponent(address))
+    axios.get('/route/getRentNFTUser/' + address)
       .then((res) => {
         setRent(res.data)
         console.log(res.data)
 
       })
       .catch(error => console.log(error))
-  }, [])
+  }, [update])
 
   return (<>
-
 
     <div className="app-user-function">
 
       <div className='bloc-tabs'>
         <div className={toggle === 1 ? "active-tabs" : "tabs"} onClick={() => toggleTab(1)}>
-          <h4> OWNED</h4>
+          <h4>OWNED</h4>
         </div>
         <div className={toggle === 2 ? "active-tabs" : "tabs"} onClick={() => toggleTab(2)}>
-          <h4>  RENTED</h4>
+          <h4>ONSALE</h4>
         </div>
         <div className={toggle === 3 ? "active-tabs" : "tabs"} onClick={() => toggleTab(3)}>
-          <h4>  ONSALE</h4>
+          <h4>RENTED</h4>
         </div>
 
       </div>
@@ -92,20 +90,20 @@ const UserInfo = () => {
                   <TableRow >
                     <TableCell></TableCell>
                     <TableCell className='row-name' >NAME</TableCell>
-                    <TableCell className='row-name' align="center">PASSWORD</TableCell>
+                    <TableCell className='row-name' align="center">TOKEN ID</TableCell>
                     <TableCell className='row-name' align="center">TIME OUT</TableCell>
                     <TableCell className='row-name' align="center">STATUS</TableCell>
                     <TableCell className='row-name' align="center"></TableCell>
                   </TableRow>
                 </TableHead>
                 <TableBody>
-                  {ownerNFT.length? <><div>empty</div>
+                  {ownerNFT.length == 0 ? <><div>empty</div>
                   </>:ownerNFT.map((row) => (
                   <TableRow
                     key={row.id}
                     sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
                   >
-                    <Owned name={row.name} img={row.img} price={row.price} time_left={row.time_left} status="owner" />
+                    <Owned update={update} setUpdate={setUpdate} tokenID = {row.tokenID} name={row.name} img={row.img} price={row.price} time_left={row.time_left} status="owner" />
 
                   </TableRow>
                   ))}
@@ -132,13 +130,13 @@ const UserInfo = () => {
                   </TableRow>
                 </TableHead>
                 <TableBody>
-                  {sellNFT.length? <><div>empty</div>
+                  {sellNFT.length == 0? <><div>empty</div>
                   </>:sellNFT.map((row) => (
                     <TableRow
                       key={row.id}
                       sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
                     >
-                      <Owned name={row.name} img={row.img} price={row.price} time_left={row.time_left} status={row.status} />
+                      <Owned  name={row.name} img={row.img} price={row.price} time_left={row.time_left} status={row.status} />
 
                     </TableRow>
                   ))}
@@ -162,7 +160,7 @@ const UserInfo = () => {
                   </TableRow>
                 </TableHead>
                 <TableBody>
-                  {rentNFT.length? <><div>empty</div>
+                  {rentNFT.length == 0? <><div>empty</div>
                   </>:rentNFT.map((row) => (
                     <TableRow
                       key={row.id}

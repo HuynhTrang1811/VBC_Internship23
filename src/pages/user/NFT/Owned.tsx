@@ -27,11 +27,13 @@ const Owned = (item: any) => {
   const handleOpenSell = () => {
     setOpenSell(true);
   }
-  const handleCloseSell = () => {
+  const handleCloseSell = async () => {
     setNFTPrice(nftInput);
     setOpenSell(false);
-    listNft(1, price);
-    axios.post('/route/sellNFT',item)
+    // listNft(1, price);
+    await axios.post('/route/sellNFT',item)
+    item.setUpdate(!item.update); 
+
 
   }
   const [months, setMonths] = useState(0);
@@ -44,7 +46,7 @@ const Owned = (item: any) => {
  
   const Actions = (status: any) => {
 
-    if (status.status == "Owner") {
+    if (status.status == "owner") {
       return (<>
         <div className='action-button'>
           <Button variant="outlined" onClick={handleOpenSell}>Sell</Button>
@@ -182,11 +184,10 @@ const Owned = (item: any) => {
         {item.name}
 
       </TableCell>
-      <TableCell className='cell-name' align="center" >{item.price}</TableCell>
+      <TableCell className='cell-name' align="center" >{item.tokenID}</TableCell>
       <TableCell className='cell-name' align="center">{item.time_left}</TableCell>
       <TableCell align="center" className={item.status === 'OnSale' ? 'cell-name-sale' : item.status === 'Owner' ? 'cell-name-owner' : 'cell-name-rent'}>{item.status}</TableCell>
       <TableCell align="center"><Actions status={item.status} /></TableCell>
-
     </>
   )
 }
