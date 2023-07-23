@@ -23,22 +23,7 @@ export const getNFT = catchAsync(
 }
 // [POST] /api/route/createNFT
 export const createNFT= (req:Request,res:Response,next:NextFunction)=>{
-    const {    name,
-        img,
-        price,
-        expirationDateTime,
-        time_out,
-        minter,
-        tokenID, state, tokenURI} = req.body
-    console.log('hello')
-    console.log(req.body); 
-    const location = NFT.create({ name,
-        img,
-        price,
-        expirationDateTime,
-        time_out,
-        minter,
-        tokenID, state, tokenURI })
+    const location = NFT.create(req.body)
     res.status(StatusCodes.CREATED).json({
         status: 'success',
         data: {
@@ -46,6 +31,8 @@ export const createNFT= (req:Request,res:Response,next:NextFunction)=>{
         },
     })
 }
+
+
 
 // // [PUT] /api/location/controlWaterPumping
 // export const controlWaterPumping = catchAsync(
