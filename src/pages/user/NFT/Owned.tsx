@@ -86,7 +86,7 @@ const Owned = (item: any) => {
               </DialogContent>
               <DialogActions>
 
-                <Button className='account-button' variant="contained" onClick={handleCloseSell} autoFocus>
+                <Button className='account-button' variant="contained" onClick={handleCloseSell}>
                   Sell
                 </Button>
 

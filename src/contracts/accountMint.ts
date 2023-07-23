@@ -1,13 +1,42 @@
 import { ethers } from 'ethers';
 import {get} from './utils/getAbis';
+import {contractAddress} from '../constants/constants'
+
+// or if its not ESmodule 
+
+// require('dotenv').config()
 
 
-export const mintAccount = async (login: any, rentalTime:any) => {// ABI of the smart contract
+export const nftContract = async () => {
+  const abi = get();
+    
+  ethers.providers.getNetwork(8888)
+  // Address of the smart contract
+  
+  // Ethereum node URL
+  const nodeUrl = 'https://agridential.vbchain.vn/VBCinternship2023'; // Replace with your Ethereum node URL
+  
+  // Create a provider instance
+  const provider = new ethers.providers.Web3Provider((window as any).ethereum)
+
+  // MetaMask requires requesting permission to connect users accounts
+  await provider.send("eth_requestAccounts", []);
+  
+  // The MetaMask plugin also allows signing transactions to
+  // send ether and pay to change state within the blockchain.
+  // For this, you need the account signer...
+  const signer = provider.getSigner()
+  
+  // Create a contract instance
+  return new ethers.Contract(contractAddress, abi, signer);
+}
+
+export const mintAccount = async (login: any, rentalTime:any, signature: any ) => {// ABI of the smart contract
     const abi = get();
     
     ethers.providers.getNetwork(8888)
     // Address of the smart contract
-    const contractAddress = '0x5d675b37cb24Ff542c8E969920Ebc48F7e969362'; // Replace with your contract address
+    const contractAddress = (await nftContract()).address; // Replace with your contract address
     
     // Ethereum node URL
     const nodeUrl = 'https://agridential.vbchain.vn/VBCinternship2023'; // Replace with your Ethereum node URL
@@ -28,11 +57,11 @@ export const mintAccount = async (login: any, rentalTime:any) => {// ABI of the 
     
     
     // Mint function
-    async function mint(login: string, rentalTime: number) {
+    async function mint(login: string, rentalTime: number, signature: any ) {
       try {
+        // console.log(ethers.utils.base58.decode(signature));
+        const tx = await contract.accountMint(login, rentalTime, signature );
         
-        const tx = await contract.accountMint(login, rentalTime);
-    
         
         console.log('Mint successful!');
       } catch (error) {
@@ -41,7 +70,7 @@ export const mintAccount = async (login: any, rentalTime:any) => {// ABI of the 
     }
 
     
-    mint(login, rentalTime);
+    mint(login, rentalTime,signature) ;
     
     function printMintTransactionInfo() {
         contract.on('Transfer', (from, to, tokenId, event) => {
@@ -69,30 +98,7 @@ export const mintAccount = async (login: any, rentalTime:any) => {// ABI of the 
         });
         });
         }
-    // printMintTransactionInfo();
-        
-    // function getExpirationtime() {
-    //   const filter = contract.filters.NFTMinted();
-
-    //   // Event listener to capture the minter's address
-    //   contract.on(filter, async (minter, tokenId) => {
-    //   console.log('Minter:', minter);
-    //   console.log('Token ID:', tokenId.toNumber());
-
-    //  // Get the minted NFT from the mapping
-    //   const mintedNFT = await contract.nfts(tokenId);
-    //   const expirationTime = mintedNFT.expirationTime.toNumber();
-    //   console.log('Expiration Time:', expirationTime);
-    //   const expirationDate = new Date(expirationTime * 1000);
-
-    // // Extract month and year from the Date object
-    //   const month = expirationDate.toLocaleString('default', { month: 'long' });
-    //   const year = expirationDate.getFullYear();
-
-    //   console.log('Expiration Date:', month, year);
-    //   });
-    // }
-    // getExpirationtime();
+  
     function getExpirationDateTime(): Promise<{ minter: string, tokenId: number, expirationDateTime: string, tokenURI:string }> {
       return new Promise((resolve, reject) => {
         const filter = contract.filters.NFTMinted();

@@ -32,6 +32,7 @@
     "@types/react-lottie": "^1.2.6",
     "@types/react-table": "^7.7.12",
     "@types/react-truncate": "^2.3.4",
+    "@web3-react/core": "^8.2.0",
     "add-asset-html-webpack-plugin": "^5.0.2",
     "apexcharts": "^3.35.3",
     "assert": "^2.0.0",
@@ -133,6 +134,6 @@
   },
   "devDependencies": {
     "@types/react-cookies": "^0.1.0",
-    "webpack-cli": "^4.9.2"
+    "webpack-cli": "^5.1.4"
   }
 }
