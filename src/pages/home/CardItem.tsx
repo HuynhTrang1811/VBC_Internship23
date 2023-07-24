@@ -7,10 +7,14 @@ import { useCart } from "react-use-cart"
 import Stack from '@mui/material/Stack';
 import Snackbar from '@mui/material/Snackbar';
 import MuiAlert, { AlertProps } from '@mui/material/Alert';
+import { buyNFT } from '../../contracts/nftList';
+
+import axios from "../../api"
+import { getcurentWalletconnect } from '../../contracts/utils/getAbis';
+
 const CardItem = (item: any) => {
   const [open, setOpen] = useState(false);
   const { addItem ,items} = useCart();
-
   const Alert = React.forwardRef<HTMLDivElement, AlertProps>(function Alert(
     props,
     ref,
@@ -37,7 +41,25 @@ const CardItem = (item: any) => {
    
     setOpen(false);
   };
-
+  
+  const handleBuy = async () => {
+    console.log(item.item); 
+    const dataItem = item.item;
+    const data = {
+      minter: dataItem.minter,
+      price: dataItem.price,
+      owner: await getcurentWalletconnect(),
+      tokenID: dataItem.tokenID
+    }
+    try {
+      await buyNFT("NETFLIX", data.tokenID, data.price)
+      await  axios.post('/route/changeOwner', data)
+      console.log('buy successfully')
+    }
+    catch {
+      console.log('something went wrong')
+    }
+  }
 
   return (
 
@@ -84,7 +106,7 @@ const CardItem = (item: any) => {
           </Snackbar>
         </Stack>
 
-        <Button className="app-home-item-button-buy"  size="medium" variant="contained" >buy</Button>
+        <Button disabled={item.item.minter == item.address} className="app-home-item-button-buy"  size="medium" variant="contained" onClick={handleBuy} >buy</Button>
       </div>
     </div>
 

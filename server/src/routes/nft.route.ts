@@ -15,4 +15,6 @@ router.get('/getSellNFT', nftController.getSellNFT)
 router.post('/createNFT',nftController.createNFT)
 
 router.post('/sellNFT', nftController.sellNFT)
+router.post('/unlistNFT', nftController.unlistNFT)
+router.post('/changeOwner', nftController.changeOwner)
 export default router

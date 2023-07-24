@@ -5,6 +5,7 @@ import NFT, { INFT } from '../models/NFT.model'
 import { AppError } from '../utils/appError'
 import { catchAsync } from '../utils/catchAsync'
 import React from 'react';
+import { io } from '../..'
 //-------------------------User-------------------------
 // [GET] /api/route/getOwnerNFTUser
 //get all NFT owner for user
@@ -84,3 +85,34 @@ export const sellNFT= async (req:Request,res:Response,next:NextFunction)=>{
     })
 }
 
+export const unlistNFT= async (req:Request,res:Response,next:NextFunction)=>{
+    const tokenID=req.body.tokenID;
+    console.log(tokenID); 
+    // const sellNFT=SellNFT.create({name,time_mint,minter});
+    const x = await NFT.findOneAndUpdate({tokenID}, {status: 'owner'})
+    await NFT.findOneAndDelete({tokenID, status:'onsale'})
+    await NFT.findOneAndDelete({tokenID, status:'rent'})
+    
+    res.status(StatusCodes.CREATED).json({
+        status: 'success',
+        data: {
+            sellNFT,
+        },
+    })
+}
+
+export const changeOwner= async (req:Request,res:Response,next:NextFunction)=>{
+    const {tokenID, minter, owner } = req.body;
+    console.log(req.body); 
+    // const sellNFT=SellNFT.create({name,time_mint,minter});
+    const x = await NFT.findOneAndUpdate({tokenID, minter}, {status: 'owner', minter: (owner as string).toLowerCase()})
+    await NFT.findOneAndDelete({tokenID, status:'onsale'})
+    await NFT.findOneAndDelete({tokenID, status:'rent'})
+    io.emit('update'); 
+    res.status(StatusCodes.CREATED).json({
+        status: 'success',
+        data: {
+            sellNFT,
+        },
+    })
+}

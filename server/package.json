@@ -25,6 +25,7 @@
         "mongoose": "^7.0.1",
         "path": "^0.12.7",
         "request-response": "^0.1.2",
+        "socket.io": "^4.7.1",
         "tsc-watch": "^6.0.0"
     },
     "devDependencies": {

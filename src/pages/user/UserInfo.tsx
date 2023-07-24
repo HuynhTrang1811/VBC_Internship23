@@ -12,6 +12,7 @@ import Paper from '@mui/material/Paper';
 import "./User.css"
 import RentedNFT from './NFT/RentedNFT';
 import axios from '../../api';
+import { getcurentWalletconnect } from '../../contracts/utils/getAbis';
 interface Product {
   id: string;
   name: string;
@@ -20,8 +21,8 @@ interface Product {
   owner: string;
   time_left: string;
   price: string;
-  status: string
-
+  status: string;
+  tokenID: string; 
 }
 const UserInfo = () => {
   //products : have owner, sell, rent NFT of user
@@ -35,34 +36,36 @@ const UserInfo = () => {
   const toggleTab = (index: any) => {
     setToggle(index)
   };
-  useEffect(() => {
-
-    const address = localStorage.getItem('userAddress') ?? '';
-    const get = encodeURIComponent(address);
-    console.log(typeof address)
-
-    console.log(address); 
-
-    axios.get('/route/getOwnerNFTUser/' + address)
-      .then((res) => { 
-        setOwner(res.data);
-        console.log(res.data); 
-      })
-      .catch(error => console.log(error))
-    axios.get('/route/getSellNFTUser/' + address)
-      .then((res) => {
-        setSell(res.data)
-        console.log(res.data)
-
-      })
-      .catch(error => console.log(error))
-    axios.get('/route/getRentNFTUser/' + address)
-      .then((res) => {
-        setRent(res.data)
-        console.log(res.data)
-
-      })
-      .catch(error => console.log(error))
+  useEffect( () => {
+    const foo = async () => {
+      const address = await getcurentWalletconnect(); 
+      // const get = encodeURIComponent(address);
+      console.log(typeof address)
+  
+      console.log(address); 
+  
+      axios.get('/route/getOwnerNFTUser/' + address)
+        .then((res) => { 
+          setOwner(res.data);
+          console.log(res.data); 
+        })
+        .catch(error => console.log(error))
+      axios.get('/route/getSellNFTUser/' + address)
+        .then((res) => {
+          setSell(res.data)
+          console.log(res.data)
+  
+        })
+        .catch(error => console.log(error))
+      axios.get('/route/getRentNFTUser/' + address)
+        .then((res) => {
+          setRent(res.data)
+          console.log(res.data)
+  
+        })
+        .catch(error => console.log(error))  
+    }
+    foo(); 
   }, [update])
 
   return (<>
@@ -121,9 +124,9 @@ const UserInfo = () => {
                   <TableRow >
                     <TableCell></TableCell>
                     <TableCell className='row-name' >NAME</TableCell>
-                    <TableCell className='row-name' align="center">PASSWORD</TableCell>
+                    <TableCell className='row-name' align="center">TOKEN ID</TableCell>
                     <TableCell className='row-name' align="center">
-                      TIME START</TableCell>
+                      PRICE</TableCell>
                     <TableCell className='row-name' align="center">TIME OUT</TableCell>
 
 
@@ -136,7 +139,7 @@ const UserInfo = () => {
                       key={row.id}
                       sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
                     >
-                      <Owned  name={row.name} img={row.img} price={row.price} time_left={row.time_left} status={row.status} />
+                      <Owned update={update} setUpdate={setUpdate} tokenID = {row.tokenID} name={row.name} img={row.img} price={row.price} time_left={row.time_left} status={row.status} />
 
                     </TableRow>
                   ))}
@@ -166,7 +169,7 @@ const UserInfo = () => {
                       key={row.id}
                       sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
                     >
-                      <Owned name={row.name} img={row.img} price={row.price} time_left={row.time_left} status={row.status} />
+                      <Owned update={update} setUpdate={setUpdate} tokenID = {row.tokenID} name={row.name} img={row.img} price={row.price} time_left={row.time_left} status={row.status} />
 
                     </TableRow>
                   ))}

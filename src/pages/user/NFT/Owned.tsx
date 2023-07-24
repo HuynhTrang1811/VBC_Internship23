@@ -1,4 +1,4 @@
-import { listNft } from '../../../contracts/nftList';
+import { listNft, unlistNft } from '../../../contracts/nftList';
 import React, { useState } from 'react'
 import "./Owner.css"
 import { Box, Dialog, DialogActions, DialogContent, DialogTitle, TableCell } from '@mui/material'
@@ -8,15 +8,16 @@ import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { DatePicker } from '@mui/x-date-pickers';
 import axios from '../../../api';
+import { socket } from '../../../api/socket';
 
 const Owned = (item: any) => {
   const [openSell, setOpenSell] = useState(false);
   const [openRent, setOpenRent] = useState(false);
   const [nftPrice, setNFTPrice] = useState('');
-  let nftInput="";
-  const handleChange = (event:React.ChangeEvent<HTMLInputElement>) => {
-    nftInput=event.target.value;
-    
+  let nftInput = "";
+  const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    nftInput = event.target.value;
+
   };
   const handleOpenRent = () => {
     setOpenRent(true);
@@ -31,19 +32,33 @@ const Owned = (item: any) => {
     setNFTPrice(nftInput);
     setOpenSell(false);
     // listNft(1, price);
-    await axios.post('/route/sellNFT',item)
-    item.setUpdate(!item.update); 
+    await handleList();
+    await axios.post('/route/sellNFT', item)
+    socket.emit('update')
+    item.setUpdate(!item.update);
 
 
   }
   const [months, setMonths] = useState(0);
   const [price, setPrice] = useState(0);
 
-  const handleList = () => {
-    listNft(1, price);
+  const handleList = async () => {
+    await listNft("NETFLIX" as string, item.tokenID, price);
 
   }
- 
+  const handleUnlist = async () => {
+    try {
+      await unlistNft("NETFLIX", item.tokenID)
+      await axios.post('/route/unlistNFT', item);
+      socket.emit('update')
+      item.setUpdate(!item.update);
+
+    }
+    catch {
+      console.log('Something went wrong')
+    }
+
+  }
   const Actions = (status: any) => {
 
     if (status.status == "owner") {
@@ -77,9 +92,9 @@ const Owned = (item: any) => {
                     </div>
                   </div>
                   <div className="sellNFT-input">
-                    <TextField id="outlined-basic" label="NFT Price" variant="outlined" helperText="Please enter NFT Price" 
-                    onChange={handleChange}
-                       />
+                    <TextField id="outlined-basic" label="NFT Price" variant="outlined" helperText="Please enter NFT Price"
+                      onChange={handleChange}
+                    />
                   </div>
 
 
@@ -155,7 +170,7 @@ const Owned = (item: any) => {
               </DialogContent>
               <DialogActions>
 
-                <Button className='account-button' variant="contained" onClick={handleCloseRent} autoFocus>
+                <Button className='account-button' variant="contained" onClick={handleCloseRent} >
                   Rent
                 </Button>
 
@@ -167,7 +182,13 @@ const Owned = (item: any) => {
       </>)
     } else {
       return (<>
+        <DialogActions>
 
+          <Button className='account-button' variant="contained" onClick={handleUnlist}>
+            Unlist
+          </Button>
+
+        </DialogActions>
       </>)
     }
   }
@@ -185,7 +206,7 @@ const Owned = (item: any) => {
 
       </TableCell>
       <TableCell className='cell-name' align="center" >{item.tokenID}</TableCell>
-      <TableCell className='cell-name' align="center">{item.time_left}</TableCell>
+      <TableCell className='cell-name' align="center">{item.price}</TableCell>
       <TableCell align="center" className={item.status === 'OnSale' ? 'cell-name-sale' : item.status === 'Owner' ? 'cell-name-owner' : 'cell-name-rent'}>{item.status}</TableCell>
       <TableCell align="center"><Actions status={item.status} /></TableCell>
     </>

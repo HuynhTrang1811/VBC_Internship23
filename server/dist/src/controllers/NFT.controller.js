@@ -12,10 +12,11 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.sellNFT = exports.createNFT = exports.getSellNFT = exports.getRentNFT = exports.getRentNFTUser = exports.getSellNFTUser = exports.getOwnerNFTUser = void 0;
+exports.changeOwner = exports.unlistNFT = exports.sellNFT = exports.createNFT = exports.getSellNFT = exports.getRentNFT = exports.getRentNFTUser = exports.getSellNFTUser = exports.getOwnerNFTUser = void 0;
 const http_status_codes_1 = require("http-status-codes");
 const NFT_model_1 = __importDefault(require("../models/NFT.model"));
 const catchAsync_1 = require("../utils/catchAsync");
+const __1 = require("../..");
 //-------------------------User-------------------------
 // [GET] /api/route/getOwnerNFTUser
 //get all NFT owner for user
@@ -78,3 +79,34 @@ const sellNFT = (req, res, next) => __awaiter(void 0, void 0, void 0, function* 
     });
 });
 exports.sellNFT = sellNFT;
+const unlistNFT = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+    const tokenID = req.body.tokenID;
+    console.log(tokenID);
+    // const sellNFT=SellNFT.create({name,time_mint,minter});
+    const x = yield NFT_model_1.default.findOneAndUpdate({ tokenID }, { status: 'owner' });
+    yield NFT_model_1.default.findOneAndDelete({ tokenID, status: 'onsale' });
+    yield NFT_model_1.default.findOneAndDelete({ tokenID, status: 'rent' });
+    res.status(http_status_codes_1.StatusCodes.CREATED).json({
+        status: 'success',
+        data: {
+            sellNFT: exports.sellNFT,
+        },
+    });
+});
+exports.unlistNFT = unlistNFT;
+const changeOwner = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+    const { tokenID, minter, owner } = req.body;
+    console.log(req.body);
+    // const sellNFT=SellNFT.create({name,time_mint,minter});
+    const x = yield NFT_model_1.default.findOneAndUpdate({ tokenID, minter }, { status: 'owner', minter: owner.toLowerCase() });
+    yield NFT_model_1.default.findOneAndDelete({ tokenID, status: 'onsale' });
+    yield NFT_model_1.default.findOneAndDelete({ tokenID, status: 'rent' });
+    __1.io.emit('update');
+    res.status(http_status_codes_1.StatusCodes.CREATED).json({
+        status: 'success',
+        data: {
+            sellNFT: exports.sellNFT,
+        },
+    });
+});
+exports.changeOwner = changeOwner;
