@@ -13,10 +13,11 @@ import { socket } from '../../../api/socket';
 const Owned = (item: any) => {
   const [openSell, setOpenSell] = useState(false);
   const [openRent, setOpenRent] = useState(false);
-  const [nftPrice, setNFTPrice] = useState('');
-  let nftInput = "";
+  const [nftPrice, setNFTPrice] = useState(0);
+  let nftInput =nftPrice;
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    nftInput = event.target.value;
+    nftInput = parseInt(event.target.value);
+   
 
   };
   const handleOpenRent = () => {
@@ -32,8 +33,11 @@ const Owned = (item: any) => {
     setNFTPrice(nftInput);
     setOpenSell(false);
     // listNft(1, price);
-    await handleList();
+   
+    await handleList(nftInput);
     await axios.post('/route/sellNFT', item)
+   
+
     socket.emit('update')
     item.setUpdate(!item.update);
 
@@ -42,7 +46,8 @@ const Owned = (item: any) => {
   const [months, setMonths] = useState(0);
   const [price, setPrice] = useState(0);
 
-  const handleList = async () => {
+  const handleList = async (price:number) => {
+   
     await listNft("NETFLIX" as string, item.tokenID, price);
 
   }
@@ -59,6 +64,8 @@ const Owned = (item: any) => {
     }
 
   }
+  
+
   const Actions = (status: any) => {
 
     if (status.status == "owner") {

@@ -142,5 +142,9 @@ Tab {
     padding-bottom: 50px;
 
 }
+.owner-empty{
+    text-align: center;
+    height: 300px;
+}
 
 

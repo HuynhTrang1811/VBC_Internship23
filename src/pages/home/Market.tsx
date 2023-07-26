@@ -33,20 +33,20 @@ const Market = () => {
       setLoading(false)
     }, 1000)
     socket.on("update", () => {
-      console.log("update received"); 
+   
       setUpdate(!update); 
     })
       axios.get('/route/getRentNFT')
       .then((res) => {
         setRentNFT(res.data)
-        console.log(res.data)
+       
 
       })
       .catch(error => console.log(error))
       axios.get('/route/getSellNFT')
       .then((res) => {
         setSellNFT(res.data)
-        console.log(res.data)
+      
 
       })
       .catch(error => console.log(error))

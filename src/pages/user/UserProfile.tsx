@@ -8,7 +8,7 @@ const UserProfile = () => {
                         <img id="bg-img" src="" />
                     </div>
                     <div className="app-user-avt-img">
-                        <img id="avt-img" src="https://i.seadn.io/gcs/files/d0b736cebabd12dd7837511e88bfcf43.jpg?auto=format&dpr=1&w=256" />
+                        <img id="avt-img" src="https://i.seadn.io/gcs/files/7ed181433ee09174f09a0e31b563d313.png?auto=format&dpr=1&w=256" />
                     </div>
 
 

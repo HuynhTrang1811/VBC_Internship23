@@ -43,7 +43,7 @@ const CardItem = (item: any) => {
   };
   
   const handleBuy = async () => {
-    console.log(item.item); 
+   
     const dataItem = item.item;
     const data = {
       minter: dataItem.minter,
@@ -79,7 +79,7 @@ const CardItem = (item: any) => {
           }}
         />
         <div className='time-left'>
-          {item.time}
+          {item.status.toUpperCase()}
         </div>
       </div>
       <div className="card-body">
@@ -90,9 +90,9 @@ const CardItem = (item: any) => {
         </div>
       </div>
       <div className="card-body">
-        <div className="card-name">Status:</div>
+        <div className="card-name">Time:</div>
         <div className="card-price">
-          {item.status}
+          {item.time}
           {/* <img src="" style={{width:20,height:20}}/> */}
         </div>
       </div>

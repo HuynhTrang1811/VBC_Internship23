@@ -13,6 +13,7 @@ import "./User.css"
 import RentedNFT from './NFT/RentedNFT';
 import axios from '../../api';
 import { getcurentWalletconnect } from '../../contracts/utils/getAbis';
+import Button from '../../layouts/components/button/Button';
 interface Product {
   id: string;
   name: string;
@@ -40,27 +41,23 @@ const UserInfo = () => {
     const foo = async () => {
       const address = await getcurentWalletconnect(); 
       // const get = encodeURIComponent(address);
-      console.log(typeof address)
-  
-      console.log(address); 
-  
+     
       axios.get('/route/getOwnerNFTUser/' + address)
         .then((res) => { 
           setOwner(res.data);
-          console.log(res.data); 
+         
         })
         .catch(error => console.log(error))
       axios.get('/route/getSellNFTUser/' + address)
         .then((res) => {
           setSell(res.data)
-          console.log(res.data)
-  
+       
         })
         .catch(error => console.log(error))
       axios.get('/route/getRentNFTUser/' + address)
         .then((res) => {
           setRent(res.data)
-          console.log(res.data)
+          
   
         })
         .catch(error => console.log(error))  
@@ -87,6 +84,12 @@ const UserInfo = () => {
       <div className='content-tabs'>
         <div className={toggle === 1 ? "active-content" : "content"}>
           <div className="owner-NFT">
+          {ownerNFT.length == 0 ? <>
+          <div className='owner-empty'>
+            Your don't have any NFT.
+          
+            </div>
+                  </>: 
             <TableContainer component={Paper}>
               <Table sx={{ minWidth: 650 }} aria-label="simple table">
                 <TableHead>
@@ -99,9 +102,9 @@ const UserInfo = () => {
                     <TableCell className='row-name' align="center"></TableCell>
                   </TableRow>
                 </TableHead>
-                <TableBody>
-                  {ownerNFT.length == 0 ? <><div>empty</div>
-                  </>:ownerNFT.map((row) => (
+               
+               <TableBody>
+                    {ownerNFT.map((row) => (
                   <TableRow
                     key={row.id}
                     sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
@@ -110,47 +113,62 @@ const UserInfo = () => {
 
                   </TableRow>
                   ))}
-                </TableBody>
+                   </TableBody>
+                 
+               
               </Table>
-            </TableContainer>
+            </TableContainer> 
+          }
           </div>
 
         </div>
         <div className={toggle === 2 ? "active-content" : "content"} >
           <div className="owner-NFT">
+          {sellNFT.length == 0 ? <>
+          <div className='owner-empty'>
+            Your don't have any selling NFT.
+          
+            </div>
+                  </>: 
             <TableContainer component={Paper}>
-              <Table sx={{ minWidth: 650 }} aria-label="simple table">
-                <TableHead>
-                  <TableRow >
-                    <TableCell></TableCell>
-                    <TableCell className='row-name' >NAME</TableCell>
-                    <TableCell className='row-name' align="center">TOKEN ID</TableCell>
-                    <TableCell className='row-name' align="center">
-                      PRICE</TableCell>
-                    <TableCell className='row-name' align="center">TIME OUT</TableCell>
+            <Table sx={{ minWidth: 650 }} aria-label="simple table">
+              <TableHead>
+                <TableRow >
+                  <TableCell></TableCell>
+                  <TableCell className='row-name' >NAME</TableCell>
+                  <TableCell className='row-name' align="center">TOKEN ID</TableCell>
+                  <TableCell className='row-name' align="center">
+                    PRICE</TableCell>
+                  <TableCell className='row-name' align="center">TIME OUT</TableCell>
 
+
+                </TableRow>
+              </TableHead>
+              <TableBody>
+             {  sellNFT.map((row) => (
+                  <TableRow
+                    key={row.id}
+                    sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
+                  >
+                    <Owned update={update} setUpdate={setUpdate} tokenID = {row.tokenID} name={row.name} img={row.img} price={row.price} time_left={row.time_left} status={row.status} />
 
                   </TableRow>
-                </TableHead>
-                <TableBody>
-                  {sellNFT.length == 0? <><div>empty</div>
-                  </>:sellNFT.map((row) => (
-                    <TableRow
-                      key={row.id}
-                      sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
-                    >
-                      <Owned update={update} setUpdate={setUpdate} tokenID = {row.tokenID} name={row.name} img={row.img} price={row.price} time_left={row.time_left} status={row.status} />
-
-                    </TableRow>
-                  ))}
-                </TableBody>
-              </Table>
-            </TableContainer>
+                ))}
+              </TableBody>
+            </Table>
+          </TableContainer>
+          }
           </div>
 
         </div>
         <div className={toggle === 3 ? "active-content" : "content"}>
           <div className="owner-NFT">
+          {rentNFT.length == 0 ? <>
+          <div className='owner-empty'>
+            Your don't have any renting NFT.
+          
+            </div>
+                  </>: 
             <TableContainer component={Paper}>
               <Table sx={{ minWidth: 650 }} aria-label="simple table">
                 <TableHead>
@@ -163,8 +181,7 @@ const UserInfo = () => {
                   </TableRow>
                 </TableHead>
                 <TableBody>
-                  {rentNFT.length == 0? <><div>empty</div>
-                  </>:rentNFT.map((row) => (
+               {rentNFT.map((row) => (
                     <TableRow
                       key={row.id}
                       sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
@@ -176,6 +193,7 @@ const UserInfo = () => {
                 </TableBody>
               </Table>
             </TableContainer>
+}
           </div>
 
         </div>

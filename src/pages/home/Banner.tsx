@@ -74,7 +74,7 @@ const Banner = () => {
         setOpenMint(false);
     };
     const handleMint = async () => {
-        console.log(months);
+       
         // setOpenMint(true);
         setOpenBacklog(true);
         const message = ethers.utils.solidityKeccak256(
@@ -84,17 +84,17 @@ const Banner = () => {
               await getcurentWalletconnect(),
             ],
           )
-          console.log(message)
+        
           const arrayifyMessage = ethers.utils.arrayify(message)
           const provider = new ethers.providers.Web3Provider((window as any).ethereum)
-          console.log(arrayifyMessage)
+       
           const signer = new ethers.Wallet('0xecd6b7a6ef7b2361bdec30e94b562b44e1a03f18beba034edd6a65ded70adf27', provider)
           const flatSignature = await signer.signMessage(arrayifyMessage)
-          console.log(flatSignature)
+      
         const nonce =  1 ;
         mintAccount('hiep', months,flatSignature).then((data : any):any => {
             if (data != null ) {
-                console.log(data); 
+              
                 const bodyData  = {    name: 'Netflix NFT',
                 img: 'https://images.theconversation.com/files/417198/original/file-20210820-25-1j3afhs.jpeg?ixlib=rb-1.1.0&q=45&auto=format&w=926&fit=clip',
                 price: "0",
@@ -103,7 +103,7 @@ const Banner = () => {
                 tokenID: parseInt(data.tokenId),
                 tokenURI: data.tokenURI,
                 status:"owner"} 
-                console.log(bodyData)
+              
                 setOpenMint(true);
                 setOpenBacklog(false);
                 setMintNFT(bodyData);

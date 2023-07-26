@@ -16,7 +16,7 @@ const ConnectWallet = () => {
         axios.get('/user/getUser')
         .then((res) => {
             setUser(res.data)
-            console.log(res.data)
+          
         })
         .catch(error => console.log(error))
 
@@ -37,13 +37,13 @@ const ConnectWallet = () => {
           
             let flag = 0;
             user.map((users: any) => {
-               
-                if (users.address === walletAdress) { flag = 1 }
+              
+                if (users.address.toLowerCase() === walletAdress.toLowerCase()) { flag = 1 }
             })
            
             const data = { address: walletAdress };
             if (flag === 0) {
-                console.log('post')
+           
                 axios.post('/user/newUser', data)
                     .then((request) => {
                         console.log('Post data success:', request.data);

@@ -119,7 +119,7 @@
     }
   }
   .app-market{
-    height: 100vh;
+    height: 110%;
     overflow: hidden;
     background-color:#F8F6F4;
     background-image: linear-gradient(315deg, #d5fefd 0%, #fffcff 74%);

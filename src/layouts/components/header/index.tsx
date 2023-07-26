@@ -13,7 +13,7 @@ import MuiAlert from '@mui/material/Alert';
 import CheckCircleRoundedIcon from '@mui/icons-material/CheckCircleRounded';
 import CheckCircleOutlineIcon from '@mui/icons-material/CheckCircleOutline';
 import Checkbox from '@mui/material/Checkbox';
-import { LinearProgress } from '@mui/material';
+import { Link, useLocation } from "react-router-dom";
 const label = { inputProps: { 'aria-label': 'Checkbox demo' } };
 type Anchor = 'right';
 
@@ -23,6 +23,8 @@ const useStyles = makeStyles({
     },
 });
 const Header = () => {
+
+   
     const [state, setState] = React.useState({
         top: false,
         left: false,
@@ -62,6 +64,14 @@ const Header = () => {
                 setState({ ...state, [anchor]: open });
             };
     const [click, setClick] = useState(false);
+    const [loading, setLoading] = useState(false);
+    useEffect(() => {
+      setLoading(true)
+      setTimeout(() => {
+        setLoading(false)
+      }, 5000)
+    }, [window.location.pathname])
+
     const [open, setOpen] = useState(false);
     // const [close, setClose]= useState(true);
     const handleClose = () => {
@@ -105,12 +115,11 @@ const Header = () => {
 
                     <ul className={click ? 'nav-menu active' : 'nav-menu'}>
 
-                        <Linkactive href="/">HOME</Linkactive>
+                        <Linkactive href="/" >HOME</Linkactive>
                         <Linkactive href="/user">PROFILE</Linkactive>
 
 
                     </ul>
-
                     <ConnectWallet />
                     <div className="cart-header" onClick={openCart}>
                         <ShoppingCartIcon className='cart-icon' onClick={toggleDrawer('right', true)} fontSize="large" />
@@ -218,13 +227,23 @@ const Header = () => {
         </>
     );
 }
-const Linkactive = (h: any) => {
-    const path = window.location.pathname;
-   
+interface LinkactiveProps {
+    href: string,
+    children: string
+  }
+  
+const Linkactive = ({href, children }: LinkactiveProps) => {
+    const location = useLocation();
+  
+    // Kiểm tra xem liên kết có active hay không
+    const isActive = location.pathname === href;
+  
     return (
-        <li>
-            <a className={path === h.href ? "nav-links-active" : "nav-links"} href={h.href}>{h.children}</a>
-        </li>
-    )
-};
+      <li>
+        <Link className={isActive ? "nav-links-active" : "nav-links"} to={href}>
+          {children}
+        </Link>
+      </li>
+    );
+  };
 export default Header;
