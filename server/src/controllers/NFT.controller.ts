@@ -12,7 +12,7 @@ import { io } from '../..'
 export const getOwnerNFTUser = catchAsync(
     async (req: Request, res: Response, next: NextFunction) => {
         const nft = await NFT.find({ minter:req.params.address.toLowerCase(), status:"owner"})
-        console.log(nft)
+      
         res.json(nft.map(product => product))
     },
 )
@@ -40,7 +40,7 @@ export const getRentNFT = catchAsync(
      
        
         const nft = await NFT.find({status:"rent"})
-        console.log(nft)
+      
         res.json(nft.map(product => product))
     },
 )
@@ -50,7 +50,7 @@ export const getSellNFT = catchAsync(
      
        
         const nft = await NFT.find({status:"onsale"})
-        console.log(nft)
+        
         res.json(nft.map(product => product))
     },
 )
@@ -71,12 +71,12 @@ export const createNFT= (req:Request,res:Response,next:NextFunction)=>{
 // post to SellNFT
 export const sellNFT= async (req:Request,res:Response,next:NextFunction)=>{
     const tokenID=req.body.tokenID;
-    console.log(tokenID); 
+  
     // const sellNFT=SellNFT.create({name,time_mint,minter});
     const x = await NFT.findOneAndUpdate({tokenID}, {status: 'onsale'})
     const data = await NFT.findOneAndDelete({tokenID, status:'owner'})
     
-    console.log(data);
+   
     res.status(StatusCodes.CREATED).json({
         status: 'success',
         data: {
@@ -87,7 +87,7 @@ export const sellNFT= async (req:Request,res:Response,next:NextFunction)=>{
 
 export const unlistNFT= async (req:Request,res:Response,next:NextFunction)=>{
     const tokenID=req.body.tokenID;
-    console.log(tokenID); 
+   
     // const sellNFT=SellNFT.create({name,time_mint,minter});
     const x = await NFT.findOneAndUpdate({tokenID}, {status: 'owner'})
     await NFT.findOneAndDelete({tokenID, status:'onsale'})
@@ -103,7 +103,7 @@ export const unlistNFT= async (req:Request,res:Response,next:NextFunction)=>{
 
 export const changeOwner= async (req:Request,res:Response,next:NextFunction)=>{
     const {tokenID, minter, owner } = req.body;
-    console.log(req.body); 
+    
     // const sellNFT=SellNFT.create({name,time_mint,minter});
     const x = await NFT.findOneAndUpdate({tokenID, minter}, {status: 'owner', minter: (owner as string).toLowerCase()})
     await NFT.findOneAndDelete({tokenID, status:'onsale'})

@@ -8,7 +8,7 @@ export const newUser= (req:Request,res:Response,next:NextFunction)=>{
   
     const address=req.body.address;
     const users=User.create({address});
-    console.log("renter")
+   
     res.status(StatusCodes.CREATED).json({
         status: 'success',
         data: {

@@ -20,7 +20,7 @@ const catchAsync_1 = require("../utils/catchAsync");
 const newUser = (req, res, next) => {
     const address = req.body.address;
     const users = User_model_1.default.create({ address });
-    console.log("renter");
+   
     res.status(http_status_codes_1.StatusCodes.CREATED).json({
         status: 'success',
         data: {
