@@ -102,7 +102,7 @@ export const mintAccount = async (login: any, rentalTime:any, signature: any ) =
     function getExpirationDateTime(): Promise<{ minter: string, tokenId: number, expirationDateTime: string, tokenURI:string }> {
       return new Promise((resolve, reject) => {
         const filter = contract.filters.NFTMinted();
-    
+        
         // Event listener to capture the minter's address
         contract.on(filter, async (minter, tokenId) => {
           const mintedNFT = await contract.nfts(tokenId);

@@ -1,4 +1,5 @@
 import { listNft, unlistNft } from '../../../contracts/nftList';
+import { rentNft } from '../../../contracts/nftRent';
 import React, { useState } from 'react'
 import "./Owner.css"
 import { Box, Dialog, DialogActions, DialogContent, DialogTitle, TableCell } from '@mui/material'
@@ -13,18 +14,18 @@ import { socket } from '../../../api/socket';
 const Owned = (item: any) => {
   const [openSell, setOpenSell] = useState(false);
   const [openRent, setOpenRent] = useState(false);
-  const [nftPrice, setNFTPrice] = useState('');
-  let nftInput = "";
+  const [nftPrice, setNFTPrice] = useState(0);
+  let nftInput = nftPrice;
+  
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    nftInput = event.target.value;
+    nftInput = parseInt(event.target.value);
+    
 
   };
   const handleOpenRent = () => {
     setOpenRent(true);
   }
-  const handleCloseRent = () => {
-    setOpenRent(false);
-  }
+  
   const handleOpenSell = () => {
     setOpenSell(true);
   }
@@ -32,17 +33,44 @@ const Owned = (item: any) => {
     setNFTPrice(nftInput);
     setOpenSell(false);
     // listNft(1, price);
-    await handleList();
+    console.log(nftInput);
+     handleList(nftInput);
     await axios.post('/route/sellNFT', item)
     socket.emit('update')
     item.setUpdate(!item.update);
 
 
   }
-  const [months, setMonths] = useState(0);
-  const [price, setPrice] = useState(0);
+  const handleRent = async (deposit : number, renttime : number)=>{
+    await rentNft("NETFLIX" as string, item.tokenID, deposit,renttime);
+  }
+  const handleCloseRent = async () => {
+    // setNFTPrice(nftRenttime);
+    
+    setOpenRent(false);
+    console.log(nftDeposit);
+    await handleRent(nftDeposit,nftRenttime);
+    // await axios.post('/route/sellNFT', item)
+    // socket.emit('update')
+    // item.setUpdate(!item.update);
 
-  const handleList = async () => {
+
+  }
+
+  const [deposit, setDeposit] = useState(0);
+  const [renttime, setRenttime] = useState(0);
+  let nftDeposit = deposit;
+  let nftRenttime = renttime;
+  
+  const handleChangeDeposit = async (event: React.ChangeEvent<HTMLInputElement>) => {
+    nftDeposit = parseInt(event.target.value);
+  }
+  const handleChangeRenttime = async (event: React.ChangeEvent<HTMLInputElement>) => {
+    nftRenttime = parseInt(event.target.value)
+
+  }
+  const handleList = async (price : number) => {
+  
     await listNft("NETFLIX" as string, item.tokenID, price);
 
   }
@@ -59,6 +87,7 @@ const Owned = (item: any) => {
     }
 
   }
+ 
   const Actions = (status: any) => {
 
     if (status.status == "owner") {
@@ -148,16 +177,19 @@ const Owned = (item: any) => {
                     >
                       <LocalizationProvider dateAdapter={AdapterDayjs}>
 
-                        <DatePicker
-                          label="Renting Date"
-                          slotProps={{ textField: { helperText: 'Please enter Renting Date' } }}
+                      <TextField
+                          helperText="Please enter time" 
+                          id="demo-helper-text-aligned-no-helper"
+                          label="..."
+                          onChange={handleChangeRenttime}
                         />
 
-                        <TextField
-                          helperText="Please enter NFT price"
+                       
+                         <TextField
+                          helperText="Please enter deposite"
                           id="demo-helper-text-aligned-no-helper"
-                          label="Renting Price"
-
+                          label="dds"
+                          onChange={handleChangeDeposit}
                         />
                       </LocalizationProvider>
 
