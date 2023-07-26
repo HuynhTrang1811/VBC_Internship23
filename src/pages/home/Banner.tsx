@@ -1,4 +1,4 @@
-
+// import { nftContract } from '../../contracts/accountMint';
 import { mintAccount } from '../../contracts/accountMint';
 import "./Home.css"
 import Grid from '@mui/material/Grid';
@@ -15,6 +15,21 @@ import ContentCopyIcon from '@mui/icons-material/ContentCopy';
 import { IconButton } from '@mui/material';
 import CheckIcon from '@mui/icons-material/Check';
 import axios from "../../api"
+import { ethers } from 'ethers';
+import {getcurentWalletconnect} from '../../contracts/utils/getAbis'
+import {contractAddress} from '../../constants/constants'
+
+export interface INFT {
+    name?: string
+    img?:string
+    price?:string
+    expirationDateTime?: String
+    time_out?: Date
+    minter?:string
+    tokenID?:number
+    state?: 'renting' | 'selling' | 'minted' 
+    tokenURI : string
+}
 const Banner = () => {
     const data_category = [
 
@@ -32,7 +47,7 @@ const Banner = () => {
     const [openNetflix, setOpenNetflix] = useState(false);
     const [openMint, setOpenMint] = useState(false);
     const [months, setMonths] = useState(0);
-    const [mintNFT, setMintNFT] = useState<any | "">("");
+    const [mintNFT, setMintNFT] = useState<INFT>({tokenURI: ''});
     const [openBacklog, setOpenBacklog] = useState(false);
     const handleOpenBacklog = () => {
         setOpenBacklog(true);
@@ -58,32 +73,44 @@ const Banner = () => {
     const handleCloseMint = () => {
         setOpenMint(false);
     };
-    const handleMint = () => {
+    const handleMint = async () => {
         console.log(months);
         // setOpenMint(true);
         setOpenBacklog(true);
-        mintAccount('hiep', months).then((data: any) => {
-
-
+        const message = ethers.utils.solidityKeccak256(
+            ['address', 'address'],
+            [
+              contractAddress,
+              await getcurentWalletconnect(),
+            ],
+          )
+          console.log(message)
+          const arrayifyMessage = ethers.utils.arrayify(message)
+          const provider = new ethers.providers.Web3Provider((window as any).ethereum)
+          console.log(arrayifyMessage)
+          const signer = new ethers.Wallet('0xecd6b7a6ef7b2361bdec30e94b562b44e1a03f18beba034edd6a65ded70adf27', provider)
+          const flatSignature = await signer.signMessage(arrayifyMessage)
+          console.log(flatSignature)
+        const nonce =  1 ;
+        mintAccount('hiep', months,flatSignature).then((data : any):any => {
             if (data != null ) {
-
+                console.log(data); 
+                const bodyData  = {    name: 'Netflix NFT',
+                img: 'https://images.theconversation.com/files/417198/original/file-20210820-25-1j3afhs.jpeg?ixlib=rb-1.1.0&q=45&auto=format&w=926&fit=clip',
+                price: "0",
+                expirationDateTime: data.expirationDateTime,
+                minter: (data.minter as string).toLowerCase(),
+                tokenID: parseInt(data.tokenId),
+                tokenURI: data.tokenURI,
+                status:"owner"} 
+                console.log(bodyData)
                 setOpenMint(true);
                 setOpenBacklog(false);
-                setMintNFT(data);
-                axios.post('/route/createNFT',data)
-                .then((request) => {
-                    console.log('Post data success:', request.data);
-                  })
-                  .catch((error) => {
-                    console.error('Error posting data:', error);
-                  });
-                
+                setMintNFT(bodyData);
+                axios.post('/route/createNFT',bodyData)
                 
             }
 
-            // else if(data==""){
-
-            // }
 
 
         })
@@ -227,7 +254,7 @@ const Banner = () => {
                             </DialogTitle>
 
                             <div id="alert-dialog-description">
-                                <div className='alert-img'> <img className='alert-mintNFT-img' src="https://i.pinimg.com/236x/7e/56/77/7e56778e565d8f6f31bb744e10acb158.jpg" /></div>
+                                <div className='alert-img'> <img className='alert-mintNFT-img' src={mintNFT.img} /></div>
                                 {/* <div > {mintNFT.minter}<br /></div>
                                 <div>  Token ID: {mintNFT.tokenId}<br /></div>
                                 <div>  Expirationdate: {mintNFT.expirationDateTime}<br /> </div>
@@ -237,13 +264,13 @@ const Banner = () => {
                                         Minter Address:
                                     </Grid>
                                     <Grid item xs={7}>
-                                        {/* {mintNFT.minter.substring(0, 10)}...{mintNFT.minter.substring(35)} */}
+                                        {mintNFT.minter?.substring(0, 10)}...{mintNFT.minter?.substring(35)}
                                     </Grid>
                                     <Grid className='alert-title' item xs={5}>
                                         Token ID:
                                     </Grid>
                                     <Grid item xs={7}>
-                                        {mintNFT.tokenId}
+                                        {mintNFT.tokenID}
                                     </Grid>
                                     <Grid className='alert-title' item xs={5}>
                                         Expirationdate:

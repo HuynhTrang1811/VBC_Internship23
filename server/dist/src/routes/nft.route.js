@@ -32,4 +32,7 @@ router.get('/getRentNFTUser/:address', nftController.getRentNFTUser);
 router.get('/getRentNFT', nftController.getRentNFT);
 router.get('/getSellNFT', nftController.getSellNFT);
 router.post('/createNFT', nftController.createNFT);
+router.post('/sellNFT', nftController.sellNFT);
+router.post('/unlistNFT', nftController.unlistNFT);
+router.post('/changeOwner', nftController.changeOwner);
 exports.default = router;

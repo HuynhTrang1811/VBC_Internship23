@@ -4,10 +4,12 @@ export interface INFT {
     name: string
     img:string
     price:string
-    expirationDateTime: Date
+    expirationDateTime: String
     time_out: Date
     minter:string
     tokenID:number
+    status: 'owner' | 'onsale' | 'rent' 
+    tokenURI: string,
 }
 
 const NFTSchema = new Schema<INFT>({
@@ -16,10 +18,12 @@ const NFTSchema = new Schema<INFT>({
     },
     img:{type:String},
     price:{type:String},
-    expirationDateTime: { type: Date, default: Date.now() },
+    expirationDateTime: { type: String, default: Date.now() },
     time_out: { type: Date, default: Date.now() },
     minter:{type:String},
-    tokenID:{type:Number}
+    tokenID:{type:Number},
+    status: {type: String},
+    tokenURI: { type:String}
 })
 
 // NFTSchema.pre('findOneAndUpdate', function (next) {

@@ -5,6 +5,8 @@ import { Grid } from '@mui/material';
 import './Home.css'
 import CircularProgress from '@mui/material/CircularProgress';
 import axios from "../../api"
+import { getcurentWalletconnect } from '../../contracts/utils/getAbis';
+import { socket } from '../../api/socket';
 const Market = () => {
   interface Product {
     id: string;
@@ -14,17 +16,26 @@ const Market = () => {
     owner: string;
     time_left: string;
     price: string;
+    tokenID: string; 
   }
   const [sellNFT, setSellNFT] = useState<Product[]>([]);
   const [rentNFT, setRentNFT] = useState<Product[]>([]);
   const [loading, setLoading] = useState(true);
-
-
+  const [update, setUpdate] = useState(true); 
+  const [address, setAddress] = useState("")
   useEffect(() => {
+    const foo = async () => {
+      const x = await getcurentWalletconnect();
+      setAddress(x);
+    }
+    foo();
     setTimeout(() => {
       setLoading(false)
     }, 1000)
-
+    socket.on("update", () => {
+      console.log("update received"); 
+      setUpdate(!update); 
+    })
       axios.get('/route/getRentNFT')
       .then((res) => {
         setRentNFT(res.data)
@@ -39,8 +50,10 @@ const Market = () => {
 
       })
       .catch(error => console.log(error))
-
-  }, [])
+    return () => {
+      socket.off("update"); 
+    }
+  }, [update])
   const NFT = sellNFT.concat(rentNFT);
   const ShowProduct = () => {
     return (<>
@@ -55,7 +68,7 @@ const Market = () => {
             return (<>
 
               <Grid item xs={6} key={product.id} >
-                <CardItem id={product._id} item={product} name={product.name} price={product.price} img={product.img} time={product.time_left} status={product.status} />
+                <CardItem address={address} update={update} setUpdate={setUpdate} id={product._id} item={product} name={product.name} price={product.price} img={product.img} time={product.time_left} status={product.status} />
 
               </Grid>
 
