@@ -14,7 +14,7 @@ const app: Express = express()
 
 app.enable('trust proxy')
 app.use(cors(
-    // { credentials: true, origin: 'http://localhost:3001' }
+    { credentials: true, origin: 'https://tokenrental.vbchain.vn' }
 ))
 app.use(express.static(path.join(__dirname, 'public')))
 app.use(helmet())

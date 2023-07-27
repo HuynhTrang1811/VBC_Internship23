@@ -39,7 +39,8 @@ io.on('connection', (socket) => {
 })
 
 app.use(cors({
-    // origin: 'http://localhost:3001', // Cho phép yêu cầu từ trang web chạy trên cổng 3001
+    origin: 'https://tokenrental.vbchain.vn', // Cho phép yêu cầu từ trang web chạy trên cổng 3001
+  
     // origin: 'http://192.168.1.3:3001', // Cho phép yêu cầu từ trang web chạy trên cổng 3001
     // methods: ['GET', 'POST', 'PUT', 'DELETE'], // Cho phép các phương thức yêu cầu này
     // credentials: true, // Cho phép chia sẻ thông tin xác thực (cookies, HTTP authentication) qua CORS
