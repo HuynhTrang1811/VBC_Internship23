@@ -47,7 +47,7 @@ app.use(cors({
 
 
 server.listen(port, () => {
-    console.log(`⚡️[server]: Server is running `);
+    console.log(`⚡️[server]: Server is running at ${port} `);
 });
 
 // app.listen(port, () => {

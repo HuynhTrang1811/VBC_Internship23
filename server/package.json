@@ -5,7 +5,7 @@
     "main": "index.ts",
     "scripts": {
         "build": "npx tsc",
-        "start": "node dist/index.js",
+        "start": "nodemon index.ts",
         "dev": "concurrently -n \"TypeScript,Node\" -c \"cyan.bold,green.bold\" \"tsc --watch\" \"nodemon -q dist/index.js\""
     },
     "author": "",
