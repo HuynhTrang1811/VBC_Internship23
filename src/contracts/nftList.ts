@@ -21,18 +21,12 @@ export const listNft = async (type: string, tokenID : number, price : any) => {
     // Create a contract instance
     const contract = new ethers.Contract(contractAddress, abi, signer);
     async function list(){
-        try {
           const tx = await nftcontract.approve(contractAddress, tokenID);
           
           // Wait for the transaction to be mined
           await tx.wait();
             const tx1 = await contract.listNft(marketcontractAddresses[type],tokenID,price);
             await tx1.wait();
-            
-            console.log('list successful!');
-          } catch (error) {
-            console.error('Error:', error);
-          }
 
     };
     await list(); 

@@ -28,7 +28,7 @@ const UserInfo = () => {
   //products : have owner, sell, rent NFT of user
   const [ownerNFT, setOwner] = useState<any[]>([])
   const [sellNFT, setSell] = useState<Product[]>([]);
-  const [rentNFT, setRent] = useState<Product[]>([]);
+  const [rentNFT, setRent] = useState<any[]>([]);
 
   const [toggle, setToggle] = useState(1);
   const [update, setUpdate] = useState(false);
@@ -106,7 +106,7 @@ const UserInfo = () => {
                     key={row.id}
                     sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
                   >
-                    <Owned update={update} setUpdate={setUpdate} tokenID = {row.tokenID} name={row.name} img={row.img} price={row.price} time_left={row.time_left} status="owner" />
+                    <Owned getback={row.getback} is_rent={row.is_rent} update={update} setUpdate={setUpdate} tokenID = {row.tokenID} name={row.name} img={row.img} price={row.price} time_left={row.time_left} status="owner" />
 
                   </TableRow>
                   ))}
@@ -169,7 +169,7 @@ const UserInfo = () => {
                       key={row.id}
                       sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
                     >
-                      <Owned update={update} setUpdate={setUpdate} tokenID = {row.tokenID} name={row.name} img={row.img} price={row.price} time_left={row.time_left} status={row.status} />
+                      <Owned rent={true} is_rent={row.is_rent} expired={row.expired} update={update} setUpdate={setUpdate} tokenID = {row.tokenID} name={row.name} img={row.img} price={row.price} time_left={row.time_left} status={row.status} />
 
                     </TableRow>
                   ))}

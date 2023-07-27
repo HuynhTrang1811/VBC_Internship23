@@ -10,6 +10,7 @@ import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { DatePicker } from '@mui/x-date-pickers';
 import axios from '../../../api';
 import { socket } from '../../../api/socket';
+import { getcurentWalletconnect } from '../../../contracts/utils/getAbis';
 
 const Owned = (item: any) => {
   const [openSell, setOpenSell] = useState(false);
@@ -34,15 +35,21 @@ const Owned = (item: any) => {
     setOpenSell(false);
     // listNft(1, price);
     console.log(nftInput);
-     handleList(nftInput);
-    await axios.post('/route/sellNFT', item)
-    socket.emit('update')
-    item.setUpdate(!item.update);
+    try {
+      // await handleList(nftInput);
+      await axios.post('/route/sellNFT', {...item, price: nftInput});
+      socket.emit('update')
+      item.setUpdate(!item.update);
+    }
+    catch(err) { 
+      console.log("something went wrong ")
+    }
+
 
 
   }
   const handleRent = async (deposit : number, renttime : number)=>{
-    await rentNft("NETFLIX" as string, item.tokenID, deposit,renttime);
+    await rentNft("NETFLIX" as string, item.tokenID, renttime,deposit, 0,0);
   }
   const handleCloseRent = async () => {
     // setNFTPrice(nftRenttime);
@@ -50,9 +57,9 @@ const Owned = (item: any) => {
     setOpenRent(false);
     console.log(nftDeposit);
     await handleRent(nftDeposit,nftRenttime);
-    // await axios.post('/route/sellNFT', item)
-    // socket.emit('update')
-    // item.setUpdate(!item.update);
+    await axios.post('/route/rentNFT', {...item, price: nftDeposit, nftRenttime})
+    socket.emit('update')
+    item.setUpdate(!item.update);
 
 
   }
@@ -76,8 +83,10 @@ const Owned = (item: any) => {
   }
   const handleUnlist = async () => {
     try {
-      await unlistNft("NETFLIX", item.tokenID)
-      await axios.post('/route/unlistNFT', item);
+      // await unlistNft("NETFLIX", item.tokenID)
+      const minter = await getcurentWalletconnect(); 
+      console.log(minter); 
+      await axios.post('/route/unlistNFT', {...item, minter});
       socket.emit('update')
       item.setUpdate(!item.update);
 
@@ -87,10 +96,34 @@ const Owned = (item: any) => {
     }
 
   }
- 
-  const Actions = (status: any) => {
+  const handleTurnBack =async () => {
+    const data_change = {
+      minter: item.getback,
+      price: item.price,
+      renter: await getcurentWalletconnect(),
+      tokenID: item.tokenID
+    }
+    await axios.post('/route/turnbackNFT', data_change)
 
-    if (status.status == "owner") {
+    socket.emit('update')
+    item.setUpdate(!item.update);
+  }
+  const handleGetMoney = async () => {
+
+  }
+  const Actions = (status: any) => {
+    if (item.is_rent) {
+      return (<>
+        <DialogActions>
+
+          <Button disabled={item.rent && item.expired == false} className='account-button' variant="contained" onClick={item.rent ? handleGetMoney : handleTurnBack}>
+            {item.rent ? "Get money" : "Turn back"}
+          </Button>
+
+        </DialogActions>
+      </>)
+    }
+    else if (status.status == "owner") {
       return (<>
         <div className='action-button'>
           <Button variant="outlined" onClick={handleOpenSell}>Sell</Button>
@@ -212,7 +245,8 @@ const Owned = (item: any) => {
           </form>
         </div>
       </>)
-    } else {
+    } 
+    else {
       return (<>
         <DialogActions>
 
@@ -239,7 +273,7 @@ const Owned = (item: any) => {
       </TableCell>
       <TableCell className='cell-name' align="center" >{item.tokenID}</TableCell>
       <TableCell className='cell-name' align="center">{item.price}</TableCell>
-      <TableCell align="center" className={item.status === 'OnSale' ? 'cell-name-sale' : item.status === 'Owner' ? 'cell-name-owner' : 'cell-name-rent'}>{item.status}</TableCell>
+      <TableCell align="center" className={item.status === 'OnSale' ? 'cell-name-sale' : item.status === 'Owner' ? 'cell-name-owner' : 'cell-name-rent'}>{item.is_rent ? 'In rent' : item.status}</TableCell>
       <TableCell align="center"><Actions status={item.status} /></TableCell>
     </>
   )

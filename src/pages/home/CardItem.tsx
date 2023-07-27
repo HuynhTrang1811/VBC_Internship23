@@ -8,6 +8,7 @@ import Stack from '@mui/material/Stack';
 import Snackbar from '@mui/material/Snackbar';
 import MuiAlert, { AlertProps } from '@mui/material/Alert';
 import { buyNFT } from '../../contracts/nftList';
+import { starRentNFT } from '../../contracts/nftRent';
 
 import axios from "../../api"
 import { getcurentWalletconnect } from '../../contracts/utils/getAbis';
@@ -61,6 +62,33 @@ const CardItem = (item: any) => {
     }
   }
 
+  const handleRent = async () => {
+    const dataItem = item.item;
+    const data_change = {
+      minter: dataItem.minter,
+      price: dataItem.price,
+      owner: await getcurentWalletconnect(),
+      tokenID: dataItem.tokenID
+    }
+    const rent_data = {
+      minter: dataItem.minter,
+      renter: await getcurentWalletconnect(),
+      name: dataItem.name,
+      tokenID:dataItem.tokenID,
+      startTime: Date.now(),
+      endTime: Date.now() + item.duration_rent,
+      rent_price: item.price_rent,
+    }
+    try {
+      await starRentNFT("NETFLIX", rent_data.tokenID)
+      await axios.post('/route/changeOwner', data_change)
+      await axios.post('/route/rentlogNFT', rent_data)
+      console.log('rent successfully')
+    }
+    catch (err) {
+      console.log('something went wrong', err)
+    }
+  }
   return (
 
     <div className='card-product'>
@@ -85,7 +113,7 @@ const CardItem = (item: any) => {
       <div className="card-body">
         <div className="card-name">{item.name}</div>
         <div className="card-price">
-          {item.price}
+          {item.status == 'onsale' ? item.price : item.price_rent}
           {/* <img src="" style={{width:20,height:20}}/> */}
         </div>
       </div>
@@ -96,6 +124,13 @@ const CardItem = (item: any) => {
           {/* <img src="" style={{width:20,height:20}}/> */}
         </div>
       </div>
+      {item.status == 'rent' && <div className="card-body">
+        <div className="card-name">Rent duration:</div>
+        <div className="card-price">
+          {item.duration_rent}
+          {/* <img src="" style={{width:20,height:20}}/> */}
+        </div>
+      </div>}
       <div className="card-buy" >
         <Stack>
           <Button className="app-home-item-button-add" variant="contained" size="medium" onClick={() => { handleClick(item) }} >add cart</Button>
@@ -106,7 +141,8 @@ const CardItem = (item: any) => {
           </Snackbar>
         </Stack>
 
-        <Button disabled={item.item.minter == item.address} className="app-home-item-button-buy"  size="medium" variant="contained" onClick={handleBuy} >buy</Button>
+        <Button disabled={item.item.minter == item.address} className="app-home-item-button-buy"  size="medium" variant="contained"
+         onClick={item.status == 'onsale' ? handleBuy : handleRent} >{item.status == 'onsale' ? 'Buy' : 'Rent'}</Button>
       </div>
     </div>
 

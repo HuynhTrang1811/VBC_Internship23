@@ -33,6 +33,10 @@ router.get('/getRentNFT', nftController.getRentNFT);
 router.get('/getSellNFT', nftController.getSellNFT);
 router.post('/createNFT', nftController.createNFT);
 router.post('/sellNFT', nftController.sellNFT);
+router.post('/rentNFT', nftController.rentNFT);
+router.post('/rentlogNFT', nftController.rentlogNFT);
 router.post('/unlistNFT', nftController.unlistNFT);
 router.post('/changeOwner', nftController.changeOwner);
+//turnbackNFT
+router.post('/turnbackNFT', nftController.turnbackNFT);
 exports.default = router;
