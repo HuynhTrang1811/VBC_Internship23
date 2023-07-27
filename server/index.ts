@@ -30,7 +30,7 @@ mongoose
     .then(() => console.log('Connect DB sucessfully'))
     .catch(() => console.log('Fail to connect DB'));
 
-const port = process.env.PORT || 8000;
+const port = process.env.PORT;
 
 io.on('connection', (socket) => {
     socket.on('update', () => {
