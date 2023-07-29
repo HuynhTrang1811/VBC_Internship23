@@ -16,19 +16,19 @@ import { IconButton } from '@mui/material';
 import CheckIcon from '@mui/icons-material/Check';
 import axios from "../../api"
 import { ethers } from 'ethers';
-import {getcurentWalletconnect} from '../../contracts/utils/getAbis'
-import {contractAddress} from '../../constants/constants'
+import { getcurentWalletconnect } from '../../contracts/utils/getAbis'
+import { contractAddress, nftGenerator } from '../../constants/constants'
 
 export interface INFT {
     name?: string
-    img?:string
-    price?:string
+    img?: string
+    price?: string
     expirationDateTime?: String
     time_out?: Date
-    minter?:string
-    tokenID?:number
-    state?: 'renting' | 'selling' | 'minted' 
-    tokenURI : string
+    minter?: string
+    tokenID?: number
+    state?: 'renting' | 'selling' | 'minted'
+    tokenURI: string
 }
 const Banner = () => {
     const data_category = [
@@ -47,7 +47,7 @@ const Banner = () => {
     const [openNetflix, setOpenNetflix] = useState(false);
     const [openMint, setOpenMint] = useState(false);
     const [months, setMonths] = useState(0);
-    const [mintNFT, setMintNFT] = useState<INFT>({tokenURI: ''});
+    const [mintNFT, setMintNFT] = useState<INFT>({ tokenURI: '' });
     const [openBacklog, setOpenBacklog] = useState(false);
     const handleOpenBacklog = () => {
         setOpenBacklog(true);
@@ -63,7 +63,7 @@ const Banner = () => {
 
 
     const handleClose = () => {
-     
+
         setOpen(false);
         setOpenNetflix(false);
     };
@@ -80,46 +80,47 @@ const Banner = () => {
         const message = ethers.utils.solidityKeccak256(
             ['address', 'address'],
             [
-              contractAddress,
-              await getcurentWalletconnect(),
+                contractAddress,
+                await getcurentWalletconnect(),
             ],
-          )
-          console.log(message)
-          const arrayifyMessage = ethers.utils.arrayify(message)
-          const provider = new ethers.providers.Web3Provider((window as any).ethereum)
-          console.log(arrayifyMessage)
-          const signer = new ethers.Wallet('0x3bec6420095c3c1dec78e0bc1d9d456666392d174ba127bbcbbf8a62bee65965', provider)
-          const flatSignature = await signer.signMessage(arrayifyMessage)
-          console.log(flatSignature)
-        const nonce =  1 ;
-        mintAccount('hiep', months,flatSignature).then((data : any):any => {
-            if (data != null ) {
-                console.log(data); 
-                const bodyData  = {    name: 'Netflix NFT',
-                img: 'https://images.theconversation.com/files/417198/original/file-20210820-25-1j3afhs.jpeg?ixlib=rb-1.1.0&q=45&auto=format&w=926&fit=clip',
-                price: "0",
-                expirationDateTime: data.expirationDateTime,
-                minter: (data.minter as string).toLowerCase(),
-                tokenID: parseInt(data.tokenId),
-                tokenURI: data.tokenURI,
-                status:"owner"} 
+        )
+        console.log(message)
+        const arrayifyMessage = ethers.utils.arrayify(message)
+        const provider = new ethers.providers.Web3Provider((window as any).ethereum)
+        console.log(arrayifyMessage)
+        const signer = new ethers.Wallet('0x3bec6420095c3c1dec78e0bc1d9d456666392d174ba127bbcbbf8a62bee65965', provider)
+        const flatSignature = await signer.signMessage(arrayifyMessage)
+        console.log(flatSignature)
+        const nonce = 1;
+        try {
+            const data: any = await mintAccount('hiep', months, flatSignature);
+
+            const nft = nftGenerator();
+            if (data != null) {
+                console.log(data);
+                const bodyData = {
+                    name: nft.name,
+                    img: nft.nft,
+                    price: "0",
+                    expirationDateTime: data.expirationDateTime,
+                    minter: (data.minter as string).toLowerCase(),
+                    tokenID: parseInt(data.tokenId),
+                    tokenURI: data.tokenURI,
+                    status: "owner"
+                }
                 console.log(bodyData)
                 setOpenMint(true);
                 setOpenBacklog(false);
                 setMintNFT(bodyData);
-                axios.post('/route/createNFT',bodyData)
-                
+                axios.post('/route/createNFT', bodyData)
+
             }
+        } catch (err: any) {
+            console.error(err.message);
+
+        }
 
 
-
-        })
-        .catch((error:any) => {
-            console.error(error.message);
-           
-
-          });
-        
     };
     const [copied, setCopied] = useState(false);
 
@@ -135,7 +136,7 @@ const Banner = () => {
         }, 500);
 
     };
-    const [active,setActive]=useState(false)
+    const [active, setActive] = useState(false)
 
     return (
         <div className='hero-container'>
@@ -156,51 +157,51 @@ const Banner = () => {
                         id="alert"
                     >
                         <div className="alert-account">
-                        <DialogTitle id="alert-dialog-title">
-                            {"ACCOUNT CATEGORIES"}
-                        </DialogTitle>
-                        <DialogContent id="alert-dialog-content">
-                            <Grid container spacing={2} columns={24}>
-                                <Grid item xs={6}>
+                            <DialogTitle id="alert-dialog-title">
+                                {"ACCOUNT CATEGORIES"}
+                            </DialogTitle>
+                            <DialogContent id="alert-dialog-content">
+                                <Grid container spacing={2} columns={24}>
+                                    <Grid item xs={6}>
 
-                                    <DialogContent onClick={handleNetflix}>
-                                        <DialogContentText id="alert-dialog-description">
-                                            <div className='account-category'>
-
-                                                <img id='img-category' src="https://i.pinimg.com/564x/0c/cc/0a/0ccc0ad61d6a1b18f7d53e636ba0979c.jpg" />
-
-                                                <div className='name-category'>NETFLIX</div>
-                                            </div>
-                                        </DialogContentText>
-                                    </DialogContent>
-                                </Grid>
-                                {data_category.map((items: any) => {
-
-                                    return (<Grid item xs={6}>
-
-                                        <DialogContent>
+                                        <DialogContent onClick={handleNetflix}>
                                             <DialogContentText id="alert-dialog-description">
                                                 <div className='account-category'>
 
-                                                    <img id='img-category' src={items.img} />
+                                                    <img id='img-category' src="https://i.pinimg.com/564x/0c/cc/0a/0ccc0ad61d6a1b18f7d53e636ba0979c.jpg" />
 
-                                                    <div className='name-category'>{items.name}</div>
+                                                    <div className='name-category'>NETFLIX</div>
                                                 </div>
                                             </DialogContentText>
                                         </DialogContent>
-                                    </Grid>)
-                                })}
+                                    </Grid>
+                                    {data_category.map((items: any) => {
+
+                                        return (<Grid item xs={6}>
+
+                                            <DialogContent>
+                                                <DialogContentText id="alert-dialog-description">
+                                                    <div className='account-category'>
+
+                                                        <img id='img-category' src={items.img} />
+
+                                                        <div className='name-category'>{items.name}</div>
+                                                    </div>
+                                                </DialogContentText>
+                                            </DialogContent>
+                                        </Grid>)
+                                    })}
 
 
-                            </Grid>
-                        </DialogContent>
-                        <DialogActions>
+                                </Grid>
+                            </DialogContent>
+                            <DialogActions>
 
-                            <Button className='account-button'  variant="contained" onClick={handleClose} autoFocus>
-                                Close
-                            </Button>
+                                <Button className='account-button' variant="contained" onClick={handleClose} autoFocus>
+                                    Close
+                                </Button>
 
-                        </DialogActions>
+                            </DialogActions>
                         </div>
                     </Dialog>
                     {/* Form Buy Netflix  */}
@@ -211,25 +212,25 @@ const Banner = () => {
                         aria-labelledby="alert-dialog-title"
                         aria-describedby="alert-dialog-description"
                     ><div className="alert-buyNFT">
-                        <DialogTitle id="alert-dialog-title">
-                            {"BUY NFT NETFLIX"}
-                        </DialogTitle>
-                        <DialogContent>
-                            <DialogContentText id="alert-dialog-description-buyNFT">
-                                Enter number of month: <input id="input_text" type="text" onChange={(e) => {
-                                    setMonths(+e.target.value);
-                                }} ></input>
-                                {/* <input></input> */}
-                            </DialogContentText>
-                        </DialogContent>
-                        <DialogActions>
-                            <Button  size="small" variant="outlined" onClick={function (event) { handleClose(); handleMint(); handleOpenBacklog() }}>Payment</Button>
+                            <DialogTitle id="alert-dialog-title">
+                                {"BUY NFT NETFLIX"}
+                            </DialogTitle>
+                            <DialogContent>
+                                <DialogContentText id="alert-dialog-description-buyNFT">
+                                    Enter number of month: <input id="input_text" type="text" onChange={(e) => {
+                                        setMonths(+e.target.value);
+                                    }} ></input>
+                                    {/* <input></input> */}
+                                </DialogContentText>
+                            </DialogContent>
+                            <DialogActions>
+                                <Button size="small" variant="outlined" onClick={function (event) { handleClose(); handleMint(); handleOpenBacklog() }}>Payment</Button>
 
-                            <Button size="small" variant="outlined" onClick={handleClose} autoFocus>
-                                Close
-                            </Button>
+                                <Button size="small" variant="outlined" onClick={handleClose} autoFocus>
+                                    Close
+                                </Button>
 
-                        </DialogActions>
+                            </DialogActions>
                         </div>
                     </Dialog>
 
@@ -290,7 +291,7 @@ const Banner = () => {
                                             setActive(!active);
                                             Copy_NFT();
                                         }}>
-                                            {active ? <CheckIcon/> : <ContentCopyIcon />}
+                                            {active ? <CheckIcon /> : <ContentCopyIcon />}
                                         </IconButton>
                                     </Grid>
                                 </Grid>
