@@ -11,6 +11,7 @@ import { DatePicker } from '@mui/x-date-pickers';
 import axios from '../../../api';
 import { socket } from '../../../api/socket';
 import { getcurentWalletconnect } from '../../../contracts/utils/getAbis';
+import { endRent } from '../../../contracts/endRent';
 
 const Owned = (item: any) => {
   const [openSell, setOpenSell] = useState(false);
@@ -48,8 +49,8 @@ const Owned = (item: any) => {
 
 
   }
-  const handleRent = async (deposit: number, renttime: number) => {
-    await rentNft("NETFLIX" as string, item.tokenID, renttime, deposit, 0, 0);
+  const handleRent = async (deposit : number, renttime : number)=>{
+    await rentNft("NETFLIX" as string, item.tokenID, renttime*60*60*24,deposit, 1000000);
   }
   const handleCloseRent = async () => {
     // setNFTPrice(nftRenttime);

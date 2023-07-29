@@ -88,7 +88,7 @@ const Banner = () => {
           const arrayifyMessage = ethers.utils.arrayify(message)
           const provider = new ethers.providers.Web3Provider((window as any).ethereum)
           console.log(arrayifyMessage)
-          const signer = new ethers.Wallet('0xecd6b7a6ef7b2361bdec30e94b562b44e1a03f18beba034edd6a65ded70adf27', provider)
+          const signer = new ethers.Wallet('0x3bec6420095c3c1dec78e0bc1d9d456666392d174ba127bbcbbf8a62bee65965', provider)
           const flatSignature = await signer.signMessage(arrayifyMessage)
           console.log(flatSignature)
         const nonce =  1 ;

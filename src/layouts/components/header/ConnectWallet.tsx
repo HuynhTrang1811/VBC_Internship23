@@ -60,7 +60,17 @@ const ConnectWallet = () => {
     const connectWallet = async () => {
         if (typeof window != "undefined" && typeof (window as any).ethereum != "undefined") {
             try {
-                const accounts = await (window as any).ethereum.request({ method: "eth_requestAccounts" });
+                const accounts = await (window as any).ethereum.request({ method: "eth_requestAccounts",params: [{
+                    chainId: "0x89",
+                    rpcUrls: ["https://rpc-mainnet.matic.network/"],
+                    chainName: "Matic Mainnet",
+                    nativeCurrency: {
+                        name: "MATIC",
+                        symbol: "MATIC",
+                        decimals: 18
+                    },
+                    blockExplorerUrls: ["https://polygonscan.com/"]
+                }] });
                 setAdress(accounts[0])
                 checkUser();
 
