@@ -16,34 +16,35 @@ const Market = () => {
     owner: string;
     time_left: string;
     price: string;
-    tokenID: string; 
+    tokenID: string;
   }
   const [sellNFT, setSellNFT] = useState<Product[]>([]);
   const [rentNFT, setRentNFT] = useState<Product[]>([]);
   const [loading, setLoading] = useState(true);
-  const [update, setUpdate] = useState(true); 
+  const [update, setUpdate] = useState(true);
   const [address, setAddress] = useState("")
   useEffect(() => {
     const foo = async () => {
       const x = await getcurentWalletconnect();
       setAddress(x);
+      socket.emit("connection", { walletAddress: x })
     }
     foo();
     setTimeout(() => {
       setLoading(false)
     }, 1000)
     socket.on("update", () => {
-      console.log("update received"); 
-      setUpdate(!update); 
+      console.log("update received");
+      setUpdate(!update);
     })
-      axios.get('/route/getRentNFT')
+    axios.get('/route/getRentNFT')
       .then((res) => {
         setRentNFT(res.data)
         console.log(res.data)
 
       })
       .catch(error => console.log(error))
-      axios.get('/route/getSellNFT')
+    axios.get('/route/getSellNFT')
       .then((res) => {
         setSellNFT(res.data)
         console.log(res.data)
@@ -51,7 +52,7 @@ const Market = () => {
       })
       .catch(error => console.log(error))
     return () => {
-      socket.off("update"); 
+      socket.off("update");
     }
   }, [update])
   const NFT = sellNFT.concat(rentNFT);
@@ -68,7 +69,7 @@ const Market = () => {
             return (<>
 
               <Grid item xs={6} key={product.id} >
-                <CardItem address={address} update={update} setUpdate={setUpdate} id={product._id} item={product} name={product.name} price={product.price} img={product.img} time={product.time_left} status={product.status} price_rent={product.price_rent} duration_rent={product.duration_rent} minter={product.minter}/>
+                <CardItem address={address} update={update} setUpdate={setUpdate} id={product._id} item={product} name={product.name} price={product.price} img={product.img} time={product.time_left} status={product.status} price_rent={product.price_rent} duration_rent={product.duration_rent} minter={product.minter} />
 
               </Grid>
 
@@ -76,12 +77,12 @@ const Market = () => {
             )
 
           })
-          
+
           )
-          
-          }
+
+        }
       </Grid>
-     
+
 
     </>)
   }

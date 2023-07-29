@@ -13,6 +13,7 @@ import "./User.css"
 import RentedNFT from './NFT/RentedNFT';
 import axios from '../../api';
 import { getcurentWalletconnect } from '../../contracts/utils/getAbis';
+import { socket } from '../../api/socket';
 interface Product {
   id: string;
   name: string;
@@ -22,7 +23,7 @@ interface Product {
   time_left: string;
   price: string;
   status: string;
-  tokenID: string; 
+  tokenID: string;
 }
 const UserInfo = () => {
   //products : have owner, sell, rent NFT of user
@@ -36,36 +37,43 @@ const UserInfo = () => {
   const toggleTab = (index: any) => {
     setToggle(index)
   };
-  useEffect( () => {
+  useEffect(() => {
     const foo = async () => {
-      const address = await getcurentWalletconnect(); 
+      const address = await getcurentWalletconnect();
       // const get = encodeURIComponent(address);
       console.log(typeof address)
-  
-      console.log(address); 
-  
+      socket.emit('connection', { walletAddress: address })
+      socket.on('user', () => {
+        console.log("receive ")
+        setUpdate(!update);
+      })
+      console.log(address);
+
       axios.get('/route/getOwnerNFTUser/' + address)
-        .then((res) => { 
+        .then((res) => {
           setOwner(res.data);
-          console.log(res.data); 
+          console.log(res.data);
         })
         .catch(error => console.log(error))
       axios.get('/route/getSellNFTUser/' + address)
         .then((res) => {
           setSell(res.data)
           console.log(res.data)
-  
+
         })
         .catch(error => console.log(error))
       axios.get('/route/getRentNFTUser/' + address)
         .then((res) => {
           setRent(res.data)
           console.log(res.data)
-  
+
         })
-        .catch(error => console.log(error))  
+        .catch(error => console.log(error))
     }
-    foo(); 
+    foo();
+    return () => {
+      socket.off("user");
+    }
   }, [update])
 
   return (<>
@@ -101,14 +109,14 @@ const UserInfo = () => {
                 </TableHead>
                 <TableBody>
                   {ownerNFT.length == 0 ? <><div>empty</div>
-                  </>:ownerNFT.map((row) => (
-                  <TableRow
-                    key={row.id}
-                    sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
-                  >
-                    <Owned getback={row.getback} is_rent={row.is_rent} update={update} setUpdate={setUpdate} tokenID = {row.tokenID} name={row.name} img={row.img} price={row.price} time_left={row.time_left} status="owner" />
+                  </> : ownerNFT.map((row) => (
+                    <TableRow
+                      key={row.id}
+                      sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
+                    >
+                      <Owned getback={row.getback} is_rent={row.is_rent} update={update} setUpdate={setUpdate} tokenID={row.tokenID} name={row.name} img={row.img} price={row.price} time_left={row.time_left} status="owner" />
 
-                  </TableRow>
+                    </TableRow>
                   ))}
                 </TableBody>
               </Table>
@@ -133,13 +141,13 @@ const UserInfo = () => {
                   </TableRow>
                 </TableHead>
                 <TableBody>
-                  {sellNFT.length == 0? <><div>empty</div>
-                  </>:sellNFT.map((row) => (
+                  {sellNFT.length == 0 ? <><div>empty</div>
+                  </> : sellNFT.map((row) => (
                     <TableRow
                       key={row.id}
                       sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
                     >
-                      <Owned update={update} setUpdate={setUpdate} tokenID = {row.tokenID} name={row.name} img={row.img} price={row.price} time_left={row.time_left} status={row.status} />
+                      <Owned update={update} setUpdate={setUpdate} tokenID={row.tokenID} name={row.name} img={row.img} price={row.price} time_left={row.time_left} status={row.status} />
 
                     </TableRow>
                   ))}
@@ -163,13 +171,13 @@ const UserInfo = () => {
                   </TableRow>
                 </TableHead>
                 <TableBody>
-                  {rentNFT.length == 0? <><div>empty</div>
-                  </>:rentNFT.map((row) => (
+                  {rentNFT.length == 0 ? <><div>empty</div>
+                  </> : rentNFT.map((row) => (
                     <TableRow
                       key={row.id}
                       sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
                     >
-                      <Owned rent={true} is_rent={row.is_rent} expired={row.expired} update={update} setUpdate={setUpdate} tokenID = {row.tokenID} name={row.name} img={row.img} price={row.price} time_left={row.time_left} status={row.status} />
+                      <Owned rent={true} is_rent={row.is_rent} expired={row.expired} update={update} setUpdate={setUpdate} tokenID={row.tokenID} name={row.name} img={row.img} price={row.price} time_left={row.time_left} status={row.status} />
 
                     </TableRow>
                   ))}

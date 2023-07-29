@@ -12,7 +12,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.turnbackNFT = exports.rentlogNFT = exports.rentNFT = exports.changeOwner = exports.unlistNFT = exports.sellNFT = exports.createNFT = exports.getSellNFT = exports.getRentNFT = exports.getRentNFTUser = exports.getSellNFTUser = exports.getOwnerNFTUser = void 0;
+exports.getMoney = exports.turnbackNFT = exports.rentlogNFT = exports.rentNFT = exports.changeOwner = exports.unlistNFT = exports.sellNFT = exports.createNFT = exports.getSellNFT = exports.getRentNFT = exports.getRentNFTUser = exports.getSellNFTUser = exports.getOwnerNFTUser = void 0;
 const http_status_codes_1 = require("http-status-codes");
 const NFT_model_1 = __importDefault(require("../models/NFT.model"));
 const RentNFT_model_1 = __importDefault(require("../models/RentNFT.model"));
@@ -23,7 +23,7 @@ const __1 = require("../..");
 //get all NFT owner for user
 exports.getOwnerNFTUser = (0, catchAsync_1.catchAsync)((req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     const nft = yield NFT_model_1.default.find({ minter: req.params.address.toLowerCase(), status: "owner" });
-    const nft_rent = yield RentNFT_model_1.default.find({ renter: req.params.address.toLowerCase() });
+    const nft_rent = yield RentNFT_model_1.default.find({ renter: req.params.address.toLowerCase(), end: false });
     console.log(nft);
     res.json(nft.map(product => {
         let x;
@@ -51,12 +51,16 @@ exports.getRentNFTUser = (0, catchAsync_1.catchAsync)((req, res, next) => __awai
     const nft_rent = yield RentNFT_model_1.default.find({ minter: req.params.address.toLowerCase() });
     let x = [...nft];
     if (nft_rent) {
+        const end_data = nft_rent.reduce((pre, curr) => {
+            return Object.assign(Object.assign({}, pre), { [curr.tokenID]: curr.end });
+        }, {});
+        console.log(end_data);
         let data = yield NFT_model_1.default.find({ tokenID: { $in: nft_rent.map(ele => ele.tokenID) } });
         x = [...nft, ...(data.map(ele => {
                 const newProduct = JSON.parse(JSON.stringify(ele));
                 return Object.assign(newProduct, {
                     is_rent: true,
-                    expired: false,
+                    expired: end_data[newProduct.tokenID],
                 });
             }))];
     }
@@ -185,3 +189,14 @@ const turnbackNFT = (req, res, next) => __awaiter(void 0, void 0, void 0, functi
     });
 });
 exports.turnbackNFT = turnbackNFT;
+const getMoney = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+    const { tokenID } = req.body;
+    yield RentNFT_model_1.default.findOneAndDelete({ tokenID });
+    res.status(http_status_codes_1.StatusCodes.CREATED).json({
+        status: 'success',
+        data: {
+            sellNFT: exports.sellNFT,
+        },
+    });
+});
+exports.getMoney = getMoney;

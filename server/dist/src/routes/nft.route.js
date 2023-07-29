@@ -24,8 +24,8 @@ var __importStar = (this && this.__importStar) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = require("express");
-const router = (0, express_1.Router)();
 const nftController = __importStar(require("../controllers/NFT.controller"));
+const router = (0, express_1.Router)();
 router.get('/getOwnerNFTUser/:address', nftController.getOwnerNFTUser);
 router.get('/getSellNFTUser/:address', nftController.getSellNFTUser);
 router.get('/getRentNFTUser/:address', nftController.getRentNFTUser);
@@ -39,4 +39,5 @@ router.post('/unlistNFT', nftController.unlistNFT);
 router.post('/changeOwner', nftController.changeOwner);
 //turnbackNFT
 router.post('/turnbackNFT', nftController.turnbackNFT);
+router.post('/getMoney', nftController.getMoney);
 exports.default = router;
