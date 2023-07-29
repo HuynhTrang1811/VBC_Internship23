@@ -49,8 +49,8 @@ const Owned = (item: any) => {
 
 
   }
-  const handleRent = async (deposit : number, renttime : number)=>{
-    await rentNft("NETFLIX" as string, item.tokenID, renttime*60*60*24,deposit, 1000000);
+  const handleRent = async (deposit: number, renttime: number) => {
+    await rentNft("NETFLIX" as string, item.tokenID, renttime * 60 * 60 * 24, deposit, 1000000);
   }
   const handleCloseRent = async () => {
     // setNFTPrice(nftRenttime);
@@ -111,9 +111,9 @@ const Owned = (item: any) => {
       tokenID: item.tokenID
     }
     try {
-      await endRent("NETFLIX",data_change.tokenID)
+      await endRent("NETFLIX", data_change.tokenID)
       await axios.post('/route/turnbackNFT', data_change)
-    
+
       socket.emit('update')
       item.setUpdate(!item.update);
       setTimeout(() => {
@@ -284,12 +284,12 @@ const Owned = (item: any) => {
   return (
     <>
 
-      <TableCell className='cell-name' align="center">
+      <TableCell className='cell-name'>
         <img className='owned-img' src={item.img} />
 
 
       </TableCell >
-      <TableCell className='cell-name' align="center" >
+      <TableCell className='cell-name' >
 
         {item.name}
 
