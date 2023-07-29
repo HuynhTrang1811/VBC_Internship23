@@ -12,10 +12,11 @@ import { starRentNFT } from '../../contracts/nftRent';
 
 import axios from "../../api"
 import { getcurentWalletconnect } from '../../contracts/utils/getAbis';
+import { socket } from '../../api/socket';
 
 const CardItem = (item: any) => {
   const [open, setOpen] = useState(false);
-  const { addItem ,items} = useCart();
+  const { addItem, items } = useCart();
   const Alert = React.forwardRef<HTMLDivElement, AlertProps>(function Alert(
     props,
     ref,
@@ -26,25 +27,25 @@ const CardItem = (item: any) => {
 
 
   const handleClick = (item: any) => {
-     
+
     setOpen(true);
     addItem(item);
-   
-   
 
-   
+
+
+
   };
 
   const handleClose = (event?: React.SyntheticEvent | Event, reason?: string) => {
     if (reason === 'clickaway') {
       return;
     }
-   
+
     setOpen(false);
   };
-  
+
   const handleBuy = async () => {
-    console.log(item.item); 
+    console.log(item.item);
     const dataItem = item.item;
     const data = {
       minter: dataItem.minter,
@@ -53,9 +54,10 @@ const CardItem = (item: any) => {
       tokenID: dataItem.tokenID
     }
     try {
-      await buyNFT("NETFLIX", data.tokenID, data.price)
-      await  axios.post('/route/changeOwner', data)
+      // await buyNFT("NETFLIX", data.tokenID, data.price)
+      await axios.post('/route/changeOwner', data)
       console.log('buy successfully')
+      emitUserEvent(data.minter);
     }
     catch {
       console.log('something went wrong')
@@ -74,20 +76,25 @@ const CardItem = (item: any) => {
       minter: dataItem.minter,
       renter: await getcurentWalletconnect(),
       name: dataItem.name,
-      tokenID:dataItem.tokenID,
+      tokenID: dataItem.tokenID,
       startTime: Date.now(),
       endTime: Date.now() + item.duration_rent,
       rent_price: item.price_rent,
     }
     try {
-      await starRentNFT("NETFLIX", rent_data.tokenID)
+      // await starRentNFT("NETFLIX", rent_data.tokenID)
       await axios.post('/route/changeOwner', data_change)
       await axios.post('/route/rentlogNFT', rent_data)
       console.log('rent successfully')
+      emitUserEvent(data_change.minter)
     }
     catch (err) {
       console.log('something went wrong', err)
     }
+  }
+
+  const emitUserEvent = (walletAddress: any) => {
+    socket.emit('user', { walletAddress })
   }
   return (
 
@@ -141,8 +148,8 @@ const CardItem = (item: any) => {
           </Snackbar>
         </Stack>
 
-        <Button disabled={item.item.minter == item.address} className="app-home-item-button-buy"  size="medium" variant="contained"
-         onClick={item.status == 'onsale' ? handleBuy : handleRent} >{item.status == 'onsale' ? 'Buy' : 'Rent'}</Button>
+        <Button disabled={item.item.minter == item.address} className="app-home-item-button-buy" size="medium" variant="contained"
+          onClick={item.status == 'onsale' ? handleBuy : handleRent} >{item.status == 'onsale' ? 'Buy' : 'Rent'}</Button>
       </div>
     </div>
 
