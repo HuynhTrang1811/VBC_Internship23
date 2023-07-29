@@ -54,7 +54,7 @@ const CardItem = (item: any) => {
       tokenID: dataItem.tokenID
     }
     try {
-      // await buyNFT("NETFLIX", data.tokenID, data.price)
+      await buyNFT("NETFLIX", data.tokenID, data.price)
       await axios.post('/route/changeOwner', data)
       console.log('buy successfully')
       emitUserEvent(data.minter);
@@ -82,7 +82,7 @@ const CardItem = (item: any) => {
       rent_price: item.price_rent,
     }
     try {
-      // await starRentNFT("NETFLIX", rent_data.tokenID)
+      await starRentNFT("NETFLIX", rent_data.tokenID)
       await axios.post('/route/changeOwner', data_change)
       await axios.post('/route/rentlogNFT', rent_data)
       console.log('rent successfully')

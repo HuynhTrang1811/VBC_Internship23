@@ -62,8 +62,8 @@ const ConnectWallet = () => {
             try {
                 const accounts = await (window as any).ethereum.request({ method: "eth_requestAccounts",params: [{
                     chainId: "0x89",
-                    rpcUrls: ["https://rpc-mainnet.matic.network/"],
-                    chainName: "Matic Mainnet",
+                    rpcUrls: ["https://sepolia.infura.io/v3/"],
+                    chainName: "Sepolia test network",
                     nativeCurrency: {
                         name: "MATIC",
                         symbol: "MATIC",

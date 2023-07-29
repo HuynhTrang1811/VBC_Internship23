@@ -5,4 +5,4 @@ export const marketcontractAddresses : {[k : string] : string} = {
     'NETFLIX' : '0x1365EE640F86a328BBfae294881d833a78Dd9557'
 }
 
-export const URL = "http://172.17.112.68:8000" || "http://localhost:8000"
+export const URL = "http://localhost:8000"

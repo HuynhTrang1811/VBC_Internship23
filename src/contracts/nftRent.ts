@@ -3,7 +3,7 @@ import { getMarketAbi } from './utils/getAbis';
 import { nftContract } from './accountMint';
 import { marketcontractAddress } from '../constants/constants';
 import { marketcontractAddresses } from '../constants/constants';
-export const rentNft = async (type: string, tokenID: number, renttime: any, deposit: any, rentalpayment: any, payouttime: any) => {
+export const rentNft = async (type: string, tokenID: number, renttime: any, deposit: any, rentalpayment: any) => {
   console.log(tokenID);
   const abi = getMarketAbi();
   const provider = new ethers.providers.Web3Provider((window as any).ethereum)
@@ -25,7 +25,7 @@ export const rentNft = async (type: string, tokenID: number, renttime: any, depo
 
     // Wait for the transaction to be mined
     await tx.wait();
-    const tx1 = await contract.rentOutNFT(marketcontractAddresses[type], tokenID, renttime, deposit, rentalpayment, payouttime);
+    const tx1 = await contract.rentOutNFT(marketcontractAddresses[type], tokenID, renttime, deposit, rentalpayment);
     await tx1.wait();
 
     console.log('rent successful!');

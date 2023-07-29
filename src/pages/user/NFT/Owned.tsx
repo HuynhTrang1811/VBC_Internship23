@@ -34,10 +34,10 @@ const Owned = (item: any) => {
   const handleCloseSell = async () => {
     setNFTPrice(nftInput);
     setOpenSell(false);
-    // listNft(1, price);
+    // listN+ft(1, price);
     console.log(nftInput);
     try {
-      // await handleList(nftInput);
+      await handleList(nftInput);
       await axios.post('/route/sellNFT', { ...item, price: nftInput });
       socket.emit('update')
       item.setUpdate(!item.update);
@@ -58,7 +58,7 @@ const Owned = (item: any) => {
     setOpenRent(false);
     console.log(nftDeposit);
     try {
-      // await handleRent(nftDeposit, nftRenttime);
+      await handleRent(nftDeposit, nftRenttime);
       await axios.post('/route/rentNFT', { ...item, price: nftDeposit, nftRenttime })
       socket.emit('update')
       item.setUpdate(!item.update);
@@ -90,7 +90,7 @@ const Owned = (item: any) => {
   }
   const handleUnlist = async () => {
     try {
-      // await unlistNft("NETFLIX", item.tokenID)
+      await unlistNft("NETFLIX", item.tokenID)
       const minter = await getcurentWalletconnect();
       console.log(minter);
       await axios.post('/route/unlistNFT', { ...item, minter });
@@ -111,8 +111,9 @@ const Owned = (item: any) => {
       tokenID: item.tokenID
     }
     try {
+      await endRent("NETFLIX",data_change.tokenID)
       await axios.post('/route/turnbackNFT', data_change)
-
+    
       socket.emit('update')
       item.setUpdate(!item.update);
       setTimeout(() => {
