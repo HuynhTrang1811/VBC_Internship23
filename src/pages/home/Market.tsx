@@ -7,6 +7,7 @@ import CircularProgress from '@mui/material/CircularProgress';
 import axios from "../../api"
 import { getcurentWalletconnect } from '../../contracts/utils/getAbis';
 import { socket } from '../../api/socket';
+import { useGlobalContext } from '../../store/GlobalContext';
 const Market = () => {
   interface Product {
     id: string;
@@ -22,7 +23,9 @@ const Market = () => {
   const [rentNFT, setRentNFT] = useState<Product[]>([]);
   const [loading, setLoading] = useState(true);
   const [update, setUpdate] = useState(true);
-  const [address, setAddress] = useState("")
+  const [address, setAddress] = useState("");
+  const { state, dispatch } = useGlobalContext();
+
   useEffect(() => {
     const foo = async () => {
       const x = await getcurentWalletconnect();
@@ -35,7 +38,7 @@ const Market = () => {
     }, 1000)
     socket.on("update", () => {
       console.log("update received");
-      setUpdate(!update);
+      dispatch({ type: "SET_UPDATE_MAIN", payload: !state.update_main });
     })
     axios.get('/route/getRentNFT')
       .then((res) => {
@@ -54,7 +57,7 @@ const Market = () => {
     return () => {
       socket.off("update");
     }
-  }, [update])
+  }, [state])
   const NFT = sellNFT.concat(rentNFT);
   const ShowProduct = () => {
     return (<>

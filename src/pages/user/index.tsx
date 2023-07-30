@@ -4,8 +4,8 @@ import UserInfo from './UserInfo';
 const User = () => {
   return (
     <>
-    <UserProfile/>
-    <UserInfo/>
+      {/* <UserProfile/> */}
+      <UserInfo />
     </>
   )
 }

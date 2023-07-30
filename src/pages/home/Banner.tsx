@@ -49,6 +49,17 @@ const Banner = () => {
     const [months, setMonths] = useState(0);
     const [mintNFT, setMintNFT] = useState<INFT>({ tokenURI: '' });
     const [openBacklog, setOpenBacklog] = useState(false);
+    function addMonthsToDate(numberOfMonths: number) {
+        const currentDate = new Date();
+        const newDate = new Date(currentDate); // Create a copy of the current date.
+
+        const currentMonth = currentDate.getMonth();
+        const targetMonth = currentMonth + numberOfMonths;
+
+        newDate.setMonth(targetMonth);
+
+        return newDate;
+    }
     const handleOpenBacklog = () => {
         setOpenBacklog(true);
     };
@@ -98,11 +109,11 @@ const Banner = () => {
             const nft = nftGenerator();
             if (data != null) {
                 console.log(data);
-                const bodyData = {
+                const bodyData: any = {
                     name: nft.name,
                     img: nft.nft,
                     price: "0",
-                    expirationDateTime: data.expirationDateTime,
+                    expirationDateTime: addMonthsToDate(months).getTime(),
                     minter: (data.minter as string).toLowerCase(),
                     tokenID: parseInt(data.tokenId),
                     tokenURI: data.tokenURI,
@@ -143,9 +154,9 @@ const Banner = () => {
             {/* <video src={video} autoPlay loop muted /> */}
             <h1>NFT MARKETPLACE</h1>
             <h3>What are you waiting for ?</h3>
-            <h3>Buy NFTs and enjoy your wonderful experiences !</h3>
+            <h3>Tokenize your account and enjoy your wonderful experiences !</h3>
             <div className='hero-btns'>
-                <Button size="large" className="app-home-banner-button" variant="contained" onClick={handleClickOpen}>Buy new NFT !</Button>
+                <Button size="large" className="app-home-banner-button" variant="contained" onClick={handleClickOpen}>Tokenize your account !</Button>
 
                 <form>
                     {/* Form BUy NFT  */}
@@ -277,7 +288,7 @@ const Banner = () => {
                                         Expirationdate:
                                     </Grid>
                                     <Grid item xs={7}>
-                                        {mintNFT.expirationDateTime}
+                                        {(new Date(mintNFT.expirationDateTime as any)).toLocaleString('en-US', { year: 'numeric', month: 'long', day: 'numeric', hour: 'numeric', minute: 'numeric', second: 'numeric' })}
                                     </Grid>
                                     <Grid className='alert-title' item xs={5}>
                                         Token URI:

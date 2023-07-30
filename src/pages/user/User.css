@@ -65,12 +65,11 @@
 
 .app-user-function {
     font-family: "Martian Mono", "Roboto Mono", monospace!important;
-    /* background-color: whitesmoke; */
-    height: 100%;
     width: 90%;
     margin: auto;
     padding: 30px;
     border-radius: 20px;
+    min-height: 500px;
 }
 
 Tab:focus {

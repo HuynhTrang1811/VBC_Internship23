@@ -12,12 +12,15 @@ import axios from '../../../api';
 import { socket } from '../../../api/socket';
 import { getcurentWalletconnect } from '../../../contracts/utils/getAbis';
 import { endRent } from '../../../contracts/endRent';
+import CountdownTimer from './CountdownTimer';
+import { useGlobalContext } from '../../../store/GlobalContext';
 
 const Owned = (item: any) => {
   const [openSell, setOpenSell] = useState(false);
   const [openRent, setOpenRent] = useState(false);
   const [nftPrice, setNFTPrice] = useState(0);
   let nftInput = nftPrice;
+  const { state, dispatch } = useGlobalContext();
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     nftInput = parseInt(event.target.value);
@@ -40,7 +43,8 @@ const Owned = (item: any) => {
       await handleList(nftInput);
       await axios.post('/route/sellNFT', { ...item, price: nftInput });
       socket.emit('update')
-      item.setUpdate(!item.update);
+      dispatch({ type: "SET_UPDATE_USER", payload: !state.update_user });
+
     }
     catch (err) {
       console.log("something went wrong ")
@@ -61,7 +65,8 @@ const Owned = (item: any) => {
       await handleRent(nftDeposit, nftRenttime);
       await axios.post('/route/rentNFT', { ...item, price: nftDeposit, nftRenttime })
       socket.emit('update')
-      item.setUpdate(!item.update);
+      dispatch({ type: "SET_UPDATE_USER", payload: !state.update_user });
+
     }
     catch (err) {
       console.log("something went wrong", err)
@@ -95,7 +100,8 @@ const Owned = (item: any) => {
       console.log(minter);
       await axios.post('/route/unlistNFT', { ...item, minter });
       socket.emit('update')
-      item.setUpdate(!item.update);
+      dispatch({ type: "SET_UPDATE_USER", payload: !state.update_user });
+
 
     }
     catch {
@@ -115,7 +121,8 @@ const Owned = (item: any) => {
       await axios.post('/route/turnbackNFT', data_change)
 
       socket.emit('update')
-      item.setUpdate(!item.update);
+      dispatch({ type: "SET_UPDATE_USER", payload: !state.update_user });
+
       setTimeout(() => {
         socket.emit('user', { walletAddress: data_change.minter })
       }, 100)
@@ -128,7 +135,8 @@ const Owned = (item: any) => {
   const handleGetMoney = async () => {
     try {
       await axios.post('/route/getMoney', { tokenID: item.tokenID })
-      item.setUpdate(!item.update);
+      dispatch({ type: "SET_UPDATE_USER", payload: !state.update_user });
+
 
     } catch (err) {
       console.log('something went wrong with get money', err);
@@ -281,6 +289,7 @@ const Owned = (item: any) => {
       </>)
     }
   }
+
   return (
     <>
 
@@ -295,7 +304,7 @@ const Owned = (item: any) => {
 
       </TableCell>
       <TableCell className='cell-name' align="center" >{item.tokenID}</TableCell>
-      <TableCell className='cell-name' align="center">{item.price}</TableCell>
+      <TableCell className='cell-name' align="center">{item.status === 'owner' && item.expirationDateTime ? <CountdownTimer targetDate={item.expirationDateTime} /> : item.price}</TableCell>
       <TableCell align="center" className={item.status === 'OnSale' ? 'cell-name-sale' : item.status === 'Owner' ? 'cell-name-owner' : 'cell-name-rent'}>{item.is_rent ? 'In rent' : item.status}</TableCell>
       <TableCell align="center"><Actions status={item.status} /></TableCell>
     </>

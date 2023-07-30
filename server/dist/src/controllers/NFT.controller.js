@@ -32,6 +32,7 @@ exports.getOwnerNFTUser = (0, catchAsync_1.catchAsync)((req, res, next) => __awa
             return Object.assign(newProduct, {
                 is_rent: true,
                 getback: x.minter,
+                expirationDateTime: x.endTime
             });
         }
         else

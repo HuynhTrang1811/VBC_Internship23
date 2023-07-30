@@ -23,6 +23,7 @@ export const getOwnerNFTUser = catchAsync(
                 return Object.assign(newProduct, {
                     is_rent: true,
                     getback: x.minter,
+                    expirationDateTime: x.endTime
                 })
             }
             else return product
