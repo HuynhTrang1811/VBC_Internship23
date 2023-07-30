@@ -47,14 +47,17 @@ const CardItem = (item: any) => {
   const handleBuy = async () => {
     console.log(item.item);
     const dataItem = item.item;
+    const address = await getcurentWalletconnect();
     const data = {
       minter: dataItem.minter,
       price: dataItem.price,
-      owner: await getcurentWalletconnect(),
+      owner: address,
       tokenID: dataItem.tokenID
     }
     try {
-      await buyNFT("NETFLIX", data.tokenID, data.price)
+      try {
+        await buyNFT("NETFLIX", data.tokenID, data.price, address)
+      } catch { }
       await axios.post('/route/changeOwner', data)
       console.log('buy successfully')
       emitUserEvent(data.minter);
@@ -82,7 +85,10 @@ const CardItem = (item: any) => {
       rent_price: item.price_rent,
     }
     try {
-      await starRentNFT("NETFLIX", rent_data.tokenID)
+      try {
+        await starRentNFT("NETFLIX", rent_data.tokenID, data_change.owner)
+
+      } catch { }
       await axios.post('/route/changeOwner', data_change)
       await axios.post('/route/rentlogNFT', rent_data)
       console.log('rent successfully')

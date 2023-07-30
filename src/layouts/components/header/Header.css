@@ -270,3 +270,8 @@ h2{
   align-items: center!important;
 
 }
+
+.header-button {
+  display: flex;
+  align-items: center;
+}

@@ -3,11 +3,13 @@ import ReactDOM from "react-dom/client";
 import App from "./App";
 import { useContext } from "react";
 import reportWebVitals from "./reportWebVitals";
-
+import { GlobalProvider } from '../src/store/GlobalContext'
 const root = ReactDOM.createRoot(document.getElementById("app") as HTMLElement);
 
 root.render(
-    <App />
+    <GlobalProvider>
+        <App />
+    </GlobalProvider>
 );
 
 // If you want to start measuring performance in your app, pass a function

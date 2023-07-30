@@ -7,8 +7,8 @@ const rentNFTSchema = new mongoose_1.Schema({
     },
     minter: { type: String },
     tokenID: { type: Number },
-    startTime: { type: Date, default: Date.now() },
-    endTime: { type: Date },
+    startTime: { type: Number, default: Date.now() },
+    endTime: { type: Number },
     rent_price: { type: Number },
     renter: { type: String },
     end: { type: Boolean, default: false }

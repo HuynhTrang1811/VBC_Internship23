@@ -14,6 +14,7 @@ import RentedNFT from './NFT/RentedNFT';
 import axios from '../../api';
 import { getcurentWalletconnect } from '../../contracts/utils/getAbis';
 import { socket } from '../../api/socket';
+import { useGlobalContext } from '../../store/GlobalContext';
 interface Product {
   id: string;
   name: string;
@@ -33,19 +34,22 @@ const UserInfo = () => {
 
   const [toggle, setToggle] = useState(1);
   const [update, setUpdate] = useState(false);
+  const { state, dispatch } = useGlobalContext();
 
   const toggleTab = (index: any) => {
     setToggle(index)
   };
+
   useEffect(() => {
     const foo = async () => {
       const address = await getcurentWalletconnect();
+      console.log('update!', address);
       // const get = encodeURIComponent(address);
       console.log(typeof address)
       socket.emit('connection', { walletAddress: address })
       socket.on('user', () => {
         console.log("receive ")
-        setUpdate(!update);
+        dispatch({ type: "SET_UPDATE_USER", payload: !state.update_user });
       })
       console.log(address);
 
@@ -74,7 +78,7 @@ const UserInfo = () => {
     return () => {
       socket.off("user");
     }
-  }, [update])
+  }, [state])
 
   return (<>
 
@@ -102,7 +106,7 @@ const UserInfo = () => {
                     <TableCell></TableCell>
                     <TableCell className='row-name' >NAME</TableCell>
                     <TableCell className='row-name' align="center">TOKEN ID</TableCell>
-                    <TableCell className='row-name' align="center">TIME OUT</TableCell>
+                    <TableCell className='row-name' align="center">EXPIRED DATE</TableCell>
                     <TableCell className='row-name' align="center">STATUS</TableCell>
                     <TableCell className='row-name' align="center"></TableCell>
                   </TableRow>
@@ -114,7 +118,7 @@ const UserInfo = () => {
                       key={row.id}
                       sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
                     >
-                      <Owned getback={row.getback} is_rent={row.is_rent} update={update} setUpdate={setUpdate} tokenID={row.tokenID} name={row.name} img={row.img} price={row.price} time_left={row.time_left} status="owner" />
+                      <Owned expirationDateTime={row.expirationDateTime} getback={row.getback} is_rent={row.is_rent} update={update} setUpdate={setUpdate} tokenID={row.tokenID} name={row.name} img={row.img} price={row.price} time_left={row.time_left} status="owner" />
 
                     </TableRow>
                   ))}
@@ -136,6 +140,7 @@ const UserInfo = () => {
                     <TableCell className='row-name' align="center">
                       PRICE</TableCell>
                     <TableCell className='row-name' align="center">TIME OUT</TableCell>
+                    <TableCell className='row-name' align="center"></TableCell>
 
 
                   </TableRow>
@@ -168,6 +173,8 @@ const UserInfo = () => {
                     <TableCell className='row-name' align="center">PRICE</TableCell>
                     <TableCell className='row-name' align="center">TIME OUT</TableCell>
                     <TableCell className='row-name' align="center">STATUS</TableCell>
+                    <TableCell className='row-name' align="center"></TableCell>
+
                   </TableRow>
                 </TableHead>
                 <TableBody>

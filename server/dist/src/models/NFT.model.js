@@ -8,7 +8,7 @@ const NFTSchema = new mongoose_1.Schema({
     img: { type: String },
     price: { type: String },
     price_rent: { type: Number, default: 0 },
-    expirationDateTime: { type: String, default: Date.now() },
+    expirationDateTime: { type: Number, default: Date.now() },
     time_out: { type: Date, default: Date.now() },
     minter: { type: String },
     tokenID: { type: Number },

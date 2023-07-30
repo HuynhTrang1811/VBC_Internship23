@@ -3,6 +3,11 @@ import './Header.css'
 import '../button/Button.css'
 import axios from "../../../api";
 import { Button, FormControl, InputLabel, MenuItem, NativeSelect, Select } from "@mui/material";
+import { socket } from "../../../api/socket";
+import { useGlobalContext } from "../../../store/GlobalContext";
+import { getCurrentBalace } from "../../../contracts/nftList";
+let x = '';
+let bl = '';
 const ConnectWallet = () => {
     interface User {
         address: string
@@ -10,31 +15,53 @@ const ConnectWallet = () => {
 
     const [walletAdress, setAdress] = useState("");
     const [user, setUser] = useState<User[]>([]);
-
+    const { state, dispatch } = useGlobalContext();
+    const [balance, setBalance] = useState("0");
     // const [have_user, setHaveUser] = useState([])
     // Khởi tạo state và sử dụng kiểu dữ liệu Product
     useEffect(() => {
 
         getcurentWalletconnect();
         checkUser()
-
         axios.get('/user/getUser')
             .then((res) => {
                 setUser(res.data)
                 console.log(res.data)
             })
             .catch(error => console.log(error))
-
-        const interval = setInterval(async () => {
+        const interval = asyncInterval(async () => {
             const accounts = await (window as any).ethereum.request({ method: "eth_accounts" });
-            if (accounts[0] !== walletAdress) {
-                setAdress(accounts[0]);
+            if (accounts[0].toLowerCase() !== x) {
+                setAdress(accounts[0].toLowerCase());
+                if (x !== "") {
+                    console.log(x);
+                    dispatch({ type: "SET_UPDATE_MAIN", payload: !state.update_main });
+                    dispatch({ type: "SET_UPDATE_USER", payload: !state.update_user });
+                }
+                x = accounts[0];
             }
-        }, 100)
 
-        return () => clearInterval(interval);
+            if (x !== "") {
+                const getbl = await getCurrentBalace(x);
+                if (getbl !== bl) {
+                    setBalance(getbl);
+                }
+                bl = getbl;
+            }
+        }, 2500)
+
 
     }, [])
+    async function asyncInterval(asyncFn: any, interval: any): Promise<any> {
+        try {
+            await asyncFn();
+        } catch (error) {
+            console.error("Error in the async function:", error);
+        }
+
+        // Wait for the specified interval before running the function again
+        setTimeout(() => asyncInterval(asyncFn, interval), interval);
+    }
     const checkUser = () => {
         if (walletAdress != 'Connect Wallet') {
             localStorage.setItem('userAddress', walletAdress);
@@ -142,7 +169,6 @@ const ConnectWallet = () => {
         }
     }
 
-
     return (
 
 
@@ -155,7 +181,7 @@ const ConnectWallet = () => {
                     </>)}
 
             </div>
-
+            <div>Balance: {balance}</div>
         </header >
 
 

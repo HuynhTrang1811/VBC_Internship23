@@ -3,8 +3,8 @@ export interface IRentNFT {
     name: string
     minter: string
     tokenID: number
-    startTime: Date;
-    endTime: Date;
+    startTime: number;
+    endTime: number;
     rent_price: number;
     renter: string;
     end: boolean
@@ -16,8 +16,8 @@ const rentNFTSchema = new Schema<IRentNFT>({
     },
     minter: { type: String },
     tokenID: { type: Number },
-    startTime: { type: Date, default: Date.now() },
-    endTime: { type: Date },
+    startTime: { type: Number, default: Date.now() },
+    endTime: { type: Number },
     rent_price: { type: Number },
     renter: { type: String },
     end: { type: Boolean, default: false }

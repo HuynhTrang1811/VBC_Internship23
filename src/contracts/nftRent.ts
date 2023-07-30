@@ -1,7 +1,7 @@
 import { ethers } from 'ethers';
-import { getMarketAbi } from './utils/getAbis';
+import { getERC20TokenAbi, getMarketAbi } from './utils/getAbis';
 import { nftContract } from './accountMint';
-import { marketcontractAddress } from '../constants/constants';
+import { erc20tokenAddress, marketcontractAddress } from '../constants/constants';
 import { marketcontractAddresses } from '../constants/constants';
 export const rentNft = async (type: string, tokenID: number, renttime: any, deposit: any, rentalpayment: any) => {
   console.log(tokenID);
@@ -63,7 +63,7 @@ export const rentNft = async (type: string, tokenID: number, renttime: any, depo
 //     await unrent(); 
 // }
 
-export const starRentNFT = async (type: string, tokenID: number) => {
+export const starRentNFT = async (type: string, tokenID: number, address: string) => {
   console.log(tokenID);
   const abi = getMarketAbi();
   const provider = new ethers.providers.Web3Provider((window as any).ethereum)
@@ -77,7 +77,13 @@ export const starRentNFT = async (type: string, tokenID: number) => {
   // For this, you need the account signer...
   const signer = provider.getSigner()
 
-
+  const erc20contract = new ethers.Contract(erc20tokenAddress, getERC20TokenAbi(), signer)
+  const allowance = await erc20contract.allowance(address, marketcontractAddress);
+  const tokensToApprove = ethers.utils.parseUnits('1000', 'ether');
+  if (allowance < tokensToApprove) {
+    const tx = await erc20contract.approve(marketcontractAddress)
+    await tx.wait();
+  }
   // Create a contract instance
   const contract = new ethers.Contract(contractAddress, abi, signer);
   async function startrent() {
