@@ -63,6 +63,9 @@ export const getRentNFTUser = catchAsync(
             }))];
         }
         console.log(x);
+        x.forEach(ele => {
+            ele.status = 'rent'
+        })
         res.json(x.map(product => product))
     },
 )
@@ -158,9 +161,9 @@ export const changeOwner = async (req: Request, res: Response, next: NextFunctio
 export const rentNFT = async (req: Request, res: Response, next: NextFunction) => {
     const tokenID = req.body.tokenID;
     console.log(tokenID);
-    const { price, nftRenttime } = req.body
+    const { price, nftRenttime, rent_fee } = req.body
     // const sellNFT=SellNFT.create({name,time_mint,minter});
-    const x = await NFT.findOneAndUpdate({ tokenID }, { status: 'rent', price_rent: price, duration_rent: nftRenttime })
+    const x = await NFT.findOneAndUpdate({ tokenID }, { status: 'rent', price_rent: price, duration_rent: nftRenttime, rent_fee })
     const data = await NFT.findOneAndDelete({ tokenID, status: 'owner' })
     // await RentNFT.create({ 
     //     minter: x?.minter, 
@@ -179,6 +182,9 @@ export const rentNFT = async (req: Request, res: Response, next: NextFunction) =
 
 export const rentlogNFT = async (req: Request, res: Response, next: NextFunction) => {
     await RentNFT.create(req.body)
+    const {endTime, tokenID} = req.body;
+    const x = await NFT.findOneAndUpdate({ tokenID }, { time_out: endTime })
+     
     res.status(StatusCodes.CREATED).json({
         status: 'success',
         data: {

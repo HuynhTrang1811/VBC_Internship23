@@ -62,7 +62,7 @@ export const mintAccount = async (login: any, rentalTime: any, signature: any) =
       // console.log(ethers.utils.base58.decode(signature));
       const tx = await contract.accountMint(login, rentalTime, signature);
 
-      await tx.wait();
+      // await tx.wait();
 
       console.log('Mint successful!');
     } catch (error) {

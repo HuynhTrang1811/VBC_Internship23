@@ -66,6 +66,9 @@ exports.getRentNFTUser = (0, catchAsync_1.catchAsync)((req, res, next) => __awai
             }))];
     }
     console.log(x);
+    x.forEach(ele => {
+        ele.status = 'rent';
+    });
     res.json(x.map(product => product));
 }));
 //-------------------------Market-------------------------
@@ -148,9 +151,9 @@ exports.changeOwner = changeOwner;
 const rentNFT = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     const tokenID = req.body.tokenID;
     console.log(tokenID);
-    const { price, nftRenttime } = req.body;
+    const { price, nftRenttime, rent_fee } = req.body;
     // const sellNFT=SellNFT.create({name,time_mint,minter});
-    const x = yield NFT_model_1.default.findOneAndUpdate({ tokenID }, { status: 'rent', price_rent: price, duration_rent: nftRenttime });
+    const x = yield NFT_model_1.default.findOneAndUpdate({ tokenID }, { status: 'rent', price_rent: price, duration_rent: nftRenttime, rent_fee });
     const data = yield NFT_model_1.default.findOneAndDelete({ tokenID, status: 'owner' });
     // await RentNFT.create({ 
     //     minter: x?.minter, 
@@ -169,6 +172,8 @@ const rentNFT = (req, res, next) => __awaiter(void 0, void 0, void 0, function* 
 exports.rentNFT = rentNFT;
 const rentlogNFT = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     yield RentNFT_model_1.default.create(req.body);
+    const { endTime, tokenID } = req.body;
+    const x = yield NFT_model_1.default.findOneAndUpdate({ tokenID }, { time_out: endTime });
     res.status(http_status_codes_1.StatusCodes.CREATED).json({
         status: 'success',
         data: {

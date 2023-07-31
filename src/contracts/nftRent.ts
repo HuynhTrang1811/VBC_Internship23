@@ -17,7 +17,8 @@ export const rentNft = async (type: string, tokenID: number, renttime: any, depo
   // For this, you need the account signer...
   const signer = provider.getSigner()
 
-
+  const _deposit = ethers.utils.parseUnits((deposit).toString(), 'ether');
+  const _rentalpayment = ethers.utils.parseUnits((rentalpayment).toString(), 'ether'); 
   // Create a contract instance
   const contract = new ethers.Contract(contractAddress, abi, signer);
   async function rent() {
@@ -25,7 +26,7 @@ export const rentNft = async (type: string, tokenID: number, renttime: any, depo
 
     // Wait for the transaction to be mined
     await tx.wait();
-    const tx1 = await contract.rentOutNFT(marketcontractAddresses[type], tokenID, renttime, deposit, rentalpayment);
+    const tx1 = await contract.rentOutNFT(marketcontractAddresses[type], tokenID, renttime, _deposit, _rentalpayment);
     await tx1.wait();
 
     console.log('rent successful!');

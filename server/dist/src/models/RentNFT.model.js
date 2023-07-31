@@ -11,7 +11,8 @@ const rentNFTSchema = new mongoose_1.Schema({
     endTime: { type: Number },
     rent_price: { type: Number },
     renter: { type: String },
-    end: { type: Boolean, default: false }
+    end: { type: Boolean, default: false },
+    rent_fee: { type: Number }
 });
 const rentnfts = (0, mongoose_1.model)('rentnfts', rentNFTSchema);
 exports.default = rentnfts;

@@ -18,7 +18,7 @@ const useCountdown = (targetDate: any) => {
     return getReturnValues(countDown);
 };
 
-const getReturnValues = (countDown: any) => {
+export const getReturnValues: any = (countDown: any) => {
     // calculate time left
     const days = Math.floor(countDown / (1000 * 60 * 60 * 24));
     const hours = Math.floor(

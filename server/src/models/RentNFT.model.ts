@@ -6,6 +6,7 @@ export interface IRentNFT {
     startTime: number;
     endTime: number;
     rent_price: number;
+    rent_fee: number;
     renter: string;
     end: boolean
 }
@@ -20,7 +21,8 @@ const rentNFTSchema = new Schema<IRentNFT>({
     endTime: { type: Number },
     rent_price: { type: Number },
     renter: { type: String },
-    end: { type: Boolean, default: false }
+    end: { type: Boolean, default: false },
+    rent_fee: {type: Number}
 })
 
 const rentnfts = model<IRentNFT>('rentnfts', rentNFTSchema)

@@ -13,6 +13,8 @@ import { starRentNFT } from '../../contracts/nftRent';
 import axios from "../../api"
 import { getcurentWalletconnect } from '../../contracts/utils/getAbis';
 import { socket } from '../../api/socket';
+import { getReturnValues } from '../../hooks/useCountDown';
+import { calTimeLeft, showDate } from '../user/NFT/CountdownTimer';
 
 const CardItem = (item: any) => {
   const [open, setOpen] = useState(false);
@@ -126,7 +128,7 @@ const CardItem = (item: any) => {
       <div className="card-body">
         <div className="card-name">{item.name}</div>
         <div className="card-price">
-          {item.status == 'onsale' ? item.price : item.price_rent}
+          {item.status == 'onsale' ? item.price : `${item.price_rent}/${item.rent_fee}`}
           {/* <img src="" style={{width:20,height:20}}/> */}
         </div>
       </div>
@@ -140,7 +142,7 @@ const CardItem = (item: any) => {
       {item.status == 'rent' && <div className="card-body">
         <div className="card-name">Rent duration:</div>
         <div className="card-price">
-          {item.duration_rent}
+          {calTimeLeft(item.duration_rent)}
           {/* <img src="" style={{width:20,height:20}}/> */}
         </div>
       </div>}

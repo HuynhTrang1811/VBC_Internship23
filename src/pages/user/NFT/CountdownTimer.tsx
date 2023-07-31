@@ -1,5 +1,5 @@
 import React from 'react';
-import { useCountdown } from '../../../hooks/useCountDown';
+import { getReturnValues, useCountdown } from '../../../hooks/useCountDown';
 
 const ExpiredNotice = () => {
     return (
@@ -14,7 +14,7 @@ interface date {
     minutes: any
     seconds: any
 }
-const showDate = (days: any, hours: any, minutes: any, senconds: any) => {
+export const showDate = (days: any, hours: any, minutes: any, senconds: any) => {
     const d = days ? `${days}d ` : "";
     const h = hours ? `${hours}h ` : "";
     const m = minutes ? `${minutes}m ` : "";
@@ -46,5 +46,11 @@ const CountdownTimer = ({ targetDate }: { targetDate: any }) => {
         );
     }
 };
+
+export const  calTimeLeft = (countTime: any) => {
+    console.log(countTime);
+    const [days, hours, minutes, seconds] = getReturnValues(countTime); 
+    return showDate(days, hours, minutes, seconds);
+}
 
 export default CountdownTimer;

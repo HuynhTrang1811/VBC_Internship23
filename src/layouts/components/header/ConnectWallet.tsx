@@ -181,7 +181,7 @@ const ConnectWallet = () => {
                     </>)}
 
             </div>
-            <div>Balance: {balance}</div>
+            <div className="balance">Balance: {balance}</div>
         </header >
 
 

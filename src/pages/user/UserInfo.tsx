@@ -29,7 +29,7 @@ interface Product {
 const UserInfo = () => {
   //products : have owner, sell, rent NFT of user
   const [ownerNFT, setOwner] = useState<any[]>([])
-  const [sellNFT, setSell] = useState<Product[]>([]);
+  const [sellNFT, setSell] = useState<any[]>([]);
   const [rentNFT, setRent] = useState<any[]>([]);
 
   const [toggle, setToggle] = useState(1);
@@ -118,7 +118,7 @@ const UserInfo = () => {
                       key={row.id}
                       sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
                     >
-                      <Owned expirationDateTime={row.expirationDateTime} getback={row.getback} is_rent={row.is_rent} update={update} setUpdate={setUpdate} tokenID={row.tokenID} name={row.name} img={row.img} price={row.price} time_left={row.time_left} status="owner" />
+                      <Owned price_rent={row.price_rent} rent_fee={row.rent_fee} expirationDateTime={row.expirationDateTime} getback={row.getback} is_rent={row.is_rent} update={update} setUpdate={setUpdate} tokenID={row.tokenID} name={row.name} img={row.img} price={row.price} time_left={row.time_left} status="owner" />
 
                     </TableRow>
                   ))}
@@ -137,9 +137,11 @@ const UserInfo = () => {
                     <TableCell></TableCell>
                     <TableCell className='row-name' >NAME</TableCell>
                     <TableCell className='row-name' align="center">TOKEN ID</TableCell>
+                    <TableCell className='row-name' align="center">EXPIRED DATE</TableCell>
+
                     <TableCell className='row-name' align="center">
                       PRICE</TableCell>
-                    <TableCell className='row-name' align="center">TIME OUT</TableCell>
+                    <TableCell className='row-name' align="center">STATUS</TableCell>
                     <TableCell className='row-name' align="center"></TableCell>
 
 
@@ -152,7 +154,7 @@ const UserInfo = () => {
                       key={row.id}
                       sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
                     >
-                      <Owned update={update} setUpdate={setUpdate} tokenID={row.tokenID} name={row.name} img={row.img} price={row.price} time_left={row.time_left} status={row.status} />
+                      <Owned expirationDateTime={row.expirationDateTime} update={update} setUpdate={setUpdate} tokenID={row.tokenID} name={row.name} img={row.img} price={row.price} time_left={row.time_left} status={row.status} />
 
                     </TableRow>
                   ))}
@@ -170,9 +172,12 @@ const UserInfo = () => {
                   <TableRow >
                     <TableCell></TableCell>
                     <TableCell className='row-name' >NAME</TableCell>
-                    <TableCell className='row-name' align="center">PRICE</TableCell>
-                    <TableCell className='row-name' align="center">TIME OUT</TableCell>
+                    <TableCell className='row-name' align="center">TOKEN ID</TableCell>
+                    <TableCell className='row-name' align="center">RENT DURATION</TableCell>
+                    <TableCell className='row-name' align="center">DEPOSIT</TableCell>
+                    <TableCell className='row-name' align="center">RENT FEE</TableCell>
                     <TableCell className='row-name' align="center">STATUS</TableCell>
+
                     <TableCell className='row-name' align="center"></TableCell>
 
                   </TableRow>
@@ -184,7 +189,7 @@ const UserInfo = () => {
                       key={row.id}
                       sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
                     >
-                      <Owned rent={true} is_rent={row.is_rent} expired={row.expired} update={update} setUpdate={setUpdate} tokenID={row.tokenID} name={row.name} img={row.img} price={row.price} time_left={row.time_left} status={row.status} />
+                      <Owned time_out={row.time_out} duration_rent={row.duration_rent} expirationDateTime={row.expirationDateTime} price_rent={row.price_rent} rent_fee={row.rent_fee} rent={true} is_rent={row.is_rent} expired={row.expired} update={update} setUpdate={setUpdate} tokenID={row.tokenID} name={row.name} img={row.img} price={row.price} time_left={row.time_left} status={row.status} />
 
                     </TableRow>
                   ))}

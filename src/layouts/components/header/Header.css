@@ -274,4 +274,9 @@ h2{
 .header-button {
   display: flex;
   align-items: center;
+  gap: 20px; 
+}
+
+.balance {
+  min-width: fit-content;
 }

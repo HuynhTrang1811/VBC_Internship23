@@ -64,3 +64,14 @@
 .rent-inf{
     padding-top: 20px;
 }
+.turnback {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+.turnback h4 {
+    margin-top: 0px;
+}
+/* .turnback button {
+    margin-right: 0px !important;
+} */

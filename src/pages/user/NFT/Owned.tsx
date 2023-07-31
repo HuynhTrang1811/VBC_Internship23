@@ -11,8 +11,8 @@ import { DatePicker } from '@mui/x-date-pickers';
 import axios from '../../../api';
 import { socket } from '../../../api/socket';
 import { getcurentWalletconnect } from '../../../contracts/utils/getAbis';
-import { endRent } from '../../../contracts/endRent';
-import CountdownTimer from './CountdownTimer';
+import { endRent, getMoney } from '../../../contracts/endRent';
+import CountdownTimer, { calTimeLeft } from './CountdownTimer';
 import { useGlobalContext } from '../../../store/GlobalContext';
 
 const Owned = (item: any) => {
@@ -54,7 +54,7 @@ const Owned = (item: any) => {
 
   }
   const handleRent = async (deposit: number, renttime: number) => {
-    await rentNft("NETFLIX" as string, item.tokenID, renttime * 60 * 60 * 24, deposit, 1000000);
+    await rentNft("NETFLIX" as string, item.tokenID, renttime, deposit, nftRentfee);
   }
   const handleCloseRent = async () => {
     // setNFTPrice(nftRenttime);
@@ -63,7 +63,7 @@ const Owned = (item: any) => {
     console.log(nftDeposit);
     try {
       await handleRent(nftDeposit, nftRenttime);
-      await axios.post('/route/rentNFT', { ...item, price: nftDeposit, nftRenttime })
+      await axios.post('/route/rentNFT', { ...item, price: nftDeposit, nftRenttime, rent_fee: nftRentfee })
       socket.emit('update')
       dispatch({ type: "SET_UPDATE_USER", payload: !state.update_user });
 
@@ -78,15 +78,20 @@ const Owned = (item: any) => {
 
   const [deposit, setDeposit] = useState(0);
   const [renttime, setRenttime] = useState(0);
+  const [rentFee, setRentFee] = useState(0);
+  /// best practice
   let nftDeposit = deposit;
   let nftRenttime = renttime;
-
+  let nftRentfee = rentFee;
   const handleChangeDeposit = async (event: React.ChangeEvent<HTMLInputElement>) => {
     nftDeposit = parseInt(event.target.value);
   }
   const handleChangeRenttime = async (event: React.ChangeEvent<HTMLInputElement>) => {
-    nftRenttime = parseInt(event.target.value)
-
+    nftRenttime = parseInt(event.target.value) * 1000;
+  }
+  const handleChangeRentFee = async (event: React.ChangeEvent<HTMLInputElement>) => {
+    nftRentfee = (parseInt(event.target.value))
+    
   }
   const handleList = async (price: number) => {
 
@@ -134,6 +139,7 @@ const Owned = (item: any) => {
   }
   const handleGetMoney = async () => {
     try {
+      await getMoney(item.tokenID)
       await axios.post('/route/getMoney', { tokenID: item.tokenID })
       dispatch({ type: "SET_UPDATE_USER", payload: !state.update_user });
 
@@ -145,12 +151,12 @@ const Owned = (item: any) => {
   const Actions = (status: any) => {
     if (item.is_rent) {
       return (<>
-        <DialogActions>
+        <DialogActions className='turnback'>
           {item.expired}
           <Button disabled={item.rent && item.expired == false} className='account-button' variant="contained" onClick={item.rent ? handleGetMoney : handleTurnBack}>
             {item.rent ? "Get money" : "Turn back"}
           </Button>
-
+          {item.price_rent && item.status === 'owner' ? <h4>Get back {item.price_rent} USDT deposit</h4> : null}
         </DialogActions>
       </>)
     }
@@ -250,10 +256,17 @@ const Owned = (item: any) => {
 
 
                         <TextField
-                          helperText="Please enter deposite"
+                          helperText="Please enter deposit"
                           id="demo-helper-text-aligned-no-helper"
                           label="dds"
                           onChange={handleChangeDeposit}
+                          defaultValue={0}
+                        />
+                        <TextField
+                          helperText="Please enter rent fee"
+                          id="demo-helper-text-aligned-no-helper"
+                          label="dds"
+                          onChange={handleChangeRentFee}
                         />
                       </LocalizationProvider>
 
@@ -292,7 +305,6 @@ const Owned = (item: any) => {
 
   return (
     <>
-
       <TableCell className='cell-name'>
         <img className='owned-img' src={item.img} />
 
@@ -304,7 +316,19 @@ const Owned = (item: any) => {
 
       </TableCell>
       <TableCell className='cell-name' align="center" >{item.tokenID}</TableCell>
-      <TableCell className='cell-name' align="center">{item.status === 'owner' && item.expirationDateTime ? <CountdownTimer targetDate={item.expirationDateTime} /> : item.price}</TableCell>
+
+      {item.status === 'rent' ?
+      <> 
+      <TableCell className='cell-name' align="center">{ item.is_rent ?  <CountdownTimer targetDate={item.time_out}/> : calTimeLeft(item.duration_rent) }</TableCell>
+        <TableCell className='cell-name' align="center">{ item.price_rent}</TableCell> 
+        <TableCell className='cell-name' align="center">{ item.rent_fee}</TableCell>
+      </>
+      : <TableCell className='cell-name' align="center">{ item.expirationDateTime ? <CountdownTimer targetDate={item.expirationDateTime}/> : null}</TableCell>
+      }
+      {item.status === 'onsale' ?
+      <TableCell className='cell-name' align="center">{ item.price}</TableCell>
+      : null
+      }
       <TableCell align="center" className={item.status === 'OnSale' ? 'cell-name-sale' : item.status === 'Owner' ? 'cell-name-owner' : 'cell-name-rent'}>{item.is_rent ? 'In rent' : item.status}</TableCell>
       <TableCell align="center"><Actions status={item.status} /></TableCell>
     </>
