@@ -2,6 +2,7 @@ import React from 'react';
 import Banner from './Banner';
 import Market from './Market';
 import { useEffect, useState } from 'react';
+import { LoadingContextProvider } from '../loading';
 
 
 const Home = () => {
@@ -13,9 +14,10 @@ const Home = () => {
     }, 5000)
   }, [])
   return (
-    <>
+    <> <LoadingContextProvider>
       <Banner />
       <Market />
+      </LoadingContextProvider>
 
     </>
   )

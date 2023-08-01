@@ -30,6 +30,7 @@ export const listNft = async (type: string, tokenID: number, price: any) => {
 
   };
   await list();
+  return true;
 }
 
 export const unlistNft = async (type: string, tokenID: number) => {
@@ -95,6 +96,7 @@ export const buyNFT = async (type: string, tokenID: number, price: number, addre
 
   };
   await unlist();
+  return true;
 }
 function removeDigitsAfterDot(inputString: string) {
   const dotIndex = inputString.indexOf('.');

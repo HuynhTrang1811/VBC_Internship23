@@ -13,10 +13,10 @@ const Footer = () => {
     <>
       <div className="footer">
     
-        <Grid container spacing={3} columns={18}>
+        <Grid container spacing={3} columns={18} justifyContent="flex-end">
           <Grid item xs={6}>
             <Typography mt={3} gutterBottom variant="h5" component="div">
-              Product of
+              PRODUCT OF
             </Typography>
             <Typography mt={3} >
               <img src="https://agridential.vn/_next/image?url=https%3A%2F%2Fres.cloudinary.com%2Fagridential%2Fimage%2Fupload%2Fv1570694865%2FLogo%2Flogo_vbc_kijy1j.png&w=1920&q=75" style={{ width: 217, height: 51 }} />
@@ -26,17 +26,17 @@ const Footer = () => {
           <Grid item xs={6}>
 
             <Typography mt={3} gutterBottom variant="h5" component="div">
-              Contact
+              CONTACT
             </Typography>
             <Typography mt={3} variant="body2">
-              <AddLocationAltIcon /> 1234 Sample Street
-              Austin Texas 78704
+              <AddLocationAltIcon /> 28/3 Lu Gia, Ward 15, District 11, Ho Chi Minh City
             </Typography>
             <Typography mt={3} variant="body2">
-              <LocalPhoneIcon /> 512.333.2222
+              <LocalPhoneIcon /> 028 6271 7798
+
             </Typography>
             <Typography mt={3} variant="body2">
-              <EmailIcon /> sampleemail@gmail.com
+              <EmailIcon /> contact@vietnamblockchain.asia
             </Typography>
 
           </Grid>

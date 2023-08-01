@@ -4,11 +4,15 @@ import App from "./App";
 import { useContext } from "react";
 import reportWebVitals from "./reportWebVitals";
 import { GlobalProvider } from '../src/store/GlobalContext'
+import './index.css'
+import { LoadingContextProvider } from "./pages/loading";
 const root = ReactDOM.createRoot(document.getElementById("app") as HTMLElement);
 
 root.render(
     <GlobalProvider>
-        <App />
+        <LoadingContextProvider>
+            <App />
+        </LoadingContextProvider>
     </GlobalProvider>
 );
 

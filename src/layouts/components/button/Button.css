@@ -1,8 +1,4 @@
-:root {
-  --primary: #fff;
-  font-family: __Inter_6faf11, __Inter_Fallback_6faf11, sans-serif !important;
-  font-weight: 300 !important;
-}
+
 
 .btn {
   padding: 8px 20px;

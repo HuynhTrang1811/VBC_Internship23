@@ -14,19 +14,23 @@ import { getcurentWalletconnect } from '../../../contracts/utils/getAbis';
 import { endRent, getMoney } from '../../../contracts/endRent';
 import CountdownTimer, { calTimeLeft } from './CountdownTimer';
 import { useGlobalContext } from '../../../store/GlobalContext';
-
+import { Backdrop, CircularProgress } from '@material-ui/core';
+import { LoadingContextProvider, useLoadingContext } from '../../loading';
 const Owned = (item: any) => {
   const [openSell, setOpenSell] = useState(false);
   const [openRent, setOpenRent] = useState(false);
+  const [openBacklog, setOpenBacklog] = useState(false);
   const [nftPrice, setNFTPrice] = useState(0);
+  const { loading, setLoading } = useLoadingContext();
   let nftInput = nftPrice;
   const { state, dispatch } = useGlobalContext();
-
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     nftInput = parseInt(event.target.value);
 
 
   };
+  
+
   const handleOpenRent = () => {
     setOpenRent(true);
   }
@@ -35,10 +39,10 @@ const Owned = (item: any) => {
     setOpenSell(true);
   }
   const handleCloseSell = async () => {
+    
     setNFTPrice(nftInput);
     setOpenSell(false);
-    // listN+ft(1, price);
-    console.log(nftInput);
+    setLoading(true);
     try {
       await handleList(nftInput);
       await axios.post('/route/sellNFT', { ...item, price: nftInput });
@@ -54,13 +58,15 @@ const Owned = (item: any) => {
 
   }
   const handleRent = async (deposit: number, renttime: number) => {
+    setLoading(true)
     await rentNft("NETFLIX" as string, item.tokenID, renttime, deposit, nftRentfee);
+    setLoading(false)
   }
   const handleCloseRent = async () => {
     // setNFTPrice(nftRenttime);
 
     setOpenRent(false);
-    console.log(nftDeposit);
+   
     try {
       await handleRent(nftDeposit, nftRenttime);
       await axios.post('/route/rentNFT', { ...item, price: nftDeposit, nftRenttime, rent_fee: nftRentfee })
@@ -91,29 +97,40 @@ const Owned = (item: any) => {
   }
   const handleChangeRentFee = async (event: React.ChangeEvent<HTMLInputElement>) => {
     nftRentfee = (parseInt(event.target.value))
-    
+
   }
   const handleList = async (price: number) => {
 
-    await listNft("NETFLIX" as string, item.tokenID, price);
+    let flag = await listNft("NETFLIX" as string, item.tokenID, price);
+    if (flag){
+      setLoading(false);
+    }
+    
 
   }
   const handleUnlist = async () => {
+   
+    setLoading(true)
     try {
-      await unlistNft("NETFLIX", item.tokenID)
+      let flag = await unlistNft("NETFLIX", item.tokenID);
+    
       const minter = await getcurentWalletconnect();
       console.log(minter);
       await axios.post('/route/unlistNFT', { ...item, minter });
       socket.emit('update')
       dispatch({ type: "SET_UPDATE_USER", payload: !state.update_user });
-
+      setLoading(false);
 
     }
     catch {
       console.log('Something went wrong')
     }
+   
 
   }
+  const handleCloseBacklog = () => {
+    setOpenBacklog(false);
+  };
   const handleTurnBack = async () => {
     const data_change = {
       minter: item.getback,
@@ -208,8 +225,11 @@ const Owned = (item: any) => {
 
               </DialogActions>
 
+
             </Dialog>
+
           </form>
+         
           <Button variant="outlined" onClick={handleOpenRent}>Rent</Button>
           <form>
             {/* Form BUy NFT  */}
@@ -287,7 +307,9 @@ const Owned = (item: any) => {
 
             </Dialog>
           </form>
+
         </div>
+
       </>)
     }
     else {
@@ -301,10 +323,12 @@ const Owned = (item: any) => {
         </DialogActions>
       </>)
     }
+
   }
 
   return (
     <>
+<LoadingContextProvider>
       <TableCell className='cell-name'>
         <img className='owned-img' src={item.img} />
 
@@ -318,19 +342,22 @@ const Owned = (item: any) => {
       <TableCell className='cell-name' align="center" >{item.tokenID}</TableCell>
 
       {item.status === 'rent' ?
-      <> 
-      <TableCell className='cell-name' align="center">{ item.is_rent ?  <CountdownTimer targetDate={item.time_out}/> : calTimeLeft(item.duration_rent) }</TableCell>
-        <TableCell className='cell-name' align="center">{ item.price_rent}</TableCell> 
-        <TableCell className='cell-name' align="center">{ item.rent_fee}</TableCell>
-      </>
-      : <TableCell className='cell-name' align="center">{ item.expirationDateTime ? <CountdownTimer targetDate={item.expirationDateTime}/> : null}</TableCell>
+        <>
+          <TableCell className='cell-name' align="center">{item.is_rent ? <CountdownTimer targetDate={item.time_out} /> : calTimeLeft(item.duration_rent)}</TableCell>
+          <TableCell className='cell-name' align="center">{item.price_rent}</TableCell>
+          <TableCell className='cell-name' align="center">{item.rent_fee}</TableCell>
+        </>
+        : <TableCell className='cell-name' align="center">{item.expirationDateTime ? <CountdownTimer targetDate={item.expirationDateTime} /> : null}</TableCell>
       }
       {item.status === 'onsale' ?
-      <TableCell className='cell-name' align="center">{ item.price}</TableCell>
-      : null
+        <TableCell className='cell-name' align="center">{item.price}</TableCell>
+        : null
       }
-      <TableCell align="center" className={item.status === 'OnSale' ? 'cell-name-sale' : item.status === 'Owner' ? 'cell-name-owner' : 'cell-name-rent'}>{item.is_rent ? 'In rent' : item.status}</TableCell>
+
+      <TableCell align="center" className={item.status === 'onsale' ? 'cell-name-sale' : item.status === 'owner' ? 'cell-name-owner' : 'cell-name-rent'}>{item.is_rent ? 'In rent' : item.status}</TableCell>
       <TableCell align="center"><Actions status={item.status} /></TableCell>
+
+      </LoadingContextProvider>
     </>
   )
 }

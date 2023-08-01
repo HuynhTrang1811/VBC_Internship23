@@ -14,6 +14,7 @@ import CheckCircleRoundedIcon from '@mui/icons-material/CheckCircleRounded';
 import CheckCircleOutlineIcon from '@mui/icons-material/CheckCircleOutline';
 import Checkbox from '@mui/material/Checkbox';
 import { LinearProgress } from '@mui/material';
+import logo from '../../../assets/images/logo2.png'
 const label = { inputProps: { 'aria-label': 'Checkbox demo' } };
 type Anchor = 'right';
 
@@ -100,9 +101,14 @@ const Header = () => {
    
     return (
         <>
+        <div className="header">
+            <div className="navbar-logo">
+                        <img className='header-logo' src={logo}/>
+                    </div>
             <nav className='navbar' >
+            
                 <div className='navbar-container' >
-
+                  
                     <ul className={click ? 'nav-menu active' : 'nav-menu'}>
 
                         <Linkactive href="/">HOME</Linkactive>
@@ -124,7 +130,7 @@ const Header = () => {
                     Payment successfully !
                 </Alert>
             </Snackbar>
-
+            </div>
         </>
     );
 }

@@ -26,6 +26,9 @@ video {
 
 
 }
+.card-price{
+  font-size: 14px !important;
+}
 .app-home-item-button-buy:hover{
   background-color: rgb(99, 187, 241)!important;
 
@@ -266,12 +269,14 @@ Card{
   border-radius: 20px;
 }
 .card-name{
-  font-size: 20px;
+  font-size: 14px;
  
 }
 .app-market-list{
   /* background-color:#fff; */
   padding: 20px;
+  padding-left: 5%;
+  padding-right: 5%;
   border-radius: 20px;
 }
 #mint_NFT_form{

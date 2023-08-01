@@ -34,6 +34,10 @@
         border-radius: 50%;
     }
 }
+.backdrop-container {
+    position: relative; /* Đảm bảo đây là một phần tử có vị trí xác định để sử dụng z-index */
+    z-index: 3; /* Đặt giá trị z-index cao hơn các phần tử trong bảng */
+  }
 
 .app-user-infor {
     display: flex;
@@ -140,6 +144,9 @@ Tab {
     height: 100%;
     padding-bottom: 50px;
 
+}
+.empty{
+    text-align: center;
 }
 
 

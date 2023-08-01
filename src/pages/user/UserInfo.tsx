@@ -15,6 +15,8 @@ import axios from '../../api';
 import { getcurentWalletconnect } from '../../contracts/utils/getAbis';
 import { socket } from '../../api/socket';
 import { useGlobalContext } from '../../store/GlobalContext';
+import { LoadingContextProvider, useLoadingContext } from '../loading';
+import { Backdrop, CircularProgress } from '@material-ui/core';
 interface Product {
   id: string;
   name: string;
@@ -35,11 +37,12 @@ const UserInfo = () => {
   const [toggle, setToggle] = useState(1);
   const [update, setUpdate] = useState(false);
   const { state, dispatch } = useGlobalContext();
-
+ 
   const toggleTab = (index: any) => {
     setToggle(index)
   };
-
+  const { loading, setLoading } = useLoadingContext();
+  const [openBacklog, setOpenBacklog] = useState(loading);
   useEffect(() => {
     const foo = async () => {
       const address = await getcurentWalletconnect();
@@ -82,129 +85,141 @@ const UserInfo = () => {
 
   return (<>
 
-    <div className="app-user-function">
 
-      <div className='bloc-tabs'>
-        <div className={toggle === 1 ? "active-tabs" : "tabs"} onClick={() => toggleTab(1)}>
-          <h4>OWNED</h4>
-        </div>
-        <div className={toggle === 2 ? "active-tabs" : "tabs"} onClick={() => toggleTab(2)}>
-          <h4>ONSALE</h4>
-        </div>
-        <div className={toggle === 3 ? "active-tabs" : "tabs"} onClick={() => toggleTab(3)}>
-          <h4>RENTED</h4>
-        </div>
 
-      </div>
-      <div className='content-tabs'>
-        <div className={toggle === 1 ? "active-content" : "content"}>
-          <div className="owner-NFT">
-            <TableContainer component={Paper}>
-              <Table sx={{ minWidth: 650 }} aria-label="simple table">
-                <TableHead>
-                  <TableRow >
-                    <TableCell></TableCell>
-                    <TableCell className='row-name' >NAME</TableCell>
-                    <TableCell className='row-name' align="center">TOKEN ID</TableCell>
-                    <TableCell className='row-name' align="center">EXPIRED DATE</TableCell>
-                    <TableCell className='row-name' align="center">STATUS</TableCell>
-                    <TableCell className='row-name' align="center"></TableCell>
-                  </TableRow>
-                </TableHead>
-                <TableBody>
-                  {ownerNFT.length == 0 ? <><div>empty</div>
-                  </> : ownerNFT.map((row) => (
-                    <TableRow
-                      key={row.id}
-                      sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
-                    >
-                      <Owned price_rent={row.price_rent} rent_fee={row.rent_fee} expirationDateTime={row.expirationDateTime} getback={row.getback} is_rent={row.is_rent} update={update} setUpdate={setUpdate} tokenID={row.tokenID} name={row.name} img={row.img} price={row.price} time_left={row.time_left} status="owner" />
+    <LoadingContextProvider>
 
-                    </TableRow>
-                  ))}
-                </TableBody>
-              </Table>
-            </TableContainer>
+      <div className="app-user-function">
+     
+      
+        <div className='bloc-tabs'>
+          <div className={toggle === 1 ? "active-tabs" : "tabs"} onClick={() => toggleTab(1)}>
+            <h4>OWNED</h4>
+          </div>
+          <div className={toggle === 2 ? "active-tabs" : "tabs"} onClick={() => toggleTab(2)}>
+            <h4>ONSALE</h4>
+          </div>
+          <div className={toggle === 3 ? "active-tabs" : "tabs"} onClick={() => toggleTab(3)}>
+            <h4>RENTED</h4>
           </div>
 
         </div>
-        <div className={toggle === 2 ? "active-content" : "content"} >
-          <div className="owner-NFT">
-            <TableContainer component={Paper}>
-              <Table sx={{ minWidth: 650 }} aria-label="simple table">
-                <TableHead>
-                  <TableRow >
-                    <TableCell></TableCell>
-                    <TableCell className='row-name' >NAME</TableCell>
-                    <TableCell className='row-name' align="center">TOKEN ID</TableCell>
-                    <TableCell className='row-name' align="center">EXPIRED DATE</TableCell>
+        <div className='content-tabs'>
+          <div className={toggle === 1 ? "active-content" : "content"}>
+            <div className="owner-NFT">
+              {ownerNFT.length == 0 ? <><div className='empty'>You don't have any NFT !</div>
+              </> :
+                <TableContainer component={Paper}>
+                  <Table sx={{ minWidth: 650 }} aria-label="simple table">
+                    <TableHead>
+                      <TableRow >
+                        <TableCell></TableCell>
+                        <TableCell className='row-name' >NAME</TableCell>
+                        <TableCell className='row-name' align="center">TOKEN ID</TableCell>
+                        <TableCell className='row-name' align="center">EXPIRED DATE</TableCell>
+                        <TableCell className='row-name' align="center">STATUS</TableCell>
+                        <TableCell className='row-name' align="center"></TableCell>
+                      </TableRow>
+                    </TableHead>
+                    <TableBody>
+                      {ownerNFT.map((row) => (
+                        <TableRow
+                          key={row.id}
+                          sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
+                        >
+                          <Owned price_rent={row.price_rent} rent_fee={row.rent_fee} expirationDateTime={row.expirationDateTime} getback={row.getback} is_rent={row.is_rent} update={update} setUpdate={setUpdate} tokenID={row.tokenID} name={row.name} img={row.img} price={row.price} time_left={row.time_left} status="owner" />
 
-                    <TableCell className='row-name' align="center">
-                      PRICE</TableCell>
-                    <TableCell className='row-name' align="center">STATUS</TableCell>
-                    <TableCell className='row-name' align="center"></TableCell>
+                        </TableRow>
+                      ))}
+                    </TableBody>
+                  </Table>
+                </TableContainer>
+              }
+            </div>
+
+          </div>
+          <div className={toggle === 2 ? "active-content" : "content"} >
+            <div className="owner-NFT">
+
+              {sellNFT.length == 0 ? <><div className='empty'>You don't have any onsale NFT !</div>
+              </> :
+                <TableContainer component={Paper}>
+                  <Table sx={{ minWidth: 650 }} aria-label="simple table">
+                    <TableHead>
+                      <TableRow >
+                        <TableCell></TableCell>
+                        <TableCell className='row-name' >NAME</TableCell>
+                        <TableCell className='row-name' align="center">TOKEN ID</TableCell>
+                        <TableCell className='row-name' align="center">EXPIRED DATE</TableCell>
+
+                        <TableCell className='row-name' align="center">
+                          PRICE</TableCell>
+                        <TableCell className='row-name' align="center">STATUS</TableCell>
+                        <TableCell className='row-name' align="center"></TableCell>
 
 
-                  </TableRow>
-                </TableHead>
-                <TableBody>
-                  {sellNFT.length == 0 ? <><div>empty</div>
-                  </> : sellNFT.map((row) => (
-                    <TableRow
-                      key={row.id}
-                      sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
-                    >
-                      <Owned expirationDateTime={row.expirationDateTime} update={update} setUpdate={setUpdate} tokenID={row.tokenID} name={row.name} img={row.img} price={row.price} time_left={row.time_left} status={row.status} />
+                      </TableRow>
+                    </TableHead>
+                    <TableBody>
+                      {sellNFT.map((row) => (
+                        <TableRow
+                          key={row.id}
+                          sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
+                        >
+                          <Owned expirationDateTime={row.expirationDateTime} update={update} setUpdate={setUpdate} tokenID={row.tokenID} name={row.name} img={row.img} price={row.price} time_left={row.time_left} status={row.status} />
 
-                    </TableRow>
-                  ))}
-                </TableBody>
-              </Table>
-            </TableContainer>
+                        </TableRow>
+                      ))}
+                    </TableBody>
+                  </Table>
+                </TableContainer>
+              }
+            </div>
+
+          </div>
+          <div className={toggle === 3 ? "active-content" : "content"}>
+            <div className="owner-NFT">
+              {rentNFT.length == 0 ? <><div className='empty'>You don't have any rented NFT !</div>
+              </> :
+                <TableContainer component={Paper}>
+                  <Table sx={{ minWidth: 650 }} aria-label="simple table">
+                    <TableHead>
+                      <TableRow >
+                        <TableCell></TableCell>
+                        <TableCell className='row-name' >NAME</TableCell>
+                        <TableCell className='row-name' align="center">TOKEN ID</TableCell>
+                        <TableCell className='row-name' align="center">RENT DURATION</TableCell>
+                        <TableCell className='row-name' align="center">DEPOSIT</TableCell>
+                        <TableCell className='row-name' align="center">RENT FEE</TableCell>
+                        <TableCell className='row-name' align="center">STATUS</TableCell>
+
+                        <TableCell className='row-name' align="center"></TableCell>
+
+                      </TableRow>
+                    </TableHead>
+                    <TableBody>
+                      {rentNFT.map((row) => (
+                        <TableRow
+                          key={row.id}
+                          sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
+                        >
+                          <Owned time_out={row.time_out} duration_rent={row.duration_rent} expirationDateTime={row.expirationDateTime} price_rent={row.price_rent} rent_fee={row.rent_fee} rent={true} is_rent={row.is_rent} expired={row.expired} update={update} setUpdate={setUpdate} tokenID={row.tokenID} name={row.name} img={row.img} price={row.price} time_left={row.time_left} status={row.status} />
+
+                        </TableRow>
+                      ))}
+                    </TableBody>
+                  </Table>
+                </TableContainer>
+              }
+            </div>
+
           </div>
 
         </div>
-        <div className={toggle === 3 ? "active-content" : "content"}>
-          <div className="owner-NFT">
-            <TableContainer component={Paper}>
-              <Table sx={{ minWidth: 650 }} aria-label="simple table">
-                <TableHead>
-                  <TableRow >
-                    <TableCell></TableCell>
-                    <TableCell className='row-name' >NAME</TableCell>
-                    <TableCell className='row-name' align="center">TOKEN ID</TableCell>
-                    <TableCell className='row-name' align="center">RENT DURATION</TableCell>
-                    <TableCell className='row-name' align="center">DEPOSIT</TableCell>
-                    <TableCell className='row-name' align="center">RENT FEE</TableCell>
-                    <TableCell className='row-name' align="center">STATUS</TableCell>
-
-                    <TableCell className='row-name' align="center"></TableCell>
-
-                  </TableRow>
-                </TableHead>
-                <TableBody>
-                  {rentNFT.length == 0 ? <><div>empty</div>
-                  </> : rentNFT.map((row) => (
-                    <TableRow
-                      key={row.id}
-                      sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
-                    >
-                      <Owned time_out={row.time_out} duration_rent={row.duration_rent} expirationDateTime={row.expirationDateTime} price_rent={row.price_rent} rent_fee={row.rent_fee} rent={true} is_rent={row.is_rent} expired={row.expired} update={update} setUpdate={setUpdate} tokenID={row.tokenID} name={row.name} img={row.img} price={row.price} time_left={row.time_left} status={row.status} />
-
-                    </TableRow>
-                  ))}
-                </TableBody>
-              </Table>
-            </TableContainer>
-          </div>
-
         </div>
-
-      </div>
-
-    </div>
-
-
+      
+     
+    </LoadingContextProvider>
 
   </>
   )

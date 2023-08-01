@@ -104,6 +104,7 @@ const CardItem = (item: any) => {
   const emitUserEvent = (walletAddress: any) => {
     socket.emit('user', { walletAddress })
   }
+  console.log(item.item.time_out)
   return (
 
     <div className='card-product'>
@@ -122,7 +123,7 @@ const CardItem = (item: any) => {
           }}
         />
         <div className='time-left'>
-          {item.time}
+        {item.status.toUpperCase()}
         </div>
       </div>
       <div className="card-body">
@@ -132,13 +133,16 @@ const CardItem = (item: any) => {
           {/* <img src="" style={{width:20,height:20}}/> */}
         </div>
       </div>
-      <div className="card-body">
-        <div className="card-name">Status:</div>
+      
+      {item.status == 'onsale' && <div className="card-body">
+        <div className="card-name">Duration</div>
         <div className="card-price">
-          {item.status}
+          {calTimeLeft(item.duration_rent)}
           {/* <img src="" style={{width:20,height:20}}/> */}
         </div>
-      </div>
+      </div>}
+       
+     
       {item.status == 'rent' && <div className="card-body">
         <div className="card-name">Rent duration:</div>
         <div className="card-price">

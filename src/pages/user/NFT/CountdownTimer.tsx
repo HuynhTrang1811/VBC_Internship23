@@ -48,7 +48,7 @@ const CountdownTimer = ({ targetDate }: { targetDate: any }) => {
 };
 
 export const  calTimeLeft = (countTime: any) => {
-    console.log(countTime);
+  
     const [days, hours, minutes, seconds] = getReturnValues(countTime); 
     return showDate(days, hours, minutes, seconds);
 }

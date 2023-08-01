@@ -1,63 +1,17 @@
 body {
-  margin: 0;
- 
+  margin: 0px !important;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  font-family: "Martian Mono", "Roboto Mono", monospace!important;
-    font-weight: 500;
-    vertical-align: inherit;
-  font-weight: 300 !important;
 }
-
-code {
-  /* font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
-    monospace; */
-   
-    font-weight: 300 !important;
-}
-.App {
-  text-align: center;
-  
-  font-family: "Martian Mono", "Roboto Mono", monospace!important;
-  font-weight: 500;
-  vertical-align: inherit;
-}
-
-.App-logo {
-  height: 40vmin;
-  pointer-events: none;
-}
-
-@media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
-  }
-}
-
-.App-header {
-  font-family: "Martian Mono", "Roboto Mono", monospace!important;
-  font-weight: 500;
-  vertical-align: inherit;
-  background-color: #282c34;
-  min-height: 100vh;
+.backdrop {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.6); /* Màu nền mờ */
+  z-index: 999; /* Đảm bảo backdrop hiển thị trên tất cả các thành phần khác */
   display: flex;
-  flex-direction: column;
-  align-items: center;
   justify-content: center;
-  font-size: calc(10px + 2vmin);
-  color: white;
+  align-items: center;
 }
-
-.App-link {
-  color: #61dafb;
-}
-
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
-}
-

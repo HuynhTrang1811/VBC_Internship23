@@ -1,20 +1,27 @@
 
 import { BrowserRouter } from "react-router-dom";
-
+import { LoadingContextProvider } from "./pages/loading";
 import RouterList from "./router";
 import { CartProvider } from 'react-use-cart';
-
+import { useState } from "react";
+import './index.css'
 
 
 function App() {
-  return (
-   
+
+  return (<>
+
+
     <BrowserRouter>
-     <CartProvider>
-    <RouterList />
-    </CartProvider>
-  </BrowserRouter>
- 
+      <LoadingContextProvider>
+        <CartProvider>
+
+          <RouterList />
+
+        </CartProvider>
+      </LoadingContextProvider>
+    </BrowserRouter>
+  </>
   );
 }
 
