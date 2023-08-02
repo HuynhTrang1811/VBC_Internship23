@@ -72,7 +72,7 @@ const Market = () => {
             return (<>
 
               <Grid item xs={6} key={product.id} >
-                <CardItem rent_fee={product.rent_fee} address={address} update={update} setUpdate={setUpdate} id={product._id} item={product} name={product.name} price={product.price} img={product.img} time={product.time_left} status={product.status} price_rent={product.price_rent} duration_rent={product.duration_rent} minter={product.minter} />
+                <CardItem rent_fee={product.rent_fee} address={address} update={update} setUpdate={setUpdate} id={product._id} item={product} name={product.name} price={product.price} img={product.img} time={product.time_left} status={product.status} price_rent={product.price_rent} duration_rent={product.duration_rent} minter={product.minter} expirationDateTime = {product.expirationDateTime} />
 
               </Grid>
 

@@ -14,7 +14,8 @@ import axios from "../../api"
 import { getcurentWalletconnect } from '../../contracts/utils/getAbis';
 import { socket } from '../../api/socket';
 import { getReturnValues } from '../../hooks/useCountDown';
-import { calTimeLeft, showDate } from '../user/NFT/CountdownTimer';
+import { calTimeLeft, showDate,CountdownTimer } from '../user/NFT/CountdownTimer';
+
 
 const CardItem = (item: any) => {
   const [open, setOpen] = useState(false);
@@ -137,7 +138,7 @@ const CardItem = (item: any) => {
       {item.status == 'onsale' && <div className="card-body">
         <div className="card-name">Duration</div>
         <div className="card-price">
-          {calTimeLeft(item.duration_rent)}
+          {<CountdownTimer targetDate={item.expirationDateTime} />}
           {/* <img src="" style={{width:20,height:20}}/> */}
         </div>
       </div>}

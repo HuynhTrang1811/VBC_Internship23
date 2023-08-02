@@ -30,7 +30,7 @@ const ShowCounter = ({ days, hours, minutes, seconds }: date) => {
     );
 };
 
-const CountdownTimer = ({ targetDate }: { targetDate: any }) => {
+export const CountdownTimer = ({ targetDate }: { targetDate: any }) => {
     const [days, hours, minutes, seconds] = useCountdown(targetDate);
 
     if (days + hours + minutes + seconds <= 0) {
