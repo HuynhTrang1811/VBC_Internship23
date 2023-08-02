@@ -5,8 +5,7 @@ export const marketcontractAddresses: { [k: string]: string } = {
     'NETFLIX': '0x1365EE640F86a328BBfae294881d833a78Dd9557'
 }
 
-export const URL = "http://localhost:8000"
-
+export const URL = "https://nftappsmartcontract.azurewebsites.net"
 export const NFTs =
     [
         "https://i.seadn.io/gae/0fG_xmFr3za03DGXa3IOWVhsC9L_1nNbNc_clKEl0ijbCzw2S50Rf6oZ2K_tuMqSvO-h_haTLbqGc-1o6lR-7K2C5HnX8Xcqs04sww?auto=format&dpr=1&w=1000",
